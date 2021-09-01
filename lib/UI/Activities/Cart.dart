@@ -1,0 +1,309 @@
+import 'package:book_buy_and_sell/Constants/Colors.dart';
+import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class Cart extends StatefulWidget {
+  const Cart({Key key}) : super(key: key);
+
+  @override
+  _CartState createState() => _CartState();
+}
+
+class _CartState extends State<Cart> {
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return SafeArea(child: Scaffold(
+      backgroundColor: Color(backgroundColor),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.screenWidth * 0.02,
+                  vertical: SizeConfig.blockSizeVertical * 2),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: ImageIcon(
+                      AssetImage('assets/icons/back.png'),
+                      color: Color(colorBlue),
+                      size: SizeConfig.blockSizeVertical * 4,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: SizeConfig.blockSizeHorizontal * 5,
+                        right: SizeConfig.screenWidth * 0.35),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Current Location",
+                          style: TextStyle(color: Color(black)),
+                        ),
+                        SizedBox(
+                          width: SizeConfig.blockSizeHorizontal * 2,
+                        ),
+                        ImageIcon(
+                          AssetImage('assets/icons/current.png'),
+                          color: Color(colorBlue),
+                          size: SizeConfig.blockSizeVertical * 3,
+                        )
+                      ],
+                    ),
+                  ),
+                  ImageIcon(
+                    AssetImage('assets/icons/notification.png'),
+                    color: Color(colorBlue),
+                    size: SizeConfig.blockSizeVertical * 4,
+                  )
+                ],
+              ),
+            ),
+            Container(
+              width: SizeConfig.screenWidth,
+              margin: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth * 0.05,
+                vertical: SizeConfig.blockSizeVertical
+              ),
+              child: Text("My Cart",
+              style: TextStyle(
+                color: Color(black),
+                fontWeight: FontWeight.w600,
+                fontSize: SizeConfig.blockSizeVertical * 2
+              ),),
+            ),
+            Container(
+              width: SizeConfig.screenWidth,
+              margin: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth * 0.05,
+                vertical: SizeConfig.blockSizeVertical
+              ),
+              child: ListView.builder(itemBuilder: (context,int index){
+                return Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        gradient: LinearGradient(
+                          colors: [
+                            Color(gradientColor1),
+                            Color(gradientColor2),
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[200],
+                            spreadRadius: 2.0,
+                            blurRadius: 5.0
+                          ),
+                        ]
+                      ),
+                      margin: EdgeInsets.only(
+                        bottom: SizeConfig.blockSizeVertical,
+                      ),
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight * 0.13,
+                      child: Container(
+                        margin:EdgeInsets.only(
+                          right: SizeConfig.blockSizeHorizontal * 2
+                        ),
+                        child: RotatedBox(
+                          child: Text("Remove",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: SizeConfig.blockSizeVertical * 2
+                            ),),
+                          quarterTurns: 1,
+                        ),
+                      ),
+                      alignment: Alignment.centerRight,
+                    ),
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      height:SizeConfig.screenHeight * 0.13,
+                      margin: EdgeInsets.only(
+                        right: SizeConfig.screenWidth * 0.09
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: SizeConfig.screenWidth * 0.25,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25)
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: Image.asset('assets/icons/book.png'),
+                            ),
+                          ),
+                          Container(
+                            width: SizeConfig.screenWidth * 0.5,
+                            margin: EdgeInsets.only(
+                              left: SizeConfig.blockSizeHorizontal
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Book Name",
+                                    style: TextStyle(
+                                      color: Color(black),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: SizeConfig.blockSizeVertical * 2
+                                    ),),
+                                    Text("10/07/2021",
+                                      style: TextStyle(
+                                          color: Color(0XFF656565),
+                                          fontWeight: FontWeight.w500,
+                                        fontSize: SizeConfig.blockSizeVertical * 1.25
+                                      ),),
+                                  ],
+                                ),
+                                Text("Author Name",
+                                  style: TextStyle(
+                                      color: Color(0XFF656565),
+                                      fontWeight: FontWeight.w500,
+                                    fontSize: SizeConfig.blockSizeVertical * 1.75
+                                  ),),
+                                Text("Condition",
+                                  style: TextStyle(
+                                      color: Color(0XFF656565),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: SizeConfig.blockSizeVertical * 1.75
+                                  ),),
+                                Container(
+                                  width: SizeConfig.screenWidth * 0.5,
+                                  height: SizeConfig.blockSizeVertical * 4,
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(gradientColor1),
+                                          Color(gradientColor2),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: MaterialButton(
+                                      onPressed: (){},
+                                      child: Text("₹ 500",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600
+                                      ),),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.all(8),
+                    ),
+                  ],
+                );
+              },
+              primary: false,
+              shrinkWrap: true,
+              itemCount: 3,),
+            ),
+            SizedBox(
+              height: SizeConfig.screenHeight * 0.15,
+            ),
+            Container(
+              width: SizeConfig.screenWidth,
+              margin: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth * 0.05
+              ),
+              height: SizeConfig.blockSizeVertical * 7,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: Color.fromRGBO(212,247,255,0.45)
+              ),
+              child: MaterialButton(
+                onPressed: (){},
+                child: Row(
+                  children: [
+                    ImageIcon(AssetImage('assets/icons/offer.png'),color: Color(colorBlue),size: SizeConfig.blockSizeVertical * 4,),
+                    Text("Get 10% off on 1st Purchase.",
+                    style: TextStyle(
+                      color: Color(black),
+                      fontWeight: FontWeight.w500,
+                      fontSize: SizeConfig.blockSizeVertical * 1.65
+                    ),),
+                    SizedBox(
+                      width: SizeConfig.blockSizeHorizontal * 4,
+                    ),
+                    MaterialButton(onPressed: (){},
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25)
+                    ),
+                    color: Colors.white,
+                    child: Text("Apply Now",
+                    style: TextStyle(
+                      color: Color(colorBlue),
+                      fontWeight: FontWeight.w600
+                    ),),
+                    minWidth: SizeConfig.screenWidth * 0.25,
+                    padding: EdgeInsets.zero,)
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.blockSizeVertical * 7,
+              margin: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.screenWidth * 0.05,
+                  vertical: SizeConfig.blockSizeVertical * 2),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(gradientColor1),
+                    Color(gradientColor2),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: MaterialButton(
+                onPressed: (){},
+                child: Text("Buy All : ₹ 1500",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    fontSize: SizeConfig.blockSizeVertical * 2
+                  ),),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 5,
+            ),
+          ],
+        ),
+      ),
+    ));
+  }
+}
