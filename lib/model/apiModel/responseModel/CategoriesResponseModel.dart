@@ -6,7 +6,8 @@ class CategoriesModel {
     this.subcategory,
   });
 
-  String id = "", name = "", image = "", subcategory = "";
+  String name = "", image = "", subcategory = "";
+  int id = 0;
 
   factory CategoriesModel.fromJson(Map<String, dynamic> json) =>
       CategoriesModel(
