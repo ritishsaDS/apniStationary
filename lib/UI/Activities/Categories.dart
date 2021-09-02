@@ -1,7 +1,16 @@
+import 'dart:convert';
+
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/SubCategory.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/common/common_snackbar.dart';
+import 'package:book_buy_and_sell/common/preference_manager.dart';
+import 'package:book_buy_and_sell/model/apiModel/responseModel/CategoriesResponseModel.dart';
+import 'package:book_buy_and_sell/model/apis/api_response.dart';
+import 'package:book_buy_and_sell/viewModel/CommonVM.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Categories extends StatefulWidget {
   const Categories({Key key}) : super(key: key);
@@ -11,7 +20,44 @@ class Categories extends StatefulWidget {
 }
 
 class _CategoriesState extends State<Categories> {
+  Future<List<CategoriesModel>> getCategories(String parentId) async {
+    CommonVM commonVM = Get.find();
 
+    Map<String, dynamic> body = {
+      "user_id": PreferenceManager.getUserId(),
+      "session_key": PreferenceManager.getSessionKey(),
+      "parent_id": parentId ?? "0"
+    };
+
+    await commonVM.getData(categoryURL, body);
+    if (commonVM.apiResponse.status == Status.COMPLETE) {
+      Response response = commonVM.apiResponse.data;
+      var jsonDecoded = jsonDecode(response.body);
+      if (jsonDecoded["status"] == "200") {
+        List<CategoriesModel> categoriesModel =
+            (jsonDecoded["category_data"] as List)
+                .map((e) => CategoriesModel.fromJson(e))
+                .toList();
+        return categoriesModel;
+      } else {
+        CommonSnackBar.snackBar(message: jsonDecoded['message']);
+        return [];
+      }
+    } else {
+      CommonSnackBar.snackBar(message: 'No Data Available');
+      return [];
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    var parentId = ModalRoute.of(context).settings.arguments as String;
+
+    getCategories(parentId);
+  }
+
+  /*
   List<String> assetImages = [
     'assets/icons/eng.png',
     'assets/icons/med.png',
@@ -40,12 +86,13 @@ class _CategoriesState extends State<Categories> {
     'Comics',
     'Entrance Exams',
     'School'
-  ];
+  ];*/
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SafeArea(child: Scaffold(
+    return SafeArea(
+        child: Scaffold(
       backgroundColor: Color(backgroundColor),
       body: SingleChildScrollView(
         child: Column(
@@ -98,7 +145,7 @@ class _CategoriesState extends State<Categories> {
                   horizontal: SizeConfig.screenWidth * 0.05,
                   vertical: SizeConfig.blockSizeVertical),
               decoration:
-              BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,9 +179,13 @@ class _CategoriesState extends State<Categories> {
                       mainAxisSpacing: SizeConfig.blockSizeVertical * 2),
                   itemBuilder: (context, int index) {
                     return InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return SubCategory(text: text[index],img: assetImages[index],);
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return SubCategory(
+                            text: text[index],
+                            img: assetImages[index],
+                          );
                         }));
                       },
                       child: Container(
@@ -165,13 +216,14 @@ class _CategoriesState extends State<Categories> {
                             ),
                             Container(
                               width: SizeConfig.screenWidth * 0.25,
-                              alignment:Alignment.center,
+                              alignment: Alignment.center,
                               child: Text(
                                 text[index],
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Color(0XFF06070D),
-                                  fontSize: SizeConfig.blockSizeVertical * 1.5,),
+                                  fontSize: SizeConfig.blockSizeVertical * 1.5,
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             )
@@ -183,9 +235,8 @@ class _CategoriesState extends State<Categories> {
                   itemCount: assetImages.length,
                   shrinkWrap: true,
                   primary: false,
-                  padding: EdgeInsets.only(
-                    top: SizeConfig.blockSizeVertical * 2
-                  ),
+                  padding:
+                      EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
                 )),
           ],
         ),
