@@ -10,7 +10,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class CommonVM extends GetxController {
   ApiResponse apiResponse = ApiResponse.initial('Initial');
-  ApiResponse forgotPasswordApiResponse = ApiResponse.initial('Initial');
+  // ApiResponse forgotPasswordApiResponse = ApiResponse.initial('Initial');
 
   ///login...
   Future<void> getData(String apiUrl, Map<String, dynamic> body) async {
