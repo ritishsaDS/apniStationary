@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import '../utils/constantString.dart';
 
@@ -12,7 +14,7 @@ class ApiCall {
     print('Request body: $apiBody');
     var url = Uri.parse(baseURL + endPoint);
     print('Request Url: $url');
-    var response = await http.post(url,  body: apiBody);
+    var response = await http.post(url, body: apiBody);
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
@@ -27,5 +29,17 @@ class ApiCall {
     print('Response body: ${response.body}');
 
     return response;
+  }
+
+  static Future<dynamic> post(String url, Object param) async {
+    url = baseURL + url;
+
+    print("URL: $url");
+    print("Body: $param");
+
+    http.Response response = await http.post(Uri.parse(url), body: param);
+    log("API Response: ${response.body}");
+
+    return json.decode(response.body);
   }
 }
