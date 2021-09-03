@@ -39,8 +39,9 @@ class ApiService extends BaseService {
         dio.Response result = await dio.Dio().post(baseURL + url,
             data: formData,
             options: dio.Options(contentType: "form-data", headers: header));
-        print('responseType+>${result.data.runtimeType}');
+        print('responseType+>${result.data}');
         response = returnResponse(result.statusCode, result.data);
+        log("response......${response}");
       } else {
         var encodeBody = jsonEncode(body);
 
@@ -97,8 +98,8 @@ class ApiService extends BaseService {
     switch (status) {
       case 200:
         return jsonDecode(result);
-      // case 256:
-      //   return result;
+      case 256:
+        return jsonDecode(result);
       case 400:
         throw BadRequestException('Bad Request');
       case 401:
