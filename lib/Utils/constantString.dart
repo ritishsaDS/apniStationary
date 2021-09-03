@@ -1,0 +1,1 @@
+final String categoryURL = 'category';

@@ -8,20 +8,18 @@ import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:flutter/material.dart';
 
 class SellSubCategory extends StatefulWidget {
-   String id;
-   dynamic text;
-   dynamic img;
-   SellSubCategory({this.id,this.text,this.img});
+  String id;
+  dynamic text;
+  dynamic img;
+
+  SellSubCategory({this.id, this.text, this.img});
 
   @override
   _SellSubCategoryState createState() => _SellSubCategoryState();
 }
 
 class _SellSubCategoryState extends State<SellSubCategory> {
-
   int selectedIndex = -1;
-
-
 
   var text = [
     'Books',
@@ -38,25 +36,17 @@ class _SellSubCategoryState extends State<SellSubCategory> {
     '11th Standard',
     '12th Standard',
   ];
+
   @override
   void initState() {
-    if(widget.text=="Entrance Exams"){
-      text = [
-        'JEE Main',
-        'NEET',
-        'NEET',
-        'JEE Main',
-        'NEET',
-        'NEET'
-      ];
-    }
-    else if(widget.text=="School"){
+    if (widget.text == "Entrance Exams") {
+      text = ['JEE Main', 'NEET', 'NEET', 'JEE Main', 'NEET', 'NEET'];
+    } else if (widget.text == "School") {
       text = [
         'CBSE Boards',
         'PSEB',
       ];
-    }
-    else{
+    } else {
       text = [
         'Books',
         'Others',
@@ -69,7 +59,8 @@ class _SellSubCategoryState extends State<SellSubCategory> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SafeArea(child: Scaffold(
+    return SafeArea(
+        child: Scaffold(
       backgroundColor: Color(backgroundColor),
       body: SingleChildScrollView(
         child: Column(
@@ -127,7 +118,7 @@ class _SellSubCategoryState extends State<SellSubCategory> {
                   horizontal: SizeConfig.screenWidth * 0.05,
                   vertical: SizeConfig.blockSizeVertical),
               decoration:
-              BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,25 +152,26 @@ class _SellSubCategoryState extends State<SellSubCategory> {
                       mainAxisSpacing: SizeConfig.blockSizeVertical * 2),
                   itemBuilder: (context, int index) {
                     return InkWell(
-                      onTap: (){
+                      onTap: () {
                         setState(() {
                           selectedIndex = index;
                         });
-                        if(text[index] == "CBSE Boards" || text[index] == "PSEB")
-                        {
-                          Navigator.push(context, MaterialPageRoute(builder: (context){
-                            return SellSchoolSubCategory(text: std,);
+                        if (text[index] == "CBSE Boards" ||
+                            text[index] == "PSEB") {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return SellSchoolSubCategory(
+                              text: std,
+                            );
                           }));
-                        }
-                        else if(text[index] == "Books")
-                        {
-                          return Navigator.push(context, MaterialPageRoute(builder: (context){
+                        } else if (text[index] == "Books") {
+                          return Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
                             return SellBook();
                           }));
-                        }
-                        else
-                        {
-                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                        } else {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
                             return SellOther();
                           }));
                         }
@@ -212,13 +204,14 @@ class _SellSubCategoryState extends State<SellSubCategory> {
                             ),
                             Container(
                               width: SizeConfig.screenWidth * 0.25,
-                              alignment:Alignment.center,
+                              alignment: Alignment.center,
                               child: Text(
                                 text[index],
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Color(0XFF06070D),
-                                  fontSize: SizeConfig.blockSizeVertical * 1.5,),
+                                  fontSize: SizeConfig.blockSizeVertical * 1.5,
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             )
@@ -230,9 +223,8 @@ class _SellSubCategoryState extends State<SellSubCategory> {
                   itemCount: text.length,
                   shrinkWrap: true,
                   primary: false,
-                  padding: EdgeInsets.only(
-                      top: SizeConfig.blockSizeVertical * 2
-                  ),
+                  padding:
+                      EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
                 )),
           ],
         ),

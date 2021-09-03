@@ -24,8 +24,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController =
+      TextEditingController(text: "user@mailinator.com");
+  TextEditingController passwordController =
+      TextEditingController(text: "12345678");
 
   ValidationViewModel validationController = Get.put(ValidationViewModel());
   FocusNode usernameFn = FocusNode();
