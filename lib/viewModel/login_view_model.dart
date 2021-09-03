@@ -9,7 +9,7 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class LoginViewModel extends GetxController {
   ApiResponse apiResponse = ApiResponse.initial('Initial');
-  ApiResponse forgotPasswordApiResponse = ApiResponse.initial('Initial');
+  // ApiResponse forgotPasswordApiResponse = ApiResponse.initial('Initial');
 
   ///login...
   Future<void> login(LoginReq model) async {
