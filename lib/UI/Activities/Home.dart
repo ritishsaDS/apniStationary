@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:book_buy_and_sell/Constants/Colors.dart';
+import 'package:book_buy_and_sell/Constants/StringConstants.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
 import 'package:book_buy_and_sell/UI/Activities/Categories.dart';
 import 'package:book_buy_and_sell/UI/Activities/SubCategory.dart';
@@ -8,10 +9,13 @@ import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
+import 'package:book_buy_and_sell/model/ClassModel/BookListModel.dart';
 import 'package:book_buy_and_sell/model/ClassModel/SliderModel.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+
+import 'SelectedBook.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -49,11 +53,12 @@ class _HomeState extends State<Home> {
     'Entrance Exams'
   ];
 
+  TextEditingController _searchField = new TextEditingController();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _callSliderAPI();
   }
 
   @override
@@ -126,6 +131,7 @@ class _HomeState extends State<Home> {
                   Container(
                     width: SizeConfig.screenWidth * 0.8,
                     child: TextFormField(
+                      controller: _searchField,
                       textInputAction: TextInputAction.search,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
@@ -141,9 +147,25 @@ class _HomeState extends State<Home> {
                           border: InputBorder.none),
                     ),
                   ),
-                  Icon(
-                    Icons.search,
-                    color: Color(colorBlue),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            if (_searchField.text != "") {
+                              return SelectedBook(_searchField.text);
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.search,
+                      color: Color(colorBlue),
+                    ),
                   ),
                 ],
               ),
@@ -274,12 +296,12 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Nearby Products",
+                        "Book List",
                         style: TextStyle(
                             fontWeight: FontWeight.w600, color: Color(black)),
                       ),
                       Container(
-                        width: SizeConfig.screenWidth * 0.3,
+                        width: 80,
                         height: SizeConfig.blockSizeVertical * 0.2,
                         decoration: BoxDecoration(color: Color(colorBlue)),
                       ),
@@ -293,7 +315,50 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            Container(
+            _getBookList(),
+          ],
+        ),
+      ),
+    ));
+  }
+
+  Widget _getSliders() {
+    return FutureBuilder<List<SliderDataModel>>(
+        future: _callSliderAPI(),
+        builder: (context, AsyncSnapshot<List<SliderDataModel>> snapshot) {
+          if (snapshot.hasData) {
+            return CarouselSlider(
+              options: CarouselOptions(height: 100),
+              items: snapshot.data.map((slider) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: SizeConfig.screenWidth,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.screenWidth * 0.05,
+                          vertical: SizeConfig.blockSizeVertical),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: ClipRRect(
+                          child: Image.network(slider.image),
+                          borderRadius: BorderRadius.circular(15)),
+                    );
+                  },
+                );
+              }).toList(),
+            );
+          } else {
+            return Container();
+          }
+        });
+  }
+
+  Widget _getBookList() {
+    return FutureBuilder<List<BookListDataModel>>(
+        future: ApiCall.callBookListAPI(""),
+        builder: (context, AsyncSnapshot<List<BookListDataModel>> snapshot) {
+          if (snapshot.hasData) {
+            return Container(
                 width: SizeConfig.screenWidth,
                 margin: EdgeInsets.symmetric(
                     horizontal: SizeConfig.screenWidth * 0.05,
@@ -329,7 +394,7 @@ class _HomeState extends State<Home> {
                                             SizeConfig.blockSizeHorizontal * 4,
                                         bottom: SizeConfig.blockSizeVertical),
                                     child: Text(
-                                      "₹ 200",
+                                      "$rs ${snapshot.data[index].price}",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500),
@@ -388,7 +453,7 @@ class _HomeState extends State<Home> {
                                   margin: EdgeInsets.only(
                                       left: SizeConfig.blockSizeHorizontal * 2),
                                   child: Text(
-                                    "Physics",
+                                    snapshot.data[index].name,
                                     style: TextStyle(
                                         color: Color(0XFF06070D),
                                         fontWeight: FontWeight.w600,
@@ -406,7 +471,7 @@ class _HomeState extends State<Home> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Author Name",
+                                        snapshot.data[index].auther_name,
                                         style: TextStyle(
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w600,
@@ -415,7 +480,7 @@ class _HomeState extends State<Home> {
                                                     1.25),
                                       ),
                                       Text(
-                                        "Edition Details",
+                                        snapshot.data[index].edition_detail,
                                         style: TextStyle(
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w600,
@@ -433,41 +498,10 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   },
-                  itemCount: 5,
+                  itemCount: snapshot.data.length,
                   shrinkWrap: true,
                   primary: false,
-                )),
-          ],
-        ),
-      ),
-    ));
-  }
-
-  Widget _getSliders() {
-    return FutureBuilder<List<SliderDataModel>>(
-        future: _callSliderAPI(),
-        builder: (context, AsyncSnapshot<List<SliderDataModel>> snapshot) {
-          if (snapshot.hasData) {
-            return CarouselSlider(
-              options: CarouselOptions(height: 100),
-              items: snapshot.data.map((slider) {
-                return Builder(
-                  builder: (BuildContext context) {
-                    return Container(
-                      width: SizeConfig.screenWidth,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.05,
-                          vertical: SizeConfig.blockSizeVertical),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: ClipRRect(
-                          child:Image.network(slider.image),
-                          borderRadius: BorderRadius.circular(15)),
-                    );
-                  },
-                );
-              }).toList(),
-            );
+                ));
           } else {
             return Container();
           }
@@ -488,3 +522,6 @@ class _HomeState extends State<Home> {
     return data.SliderData;
   }
 }
+
+
+
