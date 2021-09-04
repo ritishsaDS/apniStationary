@@ -59,11 +59,46 @@ class ApiService extends BaseService {
     }
   }
 
+  Future<http.Response> apiCall(
+      {@required APIType apiType,
+      @required String url,
+      Map<String, dynamic> body,
+      bool fileUpload = false}) async {
+    try {
+      Map<String, String> header = {
+        'Content-Type': 'application/json; charset=UTF-8'
+      };
+
+      String mainUrl = baseURL + url;
+      log("URL ---> ${baseURL + url}");
+      if (apiType == APIType.aGet) {
+        var result = await http.get(Uri.parse(baseURL + url), headers: header);
+        log("response......${result.body}");
+        return result;
+      } else {
+        var encodeBody = jsonEncode(body);
+
+        log("HEADER $header");
+        log("REQUEST ENCODE BODY $body");
+        var result = await http.post(
+          Uri.parse(mainUrl),
+          // headers: header,
+          body: body,
+        );
+        return result;
+      }
+    } catch (e) {
+      log('Error=>.. $e');
+    }
+  }
+
   returnResponse(int status, String result) {
     print("status$status");
     switch (status) {
       case 200:
         return jsonDecode(result);
+      // case 256:
+      //   return result;
       case 400:
         throw BadRequestException('Bad Request');
       case 401:

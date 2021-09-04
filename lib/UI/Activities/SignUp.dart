@@ -79,6 +79,7 @@ class _SignUpState extends State<SignUp> {
   }
 
   DateTime selectedDate = DateTime.now();
+
   selectDate(BuildContext context) async {
     // final DateTime picked = await showDatePicker(
     //   context: context,
