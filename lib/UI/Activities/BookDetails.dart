@@ -535,4 +535,14 @@ class _BookDetailState extends State<BookDetail> {
 
     return data;
   }
+
+  _callAddToCartAPI()async{
+    Map<String, dynamic> body = {
+      "user_id": "${PreferenceManager.getUserId()}",
+      "session_key": PreferenceManager.getSessionKey(),
+      "id": widget.catId,
+    };
+
+    var res = await ApiCall.post(addToCartURL, body);
+  }
 }
