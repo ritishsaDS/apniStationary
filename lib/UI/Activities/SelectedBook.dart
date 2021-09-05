@@ -208,7 +208,7 @@ class _SelectedBookState extends State<SelectedBook> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return BookDetail();
+                      return BookDetail(snapshot.data[index].id.toString());
                     }));
                   },
                   child: Container(
@@ -235,10 +235,7 @@ class _SelectedBookState extends State<SelectedBook> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.asset(
-                              'assets/icons/book.png',
-                              fit: BoxFit.cover,
-                            ),
+                            child: Image.network(ApiCall.baseURL+snapshot.data[index].image1),
                           ),
                         ),
                         Container(
@@ -255,7 +252,7 @@ class _SelectedBookState extends State<SelectedBook> {
                                     fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                "$rs ${snapshot.data[index].name}",
+                                "$rs ${snapshot.data[index].price}",
                                 style: TextStyle(
                                     color: Color(colorBlue),
                                     fontWeight: FontWeight.bold),

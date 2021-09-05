@@ -377,7 +377,7 @@ class _HomeState extends State<Home> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return BookDetail();
+                          return BookDetail(snapshot.data[index].id.toString());
                         }));
                       },
                       child: Stack(
