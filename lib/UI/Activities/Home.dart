@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
 import 'package:book_buy_and_sell/UI/Activities/Categories.dart';
 import 'package:book_buy_and_sell/UI/Activities/SubCategory.dart';
+import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/constantString.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
+import 'package:book_buy_and_sell/model/ClassModel/SliderModel.dart';
+import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -41,6 +48,14 @@ class _HomeState extends State<Home> {
     'Comics',
     'Entrance Exams'
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _callSliderAPI();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -133,17 +148,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
-              child: ClipRRect(
-                  child: Image.asset('assets/bg/home bg.png'),
-                  borderRadius: BorderRadius.circular(15)),
-            ),
+            _getSliders(),
             Container(
               width: SizeConfig.screenWidth,
               margin: EdgeInsets.symmetric(
@@ -436,5 +441,50 @@ class _HomeState extends State<Home> {
         ),
       ),
     ));
+  }
+
+  Widget _getSliders() {
+    return FutureBuilder<List<SliderDataModel>>(
+        future: _callSliderAPI(),
+        builder: (context, AsyncSnapshot<List<SliderDataModel>> snapshot) {
+          if (snapshot.hasData) {
+            return CarouselSlider(
+              options: CarouselOptions(height: 100),
+              items: snapshot.data.map((slider) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: SizeConfig.screenWidth,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.screenWidth * 0.05,
+                          vertical: SizeConfig.blockSizeVertical),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: ClipRRect(
+                          child:Image.network(slider.image),
+                          borderRadius: BorderRadius.circular(15)),
+                    );
+                  },
+                );
+              }).toList(),
+            );
+          } else {
+            return Container();
+          }
+        });
+  }
+
+  Future<List<SliderDataModel>> _callSliderAPI() async {
+    Map<String, dynamic> body = {
+      "user_id": "${PreferenceManager.getUserId()}",
+      "session_key": PreferenceManager.getSessionKey(),
+    };
+
+    var res = await ApiCall.post(sliderURL, body);
+
+    var jsonResponse = json.decode(json.encode(res).toString());
+
+    var data = new SliderModel.fromJson(jsonResponse);
+    return data.SliderData;
   }
 }
