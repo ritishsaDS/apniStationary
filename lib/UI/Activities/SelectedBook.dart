@@ -193,9 +193,9 @@ class _SelectedBookState extends State<SelectedBook> {
   }
 
   Widget _getBookList() {
-    return FutureBuilder<List<BookListDataModel>>(
+    return FutureBuilder<BookListModel>(
       future: ApiCall.callBookListAPI(widget.searchedWord),
-      builder: (context, AsyncSnapshot<List<BookListDataModel>> snapshot) {
+      builder: (context, AsyncSnapshot<BookListModel> snapshot) {
         if (snapshot.hasData) {
           return Container(
             width: SizeConfig.screenWidth,
@@ -208,7 +208,7 @@ class _SelectedBookState extends State<SelectedBook> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return BookDetail(snapshot.data[index].id.toString());
+                      return BookDetail(snapshot.data.date[index].id.toString());
                     }));
                   },
                   child: Container(
@@ -235,7 +235,7 @@ class _SelectedBookState extends State<SelectedBook> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.network(ApiCall.baseURL+snapshot.data[index].image1),
+                            child: Image.network(snapshot.data.image_url+"/"+snapshot.data.date[index].image1),
                           ),
                         ),
                         Container(
@@ -246,13 +246,13 @@ class _SelectedBookState extends State<SelectedBook> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                snapshot.data[index].name,
+                                snapshot.data.date[index].name,
                                 style: TextStyle(
                                     color: Color(0XFF06070D),
                                     fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                "$rs ${snapshot.data[index].price}",
+                                "$rs ${snapshot.data.date[index].price}",
                                 style: TextStyle(
                                     color: Color(colorBlue),
                                     fontWeight: FontWeight.bold),
@@ -330,7 +330,7 @@ class _SelectedBookState extends State<SelectedBook> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          snapshot.data[index].name,
+                                          snapshot.data.date[index].name,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Color(0XFF656565),
@@ -343,7 +343,7 @@ class _SelectedBookState extends State<SelectedBook> {
                                               0.5,
                                         ),
                                         Text(
-                                          snapshot.data[index].edition_detail,
+                                          snapshot.data.date[index].edition_detail,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Color(0XFF656565),
@@ -369,7 +369,7 @@ class _SelectedBookState extends State<SelectedBook> {
                                               0.5,
                                         ),
                                         Text(
-                                          snapshot.data[index].conditions,
+                                          snapshot.data.date[index].conditions,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Color(0XFF656565),
@@ -403,7 +403,7 @@ class _SelectedBookState extends State<SelectedBook> {
                 );
               },
               shrinkWrap: true,
-              itemCount: snapshot.data.length,
+              itemCount: snapshot.data.date.length,
               primary: false,
             ),
           );

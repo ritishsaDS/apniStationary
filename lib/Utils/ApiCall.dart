@@ -45,7 +45,7 @@ class ApiCall {
     return json.decode(response.body);
   }
 
-  static Future<List<BookListDataModel>>callBookListAPI(
+  static Future<BookListModel>callBookListAPI(
       String keyword) async {
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
@@ -59,6 +59,6 @@ class ApiCall {
 
     var data = new BookListModel.fromJson(jsonResponse);
 
-    return data.date;
+    return data;
   }
 }

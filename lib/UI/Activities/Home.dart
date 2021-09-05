@@ -354,9 +354,9 @@ class _HomeState extends State<Home> {
   }
 
   Widget _getBookList() {
-    return FutureBuilder<List<BookListDataModel>>(
+    return FutureBuilder<BookListModel>(
         future: ApiCall.callBookListAPI(""),
-        builder: (context, AsyncSnapshot<List<BookListDataModel>> snapshot) {
+        builder: (context, AsyncSnapshot<BookListModel> snapshot) {
           if (snapshot.hasData) {
             return Container(
                 width: SizeConfig.screenWidth,
@@ -377,7 +377,7 @@ class _HomeState extends State<Home> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return BookDetail(snapshot.data[index].id.toString());
+                          return BookDetail(snapshot.data.date[index].id.toString());
                         }));
                       },
                       child: Stack(
@@ -394,7 +394,7 @@ class _HomeState extends State<Home> {
                                             SizeConfig.blockSizeHorizontal * 4,
                                         bottom: SizeConfig.blockSizeVertical),
                                     child: Text(
-                                      "$rs ${snapshot.data[index].price}",
+                                      "$rs ${snapshot.data.date[index].price}",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500),
@@ -447,14 +447,14 @@ class _HomeState extends State<Home> {
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(15),
                                         topLeft: Radius.circular(15)),
-                                    child: Image.asset(ApiCall.baseURL+snapshot.data[index].image1),
+                                    child: Image.asset(snapshot.data.image_url+"/"+snapshot.data.date[index].image1),
                                   ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(
                                       left: SizeConfig.blockSizeHorizontal * 2),
                                   child: Text(
-                                    snapshot.data[index].name,
+                                    snapshot.data.date[index].name,
                                     style: TextStyle(
                                         color: Color(0XFF06070D),
                                         fontWeight: FontWeight.w600,
@@ -472,7 +472,7 @@ class _HomeState extends State<Home> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        snapshot.data[index].auther_name,
+                                        snapshot.data.date[index].auther_name,
                                         style: TextStyle(
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w600,
@@ -481,7 +481,7 @@ class _HomeState extends State<Home> {
                                                     1.25),
                                       ),
                                       Text(
-                                        snapshot.data[index].edition_detail,
+                                        snapshot.data.date[index].edition_detail,
                                         style: TextStyle(
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w600,
@@ -499,7 +499,7 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   },
-                  itemCount: snapshot.data.length,
+                  itemCount: snapshot.data.date.length,
                   shrinkWrap: true,
                   primary: false,
                 ));

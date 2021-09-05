@@ -1,14 +1,15 @@
 
 class BookDataModel {
+ String image_url;
  BookDataDetailsModel date;
 
   BookDataModel(
-      {this.date});
+      {this.date,this.image_url});
 
   factory BookDataModel.fromJson(Map<String, dynamic> parsedJson) {
     return BookDataModel(
+      image_url: parsedJson['image_url'],
       date: BookDataDetailsModel.fromJson(parsedJson['date']),
-
     );
   }
 }

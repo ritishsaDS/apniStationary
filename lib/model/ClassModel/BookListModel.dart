@@ -1,8 +1,9 @@
 class BookListModel {
-  String status;
+  String status, image_url;
+
   List<BookListDataModel> date;
 
-  BookListModel({this.status, this.date});
+  BookListModel({this.status,this.image_url, this.date});
 
   factory BookListModel.fromJson(Map<String, dynamic> parsedJson) {
     var list = parsedJson['date'] as List;
@@ -12,6 +13,7 @@ class BookListModel {
 
     return BookListModel(
       status: parsedJson['status'],
+      image_url: parsedJson['image_url'],
       date: dataList,
     );
   }
