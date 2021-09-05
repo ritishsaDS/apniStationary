@@ -440,13 +440,14 @@ class _HomeState extends State<Home> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(15),
-                                      topLeft: Radius.circular(15)),
-                                  child: Image.asset(
-                                    'assets/icons/book1.png',
-                                    fit: BoxFit.cover,
+                                Container(
+                                  height: 150,
+                                  child: ClipRRect(
+
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15)),
+                                    child: Image.asset(ApiCall.baseURL+snapshot.data[index].image1),
                                   ),
                                 ),
                                 Container(

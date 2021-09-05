@@ -98,9 +98,7 @@ class _BookDetailState extends State<BookDetail> {
                                 borderRadius: BorderRadius.circular(25)),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(25),
-                              child: Image.asset(
-                                'assets/icons/book.png',
-                              ),
+                              child: Image.network(ApiCall.baseURL+snapshot.data.date.image1),
                             ),
                           ),
                           Container(
@@ -108,9 +106,7 @@ class _BookDetailState extends State<BookDetail> {
                                 borderRadius: BorderRadius.circular(25)),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(25),
-                              child: Image.asset(
-                                'assets/icons/book.png',
-                              ),
+                              child: Image.network(ApiCall.baseURL+snapshot.data.date.image2),
                             ),
                           ),
                           Container(
@@ -118,9 +114,7 @@ class _BookDetailState extends State<BookDetail> {
                                 borderRadius: BorderRadius.circular(25)),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(25),
-                              child: Image.asset(
-                                'assets/icons/book.png',
-                              ),
+                              child: Image.network(ApiCall.baseURL+snapshot.data.date.image3),
                             ),
                           ),
                           Container(
@@ -128,9 +122,7 @@ class _BookDetailState extends State<BookDetail> {
                                 borderRadius: BorderRadius.circular(25)),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(25),
-                              child: Image.asset(
-                                'assets/icons/book.png',
-                              ),
+                              child: Image.network(ApiCall.baseURL+snapshot.data.date.image4),
                             ),
                           ),
                         ],
