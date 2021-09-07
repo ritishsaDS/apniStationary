@@ -154,7 +154,7 @@ class _HomeState extends State<Home> {
                         MaterialPageRoute(
                           builder: (context) {
                             if (_searchField.text != "") {
-                              return SelectedBook(_searchField.text);
+                              return SelectedBook(searchedWord: _searchField.text);
                             } else {
                               return null;
                             }
