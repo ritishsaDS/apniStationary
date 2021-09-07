@@ -38,7 +38,7 @@ class _MyBookListState extends State<MyBookList> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return BookDetail();
+                      return BookDetail("");
                     }));
                   },
                   child: Container(
@@ -202,7 +202,8 @@ class _MyBookListState extends State<MyBookList> {
                                                         .blockSizeVertical *
                                                     0.5,
                                               ),
-                                              Text(myBooksModel[index].condition,
+                                              Text(
+                                                  myBooksModel[index].condition,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,

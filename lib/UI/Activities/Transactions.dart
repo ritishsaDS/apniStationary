@@ -135,7 +135,7 @@ class _TransactionsState extends State<Transactions> {
                 return InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return BookDetail();
+                      return BookDetail("");
                     }));
                   },
                   child: Container(

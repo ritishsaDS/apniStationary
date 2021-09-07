@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/common/preference_manager.dart';
+import 'package:book_buy_and_sell/model/ClassModel/BookListModel.dart';
 import 'package:http/http.dart' as http;
-import '../utils/constantString.dart';
 
 class ApiCall {
   static String baseURL = 'https://buysell.powerdope.com/api/';
@@ -41,5 +43,22 @@ class ApiCall {
     log("API Response: ${response.body}");
 
     return json.decode(response.body);
+  }
+
+  static Future<BookListModel>callBookListAPI(
+      String keyword) async {
+    Map<String, dynamic> body = {
+      "user_id": "${PreferenceManager.getUserId()}",
+      "session_key": PreferenceManager.getSessionKey(),
+      "keyword": keyword
+    };
+
+    var res = await ApiCall.post(bookListURL, body);
+
+    var jsonResponse = json.decode(json.encode(res).toString());
+
+    var data = new BookListModel.fromJson(jsonResponse);
+
+    return data;
   }
 }

@@ -75,7 +75,7 @@ class _SubCategoryState extends State<SubCategory> {
                     } else {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return SelectedBook();
+                        return SelectedBook("");
                       }));
                     }
                   },

@@ -1,245 +1,21 @@
-import 'dart:convert';
-
 import 'package:book_buy_and_sell/Constants/Colors.dart';
+import 'package:book_buy_and_sell/Constants/StringConstants.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
 import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
-import 'package:book_buy_and_sell/Utils/commonLV.dart';
-import 'package:book_buy_and_sell/Utils/constantString.dart';
-import 'package:book_buy_and_sell/common/preference_manager.dart';
-import 'package:book_buy_and_sell/model/apiModel/responseModel/MyBooksModel.dart';
+import 'package:book_buy_and_sell/model/ClassModel/BookListModel.dart';
 import 'package:flutter/material.dart';
 
 class SelectedBook extends StatefulWidget {
-  const SelectedBook({Key key}) : super(key: key);
+  final String searchedWord;
+
+  SelectedBook(this.searchedWord);
 
   @override
   _SelectedBookState createState() => _SelectedBookState();
 }
 
 class _SelectedBookState extends State<SelectedBook> {
-  Future<Widget> getBookList() async {
-    Map<String, dynamic> body = {
-      "user_id": "${PreferenceManager.getUserId()}",
-      "session_key": PreferenceManager.getSessionKey()
-    };
-    var res = await ApiCall.apiCall(myBookListURL, body);
-    if (res.statusCode == 256) {
-      var jsonDecoded = jsonDecode(res.body);
-      if (jsonDecoded["status"] == "200") {
-        var imageBaseUrl = jsonDecoded["image_url"];
-        List<MyBooksModel> myBooksModel = (jsonDecoded["date"] as List)
-            .map((e) => MyBooksModel.fromJson(e))
-            .toList();
-        if (myBooksModel.length > 0) {
-          return ListView.builder(
-            itemBuilder: (context, int index) {
-              return InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return BookDetail();
-                    }));
-                  },
-                  child: Container(
-                      width: SizeConfig.screenWidth,
-                      margin:
-                          EdgeInsets.only(bottom: SizeConfig.blockSizeVertical),
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey[200],
-                                spreadRadius: 3.0,
-                                blurRadius: 2.0)
-                          ]),
-                      child: Row(children: [
-                        Container(
-                            width: SizeConfig.screenWidth * 0.2,
-                            height: SizeConfig.screenHeight * 0.15,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15)),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.network(
-                                    imageBaseUrl +
-                                        "/" +
-                                        myBooksModel[index].image,
-                                    fit: BoxFit.cover))),
-                        Container(
-                            margin: EdgeInsets.only(
-                                left: SizeConfig.blockSizeHorizontal * 4),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    myBooksModel[index].name,
-                                    style: TextStyle(
-                                        color: Color(0XFF06070D),
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Text(
-                                    myBooksModel[index].price,
-                                    style: TextStyle(
-                                        color: Color(colorBlue),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: SizeConfig.blockSizeVertical,
-                                  ),
-                                  Row(children: [
-                                    Container(
-                                        width: SizeConfig.screenWidth * 0.2,
-                                        child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Author: ",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Color(0XFF656565),
-                                                    fontSize: SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.5),
-                                              ),
-                                              SizedBox(
-                                                height: SizeConfig
-                                                        .blockSizeVertical *
-                                                    0.5,
-                                              ),
-                                              Text(
-                                                "Edition Detail: ",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Color(0XFF656565),
-                                                    fontSize: SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.5),
-                                              ),
-                                              SizedBox(
-                                                height: SizeConfig
-                                                        .blockSizeVertical *
-                                                    0.5,
-                                              ),
-                                              Text(
-                                                "Semester: ",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Color(0XFF656565),
-                                                    fontSize: SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.5),
-                                              ),
-                                              SizedBox(
-                                                height: SizeConfig
-                                                        .blockSizeVertical *
-                                                    0.5,
-                                              ),
-                                              Text(
-                                                "Condition: ",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Color(0XFF656565),
-                                                    fontSize: SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.5),
-                                              )
-                                            ])),
-                                    Container(
-                                        width: SizeConfig.screenWidth * 0.3,
-                                        child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                myBooksModel[index].autherName,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0XFF656565),
-                                                    fontSize: SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.5),
-                                              ),
-                                              SizedBox(
-                                                height: SizeConfig
-                                                        .blockSizeVertical *
-                                                    0.5,
-                                              ),
-                                              Text(
-                                                myBooksModel[index]
-                                                    .edition_detail,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0XFF656565),
-                                                    fontSize: SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.5),
-                                              ),
-                                              SizedBox(
-                                                height: SizeConfig
-                                                        .blockSizeVertical *
-                                                    0.5,
-                                              ),
-                                              Text(
-                                                myBooksModel[index].semester,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0XFF656565),
-                                                    fontSize: SizeConfig
-                                                            .blockSizeVertical *
-                                                        1.5),
-                                              ),
-                                              SizedBox(
-                                                height: SizeConfig
-                                                        .blockSizeVertical *
-                                                    0.5,
-                                              ),
-                                              Text(myBooksModel[index].condition,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Color(0XFF656565),
-                                                      fontSize: SizeConfig
-                                                              .blockSizeVertical *
-                                                          1.5))
-                                            ]))
-                                  ]),
-                                  Container(
-                                      width: SizeConfig.screenWidth * 0.6,
-                                      alignment: Alignment.centerRight,
-                                      child: Text("More Info",
-                                          style: TextStyle(
-                                              color: Color(colorBlue),
-                                              fontWeight: FontWeight.w500,
-                                              fontSize:
-                                                  SizeConfig.blockSizeVertical *
-                                                      1.35)))
-                                ]))
-                      ])));
-            },
-            shrinkWrap: true,
-            itemCount: 4,
-            primary: false,
-          );
-        } else {
-          return Text("No Data found");
-        }
-      } else {
-        return Text(jsonDecoded['message']);
-      }
-    } else {
-      return Text("No Data found");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -409,16 +185,232 @@ class _SelectedBookState extends State<SelectedBook> {
                 ],
               ),
             ),
-            Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              child: CommonLV(dataCallingMethod: getBookList()),
-            ),
+            _getBookList(),
           ],
         ),
       ),
     ));
+  }
+
+  Widget _getBookList() {
+    return FutureBuilder<BookListModel>(
+      future: ApiCall.callBookListAPI(widget.searchedWord),
+      builder: (context, AsyncSnapshot<BookListModel> snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+            width: SizeConfig.screenWidth,
+            margin: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth * 0.05,
+                vertical: SizeConfig.blockSizeVertical),
+            child: ListView.builder(
+              itemBuilder: (context, int index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return BookDetail(snapshot.data.date[index].id.toString());
+                    }));
+                  },
+                  child: Container(
+                    width: SizeConfig.screenWidth,
+                    margin:
+                        EdgeInsets.only(bottom: SizeConfig.blockSizeVertical),
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              spreadRadius: 3.0,
+                              blurRadius: 2.0),
+                        ]),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: SizeConfig.screenWidth * 0.2,
+                          height: SizeConfig.screenHeight * 0.15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.network(snapshot.data.image_url+"/"+snapshot.data.date[index].image1),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: SizeConfig.blockSizeHorizontal * 4),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                snapshot.data.date[index].name,
+                                style: TextStyle(
+                                    color: Color(0XFF06070D),
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                "$rs ${snapshot.data.date[index].price}",
+                                style: TextStyle(
+                                    color: Color(colorBlue),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: SizeConfig.blockSizeVertical,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: SizeConfig.screenWidth * 0.2,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Author :",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0XFF656565),
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
+                                        ),
+                                        SizedBox(
+                                          height: SizeConfig.blockSizeVertical *
+                                              0.5,
+                                        ),
+                                        Text(
+                                          "Edition :",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0XFF656565),
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
+                                        ),
+                                        SizedBox(
+                                          height: SizeConfig.blockSizeVertical *
+                                              0.5,
+                                        ),
+                                        Text(
+                                          "College :",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0XFF656565),
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
+                                        ),
+                                        SizedBox(
+                                          height: SizeConfig.blockSizeVertical *
+                                              0.5,
+                                        ),
+                                        Text(
+                                          "Condition :",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0XFF656565),
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    width: SizeConfig.screenWidth * 0.3,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          snapshot.data.date[index].name,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0XFF656565),
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
+                                        ),
+                                        SizedBox(
+                                          height: SizeConfig.blockSizeVertical *
+                                              0.5,
+                                        ),
+                                        Text(
+                                          snapshot.data.date[index].edition_detail,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0XFF656565),
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
+                                        ),
+                                        SizedBox(
+                                          height: SizeConfig.blockSizeVertical *
+                                              0.5,
+                                        ),
+                                        Text(
+                                          "College Name",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0XFF656565),
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
+                                        ),
+                                        SizedBox(
+                                          height: SizeConfig.blockSizeVertical *
+                                              0.5,
+                                        ),
+                                        Text(
+                                          snapshot.data.date[index].conditions,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0XFF656565),
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                width: SizeConfig.screenWidth * 0.6,
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  "More Info",
+                                  style: TextStyle(
+                                      color: Color(colorBlue),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 1.35),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              shrinkWrap: true,
+              itemCount: snapshot.data.date.length,
+              primary: false,
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 }
