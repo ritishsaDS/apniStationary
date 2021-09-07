@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/Constants/StringConstants.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
 import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/common/preference_manager.dart';
+import 'package:book_buy_and_sell/model/ClassModel/BookDataModel.dart';
 import 'package:book_buy_and_sell/model/ClassModel/BookListModel.dart';
+import 'package:book_buy_and_sell/model/apiModel/responseModel/register_response_model.dart';
 import 'package:flutter/material.dart';
 
 class SelectedBook extends StatefulWidget {
@@ -412,5 +418,15 @@ class _SelectedBookState extends State<SelectedBook> {
         }
       },
     );
+  }
+
+  deleteBookAPI(String book_id) async {
+    Map<String, dynamic> body = {
+      "user_id": "${PreferenceManager.getUserId()}",
+      "session_key": PreferenceManager.getSessionKey(),
+      "id": book_id,
+    };
+
+    var res = await ApiCall.post(bookDeleteURL, body);
   }
 }
