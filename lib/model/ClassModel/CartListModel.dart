@@ -26,7 +26,8 @@ class CartListDataModel {
       price,
       conditions,
       image1,
-      created_at;
+      created_at,
+      orderId;
   var category_id, id;
 
   CartListDataModel(
@@ -37,6 +38,7 @@ class CartListDataModel {
       this.conditions,
       this.category_id,
       this.id,
+      this.orderId,
       this.image1,
       this.created_at});
 
@@ -49,6 +51,7 @@ class CartListDataModel {
       conditions: parsedJson['conditions'],
       category_id: parsedJson['category_id'],
       id: parsedJson['id'],
+      orderId: parsedJson['order_id'],
       image1: parsedJson['image1'],
       created_at: parsedJson['created_at'],
     );

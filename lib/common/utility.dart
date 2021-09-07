@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Utility {
   static String emailAddressValidationPattern = r"([a-zA-Z0-9_@.])";
   static String password = r"[a-zA-Z0-9#!_@$%^&*-]";
@@ -16,6 +18,7 @@ class Utility {
   static String passwordNotMatch =
       "Password and Conform password does not match!";
   static int kPasswordLength = 6;
+
   static String validateUserName(String value) {
     Pattern pattern =
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
@@ -39,5 +42,28 @@ class Utility {
       return kPasswordLengthValidation;
     }
     return null;
+  }
+
+  static void showLoading(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+              child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 10),
+                        Text("Loading...")
+                      ])));
+        });
+  }
+
+  static void hideLoading(context) {
+    Navigator.pop(context); //pop dialog
   }
 }
