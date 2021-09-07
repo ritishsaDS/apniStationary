@@ -5,6 +5,8 @@ import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/model/ClassModel/BookListModel.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class SelectedBook extends StatefulWidget {
   final String searchedWord;
@@ -16,6 +18,58 @@ class SelectedBook extends StatefulWidget {
 }
 
 class _SelectedBookState extends State<SelectedBook> {
+  Future<String> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+
+    final location = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    var addresses =
+        await placemarkFromCoordinates(location.latitude, location.longitude);
+    print("-------------------------------------------------");
+    print(addresses);
+    return addresses[0].name + ", " + addresses[0].subLocality;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _determinePosition().then((value) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -31,6 +85,7 @@ class _SelectedBookState extends State<SelectedBook> {
               margin: EdgeInsets.symmetric(
                   horizontal: SizeConfig.screenWidth * 0.02,
                   vertical: SizeConfig.blockSizeVertical * 2),
+              padding: EdgeInsets.only(right: 10),
               child: Row(
                 children: [
                   InkWell(
@@ -43,24 +98,31 @@ class _SelectedBookState extends State<SelectedBook> {
                       size: SizeConfig.blockSizeVertical * 4,
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: SizeConfig.blockSizeHorizontal * 5,
-                        right: SizeConfig.screenWidth * 0.35),
+                  SizedBox(width: 10,),
+                  Flexible(
                     child: Row(
                       children: [
-                        Text(
-                          "Current Location",
-                          style: TextStyle(color: Color(black)),
-                        ),
-                        SizedBox(
+                        FutureBuilder(
+                            future: _determinePosition(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(
+                                  snapshot.data,
+                                    overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(color: Color(black)),
+                                );
+                              } else {
+                                return Container();
+                              }
+                            }),
+                       /* SizedBox(
                           width: SizeConfig.blockSizeHorizontal * 2,
                         ),
                         ImageIcon(
                           AssetImage('assets/icons/current.png'),
                           color: Color(colorBlue),
                           size: SizeConfig.blockSizeVertical * 3,
-                        )
+                        )*/
                       ],
                     ),
                   ),
@@ -208,7 +270,8 @@ class _SelectedBookState extends State<SelectedBook> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return BookDetail(snapshot.data.date[index].id.toString());
+                      return BookDetail(
+                          snapshot.data.date[index].id.toString());
                     }));
                   },
                   child: Container(
@@ -235,7 +298,9 @@ class _SelectedBookState extends State<SelectedBook> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.network(snapshot.data.image_url+"/"+snapshot.data.date[index].image1),
+                            child: Image.network(snapshot.data.image_url +
+                                "/" +
+                                snapshot.data.date[index].image1),
                           ),
                         ),
                         Container(
@@ -343,7 +408,8 @@ class _SelectedBookState extends State<SelectedBook> {
                                               0.5,
                                         ),
                                         Text(
-                                          snapshot.data.date[index].edition_detail,
+                                          snapshot
+                                              .data.date[index].edition_detail,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: Color(0XFF656565),
