@@ -7,6 +7,7 @@ import 'package:book_buy_and_sell/UI/Activities/Orders.dart';
 import 'package:book_buy_and_sell/UI/Activities/Sell.dart';
 import 'package:book_buy_and_sell/UI/Activities/Transactions.dart';
 import 'package:book_buy_and_sell/UI/Activities/Wallet.dart';
+import 'package:book_buy_and_sell/UI/Activities/WalletTrans.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List<Widget> widgetOptions = <Widget>[
     Home(),
-    Wallet(),
+   // Wallet(),
+    WalletTrans(),
     Cart(),
     Account(),
   ];
@@ -267,7 +269,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return Wallet();
+                          return WalletTrans();
                         }));
                       },
                     ),
