@@ -7,6 +7,9 @@ import 'package:book_buy_and_sell/model/ClassModel/BookListModel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:google_api_headers/google_api_headers.dart';
 
 class SelectedBook extends StatefulWidget {
   final String searchedWord;
@@ -18,6 +21,8 @@ class SelectedBook extends StatefulWidget {
 }
 
 class _SelectedBookState extends State<SelectedBook> {
+  final kGoogleApiKey = "AIzaSyDYt1WEbSBM1rji0tN69hz9nM4P833FMco";
+
   Future<String> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -98,7 +103,9 @@ class _SelectedBookState extends State<SelectedBook> {
                       size: SizeConfig.blockSizeVertical * 4,
                     ),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Flexible(
                     child: Row(
                       children: [
@@ -106,16 +113,31 @@ class _SelectedBookState extends State<SelectedBook> {
                             future: _determinePosition(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                return Text(
-                                  snapshot.data,
+                                return GestureDetector(
+                                  onTap: () async {
+                                    Prediction p =
+                                        await PlacesAutocomplete.show(
+                                            context: context,
+                                            apiKey: kGoogleApiKey,
+                                            mode:
+                                                Mode.overlay, // Mode.fullscreen
+                                            language: "en",
+                                            components: [
+                                          new Component(Component.country, "in")
+                                        ],
+                                            types: []);
+                                  },
+                                  child: Text(
+                                    snapshot.data,
                                     overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: Color(black)),
+                                    style: TextStyle(color: Color(black)),
+                                  ),
                                 );
                               } else {
                                 return Container();
                               }
                             }),
-                       /* SizedBox(
+                        /* SizedBox(
                           width: SizeConfig.blockSizeHorizontal * 2,
                         ),
                         ImageIcon(
