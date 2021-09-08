@@ -360,7 +360,7 @@ class _CartState extends State<Cart> {
     });
 
     var decode = jsonDecode(res.body);
-    if (decode["status"] == true) {
+    if (decode["status"] == "200") {
       Utility.hideLoading(context);
     } else {
       CommonSnackBar.snackBar(message: decode["message"]);
