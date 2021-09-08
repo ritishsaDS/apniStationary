@@ -9,6 +9,7 @@ import 'package:book_buy_and_sell/Utils/constantString.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/ClassModel/BookDataModel.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
@@ -377,6 +378,56 @@ class _BookDetailState extends State<BookDetail> {
                             ),
                           ),
                         ),
+
+                        GestureDetector(
+                          onTap: (){
+                          },
+                          child: Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color(gradientColor1),
+                                  Color(gradientColor2),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: MaterialButton(
+                              onPressed: () {
+                                _callAddToCartAPI();
+
+                              },
+                              child: Text(
+                                "Add to Cart",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                        ),
+                        /*Container(
+                          width: SizeConfig.screenWidth * 0.4,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(gradientColor1),
+                                Color(gradientColor2),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Buy Now: $rs ${snapshot.data.date.price}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
                         Container(
                           width: SizeConfig.screenWidth * 0.4,
                           decoration: BoxDecoration(
@@ -501,13 +552,13 @@ class _BookDetailState extends State<BookDetail> {
                                   });
                             },
                             child: Text(
-                              "Chat",
+                              "Add to Cart",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
-                        ),
+                        ), */
                       ],
                     ),
                   ),
@@ -520,6 +571,26 @@ class _BookDetailState extends State<BookDetail> {
         ),
       ),
     ));
+  }
+
+   _showAlert(BuildContext context,String msg) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Text(msg),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<BookDataModel> _callBookDataAPI() async {
@@ -544,5 +615,7 @@ class _BookDetailState extends State<BookDetail> {
     };
 
     var res = await ApiCall.post(addToCartURL, body);
+
+    _showAlert(context,res["message"]);
   }
 }
