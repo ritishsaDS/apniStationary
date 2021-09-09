@@ -47,18 +47,14 @@ class ApiCall {
   }
 
   static Future<BookListModel> callBookListAPI(String keyword,
-      {int catId = 0}) async {
+      String catID) async {
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
-      "session_key": PreferenceManager.getSessionKey()
+      "session_key": PreferenceManager.getSessionKey(),
+      "keyword": keyword,
+      "category_id":catID,
     };
 
-    if (catId > 0) {
-      body["category_id"] = "$catId";
-    }
-    if (keyword != null) {
-      body["keyword"] = keyword;
-    }
     var res = await ApiCall.post(bookListURL, body);
     var jsonResponse = json.decode(json.encode(res).toString());
 

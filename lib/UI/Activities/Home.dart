@@ -129,7 +129,7 @@ class _HomeState extends State<Home> {
                           MaterialPageRoute(
                             builder: (context) {
                               return SelectedBook(
-                                  searchedWord: _searchField.text);
+                                  searchedWord: _searchField.text,catId: "",);
                             },
                           ),
                         );
@@ -290,7 +290,7 @@ class _HomeState extends State<Home> {
                             id: categoriesModel[index].id,
                             text: categoriesModel[index].name,
                             img: categoriesModel[index].image)
-                        : SelectedBook(catId: categoriesModel[index].id);
+                        : SelectedBook(searchedWord: "",catId: categoriesModel[index].id.toString());
                   }));
                 },
                 child: Container(
@@ -411,7 +411,7 @@ class _HomeState extends State<Home> {
 
   Widget _getBookList() {
     return FutureBuilder<BookListModel>(
-        future: ApiCall.callBookListAPI(""),
+        future: ApiCall.callBookListAPI("",""),
         builder: (context, AsyncSnapshot<BookListModel> snapshot) {
           if (snapshot.hasData) {
             return Container(

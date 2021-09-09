@@ -12,8 +12,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 
 class SelectedBook extends StatefulWidget {
-  final String searchedWord;
-  final int catId;
+  final String searchedWord,catId;
 
   SelectedBook({this.searchedWord, this.catId});
 
@@ -279,7 +278,7 @@ class _SelectedBookState extends State<SelectedBook> {
 
   Widget _getBookList() {
     return FutureBuilder<BookListModel>(
-      future: ApiCall.callBookListAPI(widget.searchedWord, catId: widget.catId),
+      future: ApiCall.callBookListAPI(widget.searchedWord,widget.catId.toString()),
       builder: (context, AsyncSnapshot<BookListModel> snapshot) {
         if (snapshot.hasData) {
           return Container(

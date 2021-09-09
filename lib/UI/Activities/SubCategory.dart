@@ -75,7 +75,7 @@ class _SubCategoryState extends State<SubCategory> {
                     } else {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return SelectedBook(catId: categoriesModel[index].id);
+                        return SelectedBook(searchedWord: "",catId: categoriesModel[index].id.toString());
                       }));
                     }
                   },
