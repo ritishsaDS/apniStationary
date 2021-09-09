@@ -26,29 +26,29 @@ class _CartState extends State<Cart> {
     SizeConfig().init(context);
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Color(backgroundColor),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.screenWidth * 0.02,
-                      vertical: SizeConfig.blockSizeVertical * 2),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: ImageIcon(
-                          AssetImage('assets/icons/back.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 4,
-                        ),
-                      ),
-                     /* Container(
+      backgroundColor: Color(backgroundColor),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.screenWidth * 0.02,
+                  vertical: SizeConfig.blockSizeVertical * 2),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: ImageIcon(
+                      AssetImage('assets/icons/back.png'),
+                      color: Color(colorBlue),
+                      size: SizeConfig.blockSizeVertical * 4,
+                    ),
+                  ),
+                  /* Container(
                         margin: EdgeInsets.only(
                             left: SizeConfig.blockSizeHorizontal * 5,
                             right: SizeConfig.screenWidth * 0.35),
@@ -69,29 +69,29 @@ class _CartState extends State<Cart> {
                           ],
                         ),
                       ), */
-                     /* ImageIcon(
+                  /* ImageIcon(
                         AssetImage('assets/icons/notification.png'),
                         color: Color(colorBlue),
                         size: SizeConfig.blockSizeVertical * 4,
                       )*/
-                    ],
-                  ),
-                ),
-                Container(
-                  width: SizeConfig.screenWidth,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.screenWidth * 0.05,
-                      vertical: SizeConfig.blockSizeVertical),
-                  child: Text(
-                    "My Cart",
-                    style: TextStyle(
-                        color: Color(black),
-                        fontWeight: FontWeight.w600,
-                        fontSize: SizeConfig.blockSizeVertical * 2),
-                  ),
-                ),
-                _getCartData(),
-              /*  SizedBox(
+                ],
+              ),
+            ),
+            Container(
+              width: SizeConfig.screenWidth,
+              margin: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.screenWidth * 0.05,
+                  vertical: SizeConfig.blockSizeVertical),
+              child: Text(
+                "My Cart",
+                style: TextStyle(
+                    color: Color(black),
+                    fontWeight: FontWeight.w600,
+                    fontSize: SizeConfig.blockSizeVertical * 2),
+              ),
+            ),
+            _getCartData(),
+            /*  SizedBox(
                   height: SizeConfig.screenHeight * 0.15,
                 ),
                 Container(
@@ -139,42 +139,42 @@ class _CartState extends State<Cart> {
                     ),
                   ),
                 ),*/
-                Container(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.blockSizeVertical * 7,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.screenWidth * 0.05,
-                      vertical: SizeConfig.blockSizeVertical * 2),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(gradientColor1),
-                        Color(gradientColor2),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: MaterialButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Buy All",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: SizeConfig.blockSizeVertical * 2),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
+            Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.blockSizeVertical * 7,
+              margin: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.screenWidth * 0.05,
+                  vertical: SizeConfig.blockSizeVertical * 2),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(gradientColor1),
+                    Color(gradientColor2),
+                  ],
                 ),
-                SizedBox(
-                  height: SizeConfig.blockSizeVertical * 5,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: MaterialButton(
+                onPressed: () {},
+                child: Text(
+                  "Buy All",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: SizeConfig.blockSizeVertical * 2),
                 ),
-              ],
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
             ),
-          ),
-        ));
+            SizedBox(
+              height: SizeConfig.blockSizeVertical * 5,
+            ),
+          ],
+        ),
+      ),
+    ));
   }
 
   Widget _getCartData() {
@@ -244,7 +244,9 @@ class _CartState extends State<Cart> {
                                   borderRadius: BorderRadius.circular(25)),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(25),
-                                child: Image.network(snapshot.data.image_url+"/"+snapshot.data.date[index].image1),
+                                child: Image.network(snapshot.data.image_url +
+                                    "/" +
+                                    snapshot.data.date[index].image1),
                               ),
                             ),
                             Container(
@@ -257,7 +259,7 @@ class _CartState extends State<Cart> {
                                 children: [
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         snapshot.data.date[index].name,
@@ -265,8 +267,8 @@ class _CartState extends State<Cart> {
                                             color: Color(black),
                                             fontWeight: FontWeight.w500,
                                             fontSize:
-                                            SizeConfig.blockSizeVertical *
-                                                2),
+                                                SizeConfig.blockSizeVertical *
+                                                    2),
                                       ),
                                       Text(
                                         snapshot.data.date[index].created_at,
@@ -274,8 +276,8 @@ class _CartState extends State<Cart> {
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w500,
                                             fontSize:
-                                            SizeConfig.blockSizeVertical *
-                                                1.25),
+                                                SizeConfig.blockSizeVertical *
+                                                    1.25),
                                       ),
                                     ],
                                   ),
@@ -319,7 +321,7 @@ class _CartState extends State<Cart> {
                                         ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                          BorderRadius.circular(15),
+                                              BorderRadius.circular(15),
                                         ),
                                       ),
                                     ),
@@ -354,20 +356,12 @@ class _CartState extends State<Cart> {
     var res = await ApiCall.post(cartListURL, body);
     var jsonResponse = json.decode(json.encode(res).toString());
 
-    try{
+    try {
       var data = new CartListModel.fromJson(jsonResponse);
       return data;
-
-    }catch(e){
-      print("---------------");
-      print(e);
+    } catch (e) {
       return null;
-
     }
-
-
-
-
   }
 
   removeCart(BuildContext context, String orderId) async {
@@ -386,6 +380,3 @@ class _CartState extends State<Cart> {
     }
   }
 }
-
-
-

@@ -8,3 +8,4 @@ final String addToCartURL = 'add-to-cart';
 final String walletURL = 'wallet';
 final String cartRemoveURL = 'cart-remove';
 final String withdrawAmountURL = 'withdrow-amount';
+final String buyerOrderListURL = 'buyer-order-list';
