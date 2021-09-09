@@ -20,7 +20,7 @@ class CartListModel {
 }
 
 class CartListDataModel {
-  String name,
+  var name,
       auther_name,
       edition_detail,
       price,
