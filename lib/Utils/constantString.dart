@@ -9,3 +9,4 @@ final String walletURL = 'wallet';
 final String cartRemoveURL = 'cart-remove';
 final String withdrawAmountURL = 'withdrow-amount';
 final String buyerOrderListURL = 'buyer-order-list';
+final String sellerOrderListURL = 'seller-order-list';
