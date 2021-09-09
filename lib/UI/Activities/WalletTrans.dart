@@ -241,79 +241,88 @@ class _WalletTransState extends State<WalletTrans> {
                               fontSize: SizeConfig.blockSizeVertical * 2),
                         ),
                       ),
-                      ListView.builder(
-                        itemBuilder: (context, int index) {
-                          return Container(
-                            margin: EdgeInsets.only(left: 20,right: 20,bottom: 10),
+                      FutureBuilder<TransactionModel>(
+                          future: _callTransactionAPI(),
+                          builder: (context,AsyncSnapshot<TransactionModel> snapshot){
+                        if(snapshot.hasData){
+                          return ListView.builder(
+                            itemBuilder: (context, int index) {
+                              return Container(
 
-                            padding: EdgeInsets.all(8),
-                            height: SizeConfig.screenHeight * 0.15,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey[200],
-                                  spreadRadius: 2.0,
-                                  blurRadius: 5.0,
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image.asset('assets/icons/axis.png'),
-                                  ),
-                                ),
-                                Container(
+                                margin: EdgeInsets.only(left: 20,right: 20,bottom: 10),
 
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Top up",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        "**** **** **** 0230",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Debit Card",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: SizeConfig.blockSizeVertical * 1.5),
-                                      ),
-                                    ],
-                                  ),
+                                padding: EdgeInsets.all(8),
+                                height: SizeConfig.screenHeight * 0.15,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 2.0,
+                                      blurRadius: 5.0,
+                                    ),
+                                  ],
                                 ),
-                                Expanded(child: Container()),
-                                Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Image.asset('assets/icons/axis.png'),
+                                      ),
+                                    ),
+                                    Container(
 
-                                  child: Text("rs 300"),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 150,
+                                            child: Text(
+                                              snapshot.data.date[index].message,
+
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5,),
+
+                                          Text(
+                                            snapshot.data.date[index].created_at,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: SizeConfig.blockSizeVertical * 1.5),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(child: Container()),
+                                    Container(
+
+                                      child: Text("${_getSign(snapshot.data.date[index].type)} $rs ${snapshot.data.date[index].amount}"),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              );
+                            },
+                            primary: false,
+                            itemCount: snapshot.data.date.length,
+                            shrinkWrap: true,
                           );
-                        },
-                        primary: false,
-                        itemCount: 2,
-                        shrinkWrap: true,
-                      ),
-                      Container(
+                        }else{
+                          return Container();
+                        }
+                      }),
+                   /*   Container(
                         width: SizeConfig.screenWidth,
                         margin: EdgeInsets.symmetric(
                             horizontal: SizeConfig.screenWidth * 0.05,
@@ -561,7 +570,7 @@ class _WalletTransState extends State<WalletTrans> {
                       ),
                       SizedBox(
                         height: SizeConfig.blockSizeVertical * 4,
-                      ),
+                      ),*/
 
                     ],
                   ),
@@ -572,6 +581,14 @@ class _WalletTransState extends State<WalletTrans> {
             },
           ),
         ));
+  }
+  
+ String _getSign(String type){
+    if(type == "Dr"){
+      return "-";
+    }else{
+      return  "+";
+    }
   }
 
   Future<WalletModel> _callWalletAPI() async {
@@ -595,7 +612,7 @@ class _WalletTransState extends State<WalletTrans> {
       "session_key": PreferenceManager.getSessionKey(),
     };
 
-    var res = await ApiCall.post(walletURL, body);
+    var res = await ApiCall.post(transactionURL, body);
     var jsonResponse = json.decode(json.encode(res).toString());
     var data = new TransactionModel.fromJson(jsonResponse);
 

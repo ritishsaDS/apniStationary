@@ -1,31 +1,36 @@
 class TransactionModel {
   String status;
-  TransactionDataModel date;
 
-  TransactionModel({this.date, this.status});
+  List<TransactionDataModel> date;
+
+  TransactionModel({this.status, this.date});
 
   factory TransactionModel.fromJson(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['date'] as List;
+
+    List<TransactionDataModel> dataList =
+    list.map((i) => TransactionDataModel.fromJson(i)).toList();
+
     return TransactionModel(
       status: parsedJson['status'],
-      date: TransactionDataModel.fromJson(parsedJson['date']),
+      date: dataList,
     );
   }
 }
 
 class TransactionDataModel {
-  String wallet_amount, paid_hold_amount, received_hold_amount;
+  String amount, message, type, created_at;
 
-  TransactionDataModel({
-    this.wallet_amount,
-    this.paid_hold_amount,
-    this.received_hold_amount,
-  });
+  TransactionDataModel(
+      {this.amount, this.message, this.type, this.created_at});
 
   factory TransactionDataModel.fromJson(Map<String, dynamic> parsedJson) {
     return TransactionDataModel(
-      wallet_amount: parsedJson['wallet_amount'],
-      paid_hold_amount: parsedJson['paid_hold_amount'],
-      received_hold_amount: parsedJson['received_hold_amount'],
+      amount: parsedJson['amount'],
+      message: parsedJson['message'],
+      type: parsedJson['type'],
+      created_at: parsedJson['created_at'],
+
     );
   }
 }
