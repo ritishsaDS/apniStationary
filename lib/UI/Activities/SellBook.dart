@@ -12,6 +12,7 @@ import 'package:book_buy_and_sell/common/get_image_picker.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/ClassModel/BookDataModel.dart';
 import 'package:book_buy_and_sell/model/apiModel/requestModel/BookAdd.dart';
+import 'package:book_buy_and_sell/model/apiModel/requestModel/BookEdit.dart';
 import 'package:book_buy_and_sell/model/apiModel/responseModel/register_response_model.dart';
 import 'package:book_buy_and_sell/model/apis/api_response.dart';
 import 'package:book_buy_and_sell/viewModel/book_add_view_model.dart';
@@ -57,13 +58,6 @@ class _SellBookState extends State<SellBook> {
     semesterFn = FocusNode();
     descFn = FocusNode();
 
-    if (widget.catId.isNotEmpty) {
-      Future<BookDataModel> bookData = _callBookDataAPI();
-
-      //    bookName.text = bookData.;
-      //  mobileNoController.text = user.mobile_no;
-      //   addressController.text = user.address;
-    }
   }
 
   @override
@@ -147,15 +141,18 @@ class _SellBookState extends State<SellBook> {
           future: _callBookDataAPI(),
           builder: (context,AsyncSnapshot<BookDataModel> snapshot) {
         if (snapshot.hasData) {
-          return _commonWidget(snapshot.data.date);
+          return _commonWidget(snapshot.data.image_url,snapshot.data.date);
         } else {
-          return _commonWidget(BookDataDetailsModel(name: ""));
+          BookDataDetailsModel bookDataDetailsModel = new BookDataDetailsModel(name:"",auther_name: "",edition_detail: "",
+              price: "",conditions: "",category_id: "",description: "",semester: "",image1: "",
+              image2: "",image3: "",image4: "");
+          return _commonWidget("",bookDataDetailsModel);
         }
       });
     }
   }
 
-  Widget _commonWidget(BookDataDetailsModel data) {
+  Widget _commonWidget(String image_url,BookDataDetailsModel data) {
     return Column(
       children: [
         Container(
@@ -191,6 +188,55 @@ class _SellBookState extends State<SellBook> {
                   }, child: GetBuilder<ImageUploadViewModel>(
                     builder: (controller) {
                       if (controller.selectedImg == null) {
+                        if (data.image1 != "") {
+                          return Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            height: SizeConfig.screenHeight * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1.0,
+                                      blurRadius: 2.0),
+                                ],
+
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        image_url + "/" + data.image1),
+                                    fit: BoxFit.cover)),
+                          );
+                        } else {
+                          return Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            height: SizeConfig.screenHeight * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1.0,
+                                      blurRadius: 2.0),
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add_circle,
+                                  color: Color(colorBlue),
+                                  size: SizeConfig.blockSizeVertical * 6,
+                                ),
+                                Text("Add Book Pic")
+                              ],
+                            ),
+                          );
+                        }
+                      }
+
+
                         return Container(
                           width: SizeConfig.screenWidth * 0.4,
                           height: SizeConfig.screenHeight * 0.15,
@@ -202,39 +248,13 @@ class _SellBookState extends State<SellBook> {
                                     color: Colors.grey[200],
                                     spreadRadius: 1.0,
                                     blurRadius: 2.0),
-                              ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add_circle,
-                                color: Color(colorBlue),
-                                size: SizeConfig.blockSizeVertical * 6,
-                              ),
-                              Text("Add Book Pic")
-                            ],
-                          ),
+                              ],
+
+                              image: DecorationImage(
+                                  image: MemoryImage(controller.selectedImg),
+                                  fit: BoxFit.cover)),
                         );
                       }
-
-                      return Container(
-                        width: SizeConfig.screenWidth * 0.4,
-                        height: SizeConfig.screenHeight * 0.15,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey[200],
-                                  spreadRadius: 1.0,
-                                  blurRadius: 2.0),
-                            ],
-                            image: DecorationImage(
-                                image: MemoryImage(controller.selectedImg),
-                                fit: BoxFit.cover)),
-                      );
-                    },
                   )),
                   GestureDetector(onTap: () async {
                     ImageUploadViewModel imageUpload = Get.find();
@@ -247,31 +267,52 @@ class _SellBookState extends State<SellBook> {
                   }, child: GetBuilder<ImageUploadViewModel>(
                     builder: (controller) {
                       if (controller.selectedImg2 == null) {
-                        return Container(
-                          width: SizeConfig.screenWidth * 0.4,
-                          height: SizeConfig.screenHeight * 0.15,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey[200],
-                                    spreadRadius: 1.0,
-                                    blurRadius: 2.0),
-                              ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add_circle,
-                                color: Color(colorBlue),
-                                size: SizeConfig.blockSizeVertical * 6,
-                              ),
-                              Text("Add Book Pic")
-                            ],
-                          ),
-                        );
+                        if (data.image2 != "") {
+                          return Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            height: SizeConfig.screenHeight * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1.0,
+                                      blurRadius: 2.0),
+                                ],
+
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        image_url + "/" + data.image2),
+                                    fit: BoxFit.cover)),
+                          );
+                        } else {
+                          return Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            height: SizeConfig.screenHeight * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1.0,
+                                      blurRadius: 2.0),
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add_circle,
+                                  color: Color(colorBlue),
+                                  size: SizeConfig.blockSizeVertical * 6,
+                                ),
+                                Text("Add Book Pic")
+                              ],
+                            ),
+                          );
+                        }
                       }
 
                       return Container(
@@ -311,31 +352,52 @@ class _SellBookState extends State<SellBook> {
                   }, child: GetBuilder<ImageUploadViewModel>(
                     builder: (controller) {
                       if (controller.selectedImg3 == null) {
-                        return Container(
-                          width: SizeConfig.screenWidth * 0.4,
-                          height: SizeConfig.screenHeight * 0.15,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey[200],
-                                    spreadRadius: 1.0,
-                                    blurRadius: 2.0),
-                              ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add_circle,
-                                color: Color(colorBlue),
-                                size: SizeConfig.blockSizeVertical * 6,
-                              ),
-                              Text("Add Book Pic")
-                            ],
-                          ),
-                        );
+                        if (data.image3 != "") {
+                          return Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            height: SizeConfig.screenHeight * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1.0,
+                                      blurRadius: 2.0),
+                                ],
+
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        image_url + "/" + data.image3),
+                                    fit: BoxFit.cover)),
+                          );
+                        } else {
+                          return Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            height: SizeConfig.screenHeight * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1.0,
+                                      blurRadius: 2.0),
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add_circle,
+                                  color: Color(colorBlue),
+                                  size: SizeConfig.blockSizeVertical * 6,
+                                ),
+                                Text("Add Book Pic")
+                              ],
+                            ),
+                          );
+                        }
                       }
 
                       return Container(
@@ -367,31 +429,52 @@ class _SellBookState extends State<SellBook> {
                   }, child: GetBuilder<ImageUploadViewModel>(
                     builder: (controller) {
                       if (controller.selectedImg4 == null) {
-                        return Container(
-                          width: SizeConfig.screenWidth * 0.4,
-                          height: SizeConfig.screenHeight * 0.15,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey[200],
-                                    spreadRadius: 1.0,
-                                    blurRadius: 2.0),
-                              ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add_circle,
-                                color: Color(colorBlue),
-                                size: SizeConfig.blockSizeVertical * 6,
-                              ),
-                              Text("Add Book Pic")
-                            ],
-                          ),
-                        );
+                        if (data.image4 != "") {
+                          return Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            height: SizeConfig.screenHeight * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1.0,
+                                      blurRadius: 2.0),
+                                ],
+
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        image_url + "/" + data.image4),
+                                    fit: BoxFit.cover)),
+                          );
+                        } else {
+                          return Container(
+                            width: SizeConfig.screenWidth * 0.4,
+                            height: SizeConfig.screenHeight * 0.15,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1.0,
+                                      blurRadius: 2.0),
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add_circle,
+                                  color: Color(colorBlue),
+                                  size: SizeConfig.blockSizeVertical * 6,
+                                ),
+                                Text("Add Book Pic")
+                              ],
+                            ),
+                          );
+                        }
                       }
 
                       return Container(
@@ -481,7 +564,7 @@ class _SellBookState extends State<SellBook> {
                           blurRadius: 4.0),
                     ]),
                 child: TextFormField(
-                  controller: author,
+                  controller: author..text = data.auther_name,
                   focusNode: authorFn,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
@@ -520,7 +603,7 @@ class _SellBookState extends State<SellBook> {
                           blurRadius: 4.0),
                     ]),
                 child: TextFormField(
-                  controller: edition,
+                  controller: edition..text = data.edition_detail,
                   focusNode: editionFn,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
@@ -567,6 +650,7 @@ class _SellBookState extends State<SellBook> {
                                   blurRadius: 4.0),
                             ]),
                         child: DropdownButtonFormField<String>(
+                          value: data.semester,
                           decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.zero,
@@ -622,6 +706,7 @@ class _SellBookState extends State<SellBook> {
                                   blurRadius: 4.0),
                             ]),
                         child: DropdownButtonFormField<String>(
+                          value: data.conditions,
                           decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.zero,
@@ -675,7 +760,7 @@ class _SellBookState extends State<SellBook> {
                           blurRadius: 4.0),
                     ]),
                 child: TextFormField(
-                  controller: desc,
+                  controller: desc..text = data.description,
                   focusNode: descFn,
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.text,
@@ -718,7 +803,7 @@ class _SellBookState extends State<SellBook> {
                           borderRadius: BorderRadius.circular(25),
                           color: Colors.white),
                       child: TextFormField(
-                        controller: price,
+                        controller: price..text = data.price,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "Price",
@@ -773,56 +858,107 @@ class _SellBookState extends State<SellBook> {
                               return;
                             }
 
-                            BookAddViewModel bookAddViewModel =
-                                Get.put(BookAddViewModel());
-                            ImageUploadViewModel imaUploadViewModel =
-                                Get.put(ImageUploadViewModel());
-                            print(
-                                "image selected${imaUploadViewModel.selectedImg}");
-                            BookAdd bookAddReq = BookAdd();
-                            bookAddReq.user_id =
-                                "${PreferenceManager.getUserId()}";
-                            bookAddReq.session_key =
-                                "${PreferenceManager.getSessionKey()}";
-                            bookAddReq.category_id = "1";
-                            bookAddReq.name = bookName.text;
-                            bookAddReq.auther_name = author.text;
-                            bookAddReq.edition_detail = edition.text;
-                            bookAddReq.semester = semester.text;
-                            bookAddReq.conditions = conditions.text;
-                            bookAddReq.description = desc.text;
-                            bookAddReq.price = price.text;
-                            bookAddReq.image1 = imaUploadViewModel.selectedImg;
-                            bookAddReq.image2 = imaUploadViewModel.selectedImg2;
-                            bookAddReq.image3 = imaUploadViewModel.selectedImg3;
-                            bookAddReq.image4 = imaUploadViewModel.selectedImg4;
+                            if (widget.catId != "") {
+                              BookAddViewModel bookAddViewModel =
+                              Get.put(BookAddViewModel());
+                              ImageUploadViewModel imaUploadViewModel =
+                              Get.put(ImageUploadViewModel());
+                              print(
+                                  "image selected${imaUploadViewModel
+                                      .selectedImg}");
+                              BookEdit bookEditReq = BookEdit();
+                              bookEditReq.id = widget.catId;
+                              bookEditReq.user_id =
+                              "${PreferenceManager.getUserId()}";
+                              bookEditReq.session_key =
+                              "${PreferenceManager.getSessionKey()}";
+                              bookEditReq.category_id = "1";
+                              bookEditReq.name = bookName.text;
+                              bookEditReq.auther_name = author.text;
+                              bookEditReq.edition_detail = edition.text;
+                              bookEditReq.semester = semester.text;
+                              bookEditReq.conditions = conditions.text;
+                              bookEditReq.description = desc.text;
+                              bookEditReq.price = price.text;
+                              bookEditReq.image1 =
+                                  imaUploadViewModel.selectedImg;
+                              bookEditReq.image2 =
+                                  imaUploadViewModel.selectedImg2;
+                              bookEditReq.image3 =
+                                  imaUploadViewModel.selectedImg3;
+                              bookEditReq.image4 =
+                                  imaUploadViewModel.selectedImg4;
 
-                            await bookAddViewModel.bookAdd(bookAddReq);
-                            // if (bookAddViewModel.apiResponse.status ==
-                            //     Status.COMPLETE) {
-                            RegisterResponseModel response =
-                                bookAddViewModel.apiResponse.data;
-                            if (response.status == '200') {
-                              CommonSnackBar.snackBar(
-                                  message: response.message);
+                              await bookAddViewModel.bookEdit(bookEditReq);
+                              // if (bookAddViewModel.apiResponse.status ==
+                              //     Status.COMPLETE) {
+                              RegisterResponseModel response =
+                                  bookAddViewModel.apiResponse.data;
+                              if (response.status == '200') {
+                                CommonSnackBar.snackBar(
+                                    message: response.message);
 
-                              Future.delayed(Duration(seconds: 2), () {
-                                Get.back();
-                                bookName.clear();
-                                author.clear();
-                                price.clear();
-                                desc.clear();
-                                edition.clear();
-                              });
-                              Navigator.pop(context);
+                                Future.delayed(Duration(seconds: 2), () {
+                                  Get.back();
+                                });
+                                Navigator.pop(context);
+                              } else {
+                                CommonSnackBar.snackBar(
+                                    message: response.message);
+                              }
                             } else {
-                              CommonSnackBar.snackBar(
-                                  message: response.message);
+                              BookAddViewModel bookAddViewModel =
+                              Get.put(BookAddViewModel());
+                              ImageUploadViewModel imaUploadViewModel =
+                              Get.put(ImageUploadViewModel());
+                              print(
+                                  "image selected${imaUploadViewModel
+                                      .selectedImg}");
+                              BookAdd bookAddReq = BookAdd();
+                              bookAddReq.user_id =
+                              "${PreferenceManager.getUserId()}";
+                              bookAddReq.session_key =
+                              "${PreferenceManager.getSessionKey()}";
+                              bookAddReq.category_id = "1";
+                              bookAddReq.name = bookName.text;
+                              bookAddReq.auther_name = author.text;
+                              bookAddReq.edition_detail = edition.text;
+                              bookAddReq.semester = semester.text;
+                              bookAddReq.conditions = conditions.text;
+                              bookAddReq.description = desc.text;
+                              bookAddReq.price = price.text;
+                              bookAddReq.image1 =
+                                  imaUploadViewModel.selectedImg;
+                              bookAddReq.image2 =
+                                  imaUploadViewModel.selectedImg2;
+                              bookAddReq.image3 =
+                                  imaUploadViewModel.selectedImg3;
+                              bookAddReq.image4 =
+                                  imaUploadViewModel.selectedImg4;
+
+                              await bookAddViewModel.bookAdd(bookAddReq);
+                              // if (bookAddViewModel.apiResponse.status ==
+                              //     Status.COMPLETE) {
+                              RegisterResponseModel response =
+                                  bookAddViewModel.apiResponse.data;
+                              if (response.status == '200') {
+                                CommonSnackBar.snackBar(
+                                    message: response.message);
+
+                                Future.delayed(Duration(seconds: 2), () {
+                                  Get.back();
+                                  bookName.clear();
+                                  author.clear();
+                                  price.clear();
+                                  desc.clear();
+                                  edition.clear();
+                                });
+                                Navigator.pop(context);
+                              } else {
+                                CommonSnackBar.snackBar(
+                                    message: response.message);
+                              }
                             }
-                            // } else {
-                            //   CommonSnackBar.snackBar(
-                            //       message: "Server Errorrr");
-                            // }
                           }
                         },
                         child: Text(

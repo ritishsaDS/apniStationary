@@ -5,5 +5,6 @@ abstract class BaseService<T> {
   final String changePasswordURL = 'change-password';
   final String forgotPasswordURL = 'forget-password';
   final String bookAdd = 'book-add';
+  final String bookEdit = 'book-edit';
 
 }
