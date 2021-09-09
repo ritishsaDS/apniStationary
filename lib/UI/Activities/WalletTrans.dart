@@ -242,7 +242,7 @@ class _WalletTransState extends State<WalletTrans> {
                         ),
                       ),
                       FutureBuilder<TransactionModel>(
-                          future: _callTransactionAPI(),
+                          future: ApiCall.callTransactionAPI(),
                           builder: (context,AsyncSnapshot<TransactionModel> snapshot){
                         if(snapshot.hasData){
                           return ListView.builder(
@@ -308,7 +308,7 @@ class _WalletTransState extends State<WalletTrans> {
                                     Expanded(child: Container()),
                                     Container(
 
-                                      child: Text("${_getSign(snapshot.data.date[index].type)} $rs ${snapshot.data.date[index].amount}"),
+                                      child: Text("${getSign(snapshot.data.date[index].type)} $rs ${snapshot.data.date[index].amount}"),
                                     ),
                                   ],
                                 ),
@@ -583,13 +583,7 @@ class _WalletTransState extends State<WalletTrans> {
         ));
   }
   
- String _getSign(String type){
-    if(type == "Dr"){
-      return "-";
-    }else{
-      return  "+";
-    }
-  }
+
 
   Future<WalletModel> _callWalletAPI() async {
 
@@ -605,17 +599,12 @@ class _WalletTransState extends State<WalletTrans> {
     return data;
   }
 
-  Future<TransactionModel> _callTransactionAPI() async {
 
-    Map<String, dynamic> body = {
-      "user_id": "${PreferenceManager.getUserId()}",
-      "session_key": PreferenceManager.getSessionKey(),
-    };
-
-    var res = await ApiCall.post(transactionURL, body);
-    var jsonResponse = json.decode(json.encode(res).toString());
-    var data = new TransactionModel.fromJson(jsonResponse);
-
-    return data;
+}
+String getSign(String type){
+  if(type == "Dr"){
+    return "-";
+  }else{
+    return  "+";
   }
 }

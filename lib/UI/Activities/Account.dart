@@ -3,9 +3,12 @@ import 'package:book_buy_and_sell/UI/Activities/Cart.dart';
 import 'package:book_buy_and_sell/UI/Activities/ChangePassword.dart';
 import 'package:book_buy_and_sell/UI/Activities/EditProfile.dart';
 import 'package:book_buy_and_sell/UI/Activities/Orders.dart';
+import 'package:book_buy_and_sell/UI/Activities/Transactions.dart';
 import 'package:book_buy_and_sell/UI/Activities/Wallet.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:flutter/material.dart';
+
+import 'WalletTrans.dart';
 
 class Account extends StatefulWidget {
   const Account({Key key}) : super(key: key);
@@ -247,7 +250,7 @@ class _AccountState extends State<Account> {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return Wallet();
+                          return WalletTrans();
                         }));
                       },
                     ),
@@ -283,6 +286,12 @@ class _AccountState extends State<Account> {
                         color: Color(matteBlack),
                         size: SizeConfig.blockSizeVertical * 2.5,
                       ),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return Transactions();
+                        }));
+                      },
                     ),
                   ),
                   Container(

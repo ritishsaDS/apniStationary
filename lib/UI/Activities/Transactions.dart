@@ -1,6 +1,10 @@
 import 'package:book_buy_and_sell/Constants/Colors.dart';
+import 'package:book_buy_and_sell/Constants/StringConstants.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
+import 'package:book_buy_and_sell/UI/Activities/WalletTrans.dart';
+import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/model/ClassModel/TransactionModel.dart';
 import 'package:flutter/material.dart';
 
 class Transactions extends StatefulWidget {
@@ -37,7 +41,7 @@ class _TransactionsState extends State<Transactions> {
                       size: SizeConfig.blockSizeVertical * 4,
                     ),
                   ),
-                  Container(
+                  /*Container(
                     margin: EdgeInsets.only(
                         left: SizeConfig.blockSizeHorizontal * 5,
                         right: SizeConfig.screenWidth * 0.35),
@@ -62,11 +66,11 @@ class _TransactionsState extends State<Transactions> {
                     AssetImage('assets/icons/notification.png'),
                     color: Color(colorBlue),
                     size: SizeConfig.blockSizeVertical * 4,
-                  )
+                  ) */
                 ],
               ),
             ),
-            Container(
+           /* Container(
               width: SizeConfig.screenWidth,
               margin: EdgeInsets.symmetric(
                   horizontal: SizeConfig.screenWidth * 0.05,
@@ -100,7 +104,7 @@ class _TransactionsState extends State<Transactions> {
                   ),
                 ],
               ),
-            ),
+            ),*/
             Container(
               width: SizeConfig.screenWidth,
               margin: EdgeInsets.symmetric(
@@ -125,122 +129,87 @@ class _TransactionsState extends State<Transactions> {
                 ],
               ),
             ),
-            Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical
-              ),
-              child: ListView.builder(itemBuilder: (context,int index){
-                return InkWell(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return BookDetail("");
-                    }));
-                  },
-                  child: Container(
-                    width: SizeConfig.screenWidth,
-                    margin: EdgeInsets.symmetric(
-                        vertical: SizeConfig.blockSizeVertical),
-                    padding: EdgeInsets.all(8),
-                    height: SizeConfig.screenHeight * 0.15,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[200],
-                          spreadRadius: 2.0,
-                          blurRadius: 5.0,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: SizeConfig.screenWidth * 0.25,
+            FutureBuilder<TransactionModel>(
+                future: ApiCall.callTransactionAPI(),
+                builder: (context,AsyncSnapshot<TransactionModel> snapshot){
+                  if(snapshot.hasData){
+                    return ListView.builder(
+                      itemBuilder: (context, int index) {
+                        return Container(
+
+                          margin: EdgeInsets.only(left: 20,right: 20,bottom: 10),
+
+                          padding: EdgeInsets.all(8),
+                          height: SizeConfig.screenHeight * 0.15,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15)),
-                          child: ClipRRect(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.asset('assets/icons/book.png'),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: SizeConfig.blockSizeHorizontal * 2),
-                          color: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width:SizeConfig.screenWidth * 0.25,
-                                    child: Text(
-                                      "Book Name",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: SizeConfig.screenWidth * 0.15
-                                    ),
-                                    child: Text(
-                                      "10/07/2021",
-                                      style: TextStyle(
-                                          color: Color(black),
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: SizeConfig.blockSizeVertical * 1.25
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                "Axis Bank",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "**** **** **** 0230",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: SizeConfig.blockSizeHorizontal * 10
-                                    ),
-                                    width: SizeConfig.screenWidth * 0.15,
-                                    child: Image.asset(
-                                        'assets/icons/mastercard.png'),
-                                  ),
-                                ],
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey[200],
+                                spreadRadius: 2.0,
+                                blurRadius: 5.0,
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-                shrinkWrap: true,
-                itemCount: 2,
-                primary: false,),
-            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.asset('assets/icons/axis.png'),
+                                ),
+                              ),
+                              Container(
+
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 150,
+                                      child: Text(
+                                        snapshot.data.date[index].message,
+
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 5,),
+
+                                    Text(
+                                      snapshot.data.date[index].created_at,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: SizeConfig.blockSizeVertical * 1.5),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(child: Container()),
+                              Container(
+
+                                child: Text("${getSign(snapshot.data.date[index].type)} $rs ${snapshot.data.date[index].amount}"),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      primary: false,
+                      itemCount: snapshot.data.date.length,
+                      shrinkWrap: true,
+                    );
+                  }else{
+                    return Container();
+                  }
+                }),
 
           ],
         ),
