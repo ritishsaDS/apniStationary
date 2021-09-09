@@ -9,6 +9,7 @@ import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/commonLV.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/common/common_snackbar.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/ClassModel/BookListModel.dart';
 import 'package:book_buy_and_sell/model/ClassModel/SliderModel.dart';
@@ -122,19 +123,20 @@ class _HomeState extends State<Home> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            if (_searchField.text != "") {
+                      if (_searchField.text != "") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
                               return SelectedBook(
                                   searchedWord: _searchField.text);
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                      );
+                            },
+                          ),
+                        );
+                      } else {
+                        CommonSnackBar.snackBar(
+                            message: "Search Item cannot be empty");
+                      }
                     },
                     child: Icon(
                       Icons.search,

@@ -573,25 +573,7 @@ class _BookDetailState extends State<BookDetail> {
     ));
   }
 
-   _showAlert(BuildContext context,String msg) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Alert'),
-          content: Text(msg),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
 
   Future<BookDataModel> _callBookDataAPI() async {
     Map<String, dynamic> body = {
@@ -618,4 +600,24 @@ class _BookDetailState extends State<BookDetail> {
 
     _showAlert(context,res["message"]);
   }
+}
+
+_showAlert(BuildContext context,String msg) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Alert'),
+        content: Text(msg),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
