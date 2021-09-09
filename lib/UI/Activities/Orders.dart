@@ -17,179 +17,229 @@ class Orders extends StatefulWidget {
   _OrdersState createState() => _OrdersState();
 }
 
-class _OrdersState extends State<Orders> {
+class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
+
+  TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(backgroundColor),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.02,
-                  vertical: SizeConfig.blockSizeVertical * 2),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: ImageIcon(
-                      AssetImage('assets/icons/back.png'),
-                      color: Color(colorBlue),
-                      size: SizeConfig.blockSizeVertical * 4,
-                    ),
-                  ),
-                  /*  Container(
-                    margin: EdgeInsets.only(
-                        left: SizeConfig.blockSizeHorizontal * 5,
-                        right: SizeConfig.screenWidth * 0.35),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Current Location",
-                          style: TextStyle(color: Color(black)),
-                        ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        ImageIcon(
-                          AssetImage('assets/icons/current.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 3,
-                        )
-                      ],
-                    ),
-                  ),
-                  ImageIcon(
-                    AssetImage('assets/icons/notification.png'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+             margin: EdgeInsets.symmetric(
+                 horizontal: SizeConfig.screenWidth * 0.02,
+                 vertical: SizeConfig.blockSizeVertical * 2),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: ImageIcon(
+                    AssetImage('assets/icons/back.png'),
                     color: Color(colorBlue),
                     size: SizeConfig.blockSizeVertical * 4,
-                  ) */
-                ],
-              ),
-            ),
-            _getBuyerOrdersList(),
-
-            /* Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Color(colorBlue))),
-              child: Row(
-                children: [
-                  Container(
-                    width: SizeConfig.screenWidth * 0.8,
-                    child: TextFormField(
-                      textInputAction: TextInputAction.search,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: SizeConfig.blockSizeVertical * 1.5,
-                              horizontal: SizeConfig.blockSizeHorizontal * 5),
-                          hintText: "Search an item",
-                          hintStyle: TextStyle(
-                            color: Color(0XFF787878),
-                            fontWeight: FontWeight.w500,
-                          ),
-                          border: InputBorder.none),
-                    ),
                   ),
-                  Icon(
-                    Icons.search,
-                    color: Color(colorBlue),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              decoration:
-              BoxDecoration(borderRadius: BorderRadius.circular(15)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+                /*  Container(
+                  margin: EdgeInsets.only(
+                      left: SizeConfig.blockSizeHorizontal * 5,
+                      right: SizeConfig.screenWidth * 0.35),
+                  child: Row(
                     children: [
                       Text(
-                        "Orders",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Color(black)),
+                        "Current Location",
+                        style: TextStyle(color: Color(black)),
+                      ),
+                      SizedBox(
+                        width: SizeConfig.blockSizeHorizontal * 2,
+                      ),
+                      ImageIcon(
+                        AssetImage('assets/icons/current.png'),
+                        color: Color(colorBlue),
+                        size: SizeConfig.blockSizeVertical * 3,
+                      )
+                    ],
+                  ),
+                ),
+                ImageIcon(
+                  AssetImage('assets/icons/notification.png'),
+                  color: Color(colorBlue),
+                  size: SizeConfig.blockSizeVertical * 4,
+                ) */
+              ],
+            ),
+          ),
+
+          Container(
+            margin: EdgeInsets.only(left: 10,right: 10,bottom: 10),
+            height: 45,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(
+                25.0,
+              ),
+            ),
+            child: TabBar(
+
+              controller: _tabController,
+              // give the indicator a decoration (color and border radius)
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(
+                  25.0,
+                ),
+                color: Color(colorBlue),
+              ),
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.black,
+              tabs: [
+                // first tab [you can add an icon using the icon property]
+                Tab(
+                  text: 'Buy Order',
+                ),
+
+                // second tab [you can add an icon using the icon property]
+                Tab(
+                  text: 'Sell Order',
+                ),
+              ],
+            ),
+          ),
+
+         Expanded(child: TabBarView(controller: _tabController,children: [_getBuyerOrdersList(),Container(color: Colors.red,height: 100,width: 100,)])),
+
+
+          /* Container(
+            width: SizeConfig.screenWidth,
+            margin: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth * 0.05,
+                vertical: SizeConfig.blockSizeVertical),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(color: Color(colorBlue))),
+            child: Row(
+              children: [
+                Container(
+                  width: SizeConfig.screenWidth * 0.8,
+                  child: TextFormField(
+                    textInputAction: TextInputAction.search,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: SizeConfig.blockSizeVertical * 1.5,
+                            horizontal: SizeConfig.blockSizeHorizontal * 5),
+                        hintText: "Search an item",
+                        hintStyle: TextStyle(
+                          color: Color(0XFF787878),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        border: InputBorder.none),
+                  ),
+                ),
+                Icon(
+                  Icons.search,
+                  color: Color(colorBlue),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: SizeConfig.screenWidth,
+            margin: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth * 0.05,
+                vertical: SizeConfig.blockSizeVertical),
+            decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(15)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Orders",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, color: Color(black)),
+                    ),
+                    Container(
+                      width: SizeConfig.screenWidth * 0.12,
+                      height: SizeConfig.blockSizeVertical * 0.2,
+                      decoration: BoxDecoration(color: Color(colorBlue)),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: SizeConfig.screenWidth * 0.4,
+                  height: SizeConfig.blockSizeVertical * 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    border: Border.all(
+                      color: Color(colorBlue),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width:SizeConfig.screenWidth * 0.25,
+                        height: SizeConfig.blockSizeVertical * 4,
+                        alignment: Alignment.center,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Latest Orders",
+                              hintStyle: TextStyle(
+                                color: Color(hintGrey),
+                                fontSize: SizeConfig.blockSizeVertical * 1.25,
+                              ),
+                              contentPadding: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 2.5)
+                          ),
+                          textAlign: TextAlign.center,
+                          readOnly: true,
+                        ),
                       ),
                       Container(
-                        width: SizeConfig.screenWidth * 0.12,
-                        height: SizeConfig.blockSizeVertical * 0.2,
-                        decoration: BoxDecoration(color: Color(colorBlue)),
+                        width: SizeConfig.screenWidth * 0.1,
+                        height: SizeConfig.blockSizeVertical * 4,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(25),
+                                topRight: Radius.circular(25)
+                            ),
+                            color: Color(colorBlue)
+                        ),
+                        child: Icon(Icons.keyboard_arrow_down,
+                          color: Colors.white,
+                          size: SizeConfig.blockSizeVertical * 3,),
                       ),
                     ],
                   ),
-                  Container(
-                    width: SizeConfig.screenWidth * 0.4,
-                    height: SizeConfig.blockSizeVertical * 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: Color(colorBlue),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width:SizeConfig.screenWidth * 0.25,
-                          height: SizeConfig.blockSizeVertical * 4,
-                          alignment: Alignment.center,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Latest Orders",
-                                hintStyle: TextStyle(
-                                  color: Color(hintGrey),
-                                  fontSize: SizeConfig.blockSizeVertical * 1.25,
-                                ),
-                                contentPadding: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 2.5)
-                            ),
-                            textAlign: TextAlign.center,
-                            readOnly: true,
-                          ),
-                        ),
-                        Container(
-                          width: SizeConfig.screenWidth * 0.1,
-                          height: SizeConfig.blockSizeVertical * 4,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(25),
-                                  topRight: Radius.circular(25)
-                              ),
-                              color: Color(colorBlue)
-                          ),
-                          child: Icon(Icons.keyboard_arrow_down,
-                            color: Colors.white,
-                            size: SizeConfig.blockSizeVertical * 3,),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),*/
-          ],
-        ),
+                ),
+              ],
+            ),
+          ),*/
+        ],
       ),
     ));
   }
