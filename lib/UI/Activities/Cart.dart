@@ -77,19 +77,7 @@ class _CartState extends State<Cart> {
                 ],
               ),
             ),
-            Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              child: Text(
-                "My Cart",
-                style: TextStyle(
-                    color: Color(black),
-                    fontWeight: FontWeight.w600,
-                    fontSize: SizeConfig.blockSizeVertical * 2),
-              ),
-            ),
+
             _getCartData(),
             /*  SizedBox(
                   height: SizeConfig.screenHeight * 0.15,
@@ -139,35 +127,7 @@ class _CartState extends State<Cart> {
                     ),
                   ),
                 ),*/
-            Container(
-              width: SizeConfig.screenWidth,
-              height: SizeConfig.blockSizeVertical * 7,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical * 2),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(gradientColor1),
-                    Color(gradientColor2),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: MaterialButton(
-                onPressed: () {},
-                child: Text(
-                  "Buy All",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: SizeConfig.blockSizeVertical * 2),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
+
             SizedBox(
               height: SizeConfig.blockSizeVertical * 5,
             ),
@@ -182,164 +142,210 @@ class _CartState extends State<Cart> {
         future: _callCartAPI(),
         builder: (context, AsyncSnapshot<CartListModel> snapshot) {
           if (snapshot.hasData) {
-            return Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              child: ListView.builder(
-                itemBuilder: (context, int index) {
-                  return Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(gradientColor1),
-                                Color(gradientColor2),
-                              ],
+            return Column(
+              children: [
+                Container(
+                  width: SizeConfig.screenWidth,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.screenWidth * 0.05,
+                      vertical: SizeConfig.blockSizeVertical),
+                  child: Text(
+                    "My Cart",
+                    style: TextStyle(
+                        color: Color(black),
+                        fontWeight: FontWeight.w600,
+                        fontSize: SizeConfig.blockSizeVertical * 2),
+                  ),
+                ),
+                Container(
+                  width: SizeConfig.screenWidth,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.screenWidth * 0.05,
+                      vertical: SizeConfig.blockSizeVertical),
+                  child: ListView.builder(
+                    itemBuilder: (context, int index) {
+                      return Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(gradientColor1),
+                                    Color(gradientColor2),
+                                  ],
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 2.0,
+                                      blurRadius: 5.0),
+                                ]),
+                            margin: EdgeInsets.only(
+                              bottom: SizeConfig.blockSizeVertical,
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey[200],
-                                  spreadRadius: 2.0,
-                                  blurRadius: 5.0),
-                            ]),
-                        margin: EdgeInsets.only(
-                          bottom: SizeConfig.blockSizeVertical,
-                        ),
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenHeight * 0.13,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              right: SizeConfig.blockSizeHorizontal * 2),
-                          child: RotatedBox(
-                            child: Text(
-                              "Remove",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: SizeConfig.blockSizeVertical * 2),
-                            ),
-                            quarterTurns: 1,
-                          ),
-                        ),
-                        alignment: Alignment.centerRight,
-                      ),
-                      Container(
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenHeight * 0.13,
-                        margin: EdgeInsets.only(
-                            right: SizeConfig.screenWidth * 0.09),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: SizeConfig.screenWidth * 0.25,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25)),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(25),
-                                child: Image.network(snapshot.data.image_url +
-                                    "/" +
-                                    snapshot.data.date[index].image1),
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight * 0.13,
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  right: SizeConfig.blockSizeHorizontal * 2),
+                              child: RotatedBox(
+                                child: Text(
+                                  "Remove",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: SizeConfig.blockSizeVertical * 2),
+                                ),
+                                quarterTurns: 1,
                               ),
                             ),
-                            Container(
-                              width: SizeConfig.screenWidth * 0.5,
-                              margin: EdgeInsets.only(
-                                  left: SizeConfig.blockSizeHorizontal),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                            alignment: Alignment.centerRight,
+                          ),
+                          Container(
+                            width: SizeConfig.screenWidth,
+                            height: SizeConfig.screenHeight * 0.13,
+                            margin: EdgeInsets.only(
+                                right: SizeConfig.screenWidth * 0.09),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: SizeConfig.screenWidth * 0.25,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25)),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(25),
+                                    child: Image.network(snapshot.data.image_url +
+                                        "/" +
+                                        snapshot.data.date[index].image1),
+                                  ),
+                                ),
+                                Container(
+                                  width: SizeConfig.screenWidth * 0.5,
+                                  margin: EdgeInsets.only(
+                                      left: SizeConfig.blockSizeHorizontal),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        snapshot.data.date[index].name,
-                                        style: TextStyle(
-                                            color: Color(black),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize:
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            snapshot.data.date[index].name,
+                                            style: TextStyle(
+                                                color: Color(black),
+                                                fontWeight: FontWeight.w500,
+                                                fontSize:
                                                 SizeConfig.blockSizeVertical *
                                                     2),
+                                          ),
+                                          Text(
+                                            snapshot.data.date[index].created_at,
+                                            style: TextStyle(
+                                                color: Color(0XFF656565),
+                                                fontWeight: FontWeight.w500,
+                                                fontSize:
+                                                SizeConfig.blockSizeVertical *
+                                                    1.25),
+                                          ),
+                                        ],
                                       ),
                                       Text(
-                                        snapshot.data.date[index].created_at,
+                                        snapshot.data.date[index].auther_name,
                                         style: TextStyle(
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w500,
-                                            fontSize:
-                                                SizeConfig.blockSizeVertical *
-                                                    1.25),
+                                            fontSize: SizeConfig.blockSizeVertical *
+                                                1.75),
+                                      ),
+                                      Text(
+                                        "Condition: ${snapshot.data.date[index].conditions}",
+                                        style: TextStyle(
+                                            color: Color(0XFF656565),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: SizeConfig.blockSizeVertical *
+                                                1.75),
+                                      ),
+                                      Container(
+                                        width: SizeConfig.screenWidth * 0.5,
+                                        height: SizeConfig.blockSizeVertical * 4,
+                                        alignment: Alignment.centerRight,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                Color(gradientColor1),
+                                                Color(gradientColor2),
+                                              ],
+                                            ),
+                                            borderRadius: BorderRadius.circular(15),
+                                          ),
+                                          child: MaterialButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              "$rs ${snapshot.data.date[index].price}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(15),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    snapshot.data.date[index].auther_name,
-                                    style: TextStyle(
-                                        color: Color(0XFF656565),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: SizeConfig.blockSizeVertical *
-                                            1.75),
-                                  ),
-                                  Text(
-                                    "Condition: ${snapshot.data.date[index].conditions}",
-                                    style: TextStyle(
-                                        color: Color(0XFF656565),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: SizeConfig.blockSizeVertical *
-                                            1.75),
-                                  ),
-                                  Container(
-                                    width: SizeConfig.screenWidth * 0.5,
-                                    height: SizeConfig.blockSizeVertical * 4,
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Color(gradientColor1),
-                                            Color(gradientColor2),
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: MaterialButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "$rs ${snapshot.data.date[index].price}",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        padding: EdgeInsets.all(8),
-                      ),
-                    ],
-                  );
-                },
-                primary: false,
-                shrinkWrap: true,
-                itemCount: snapshot.data.date.length,
-              ),
+                            padding: EdgeInsets.all(8),
+                          ),
+                        ],
+                      );
+                    },
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.date.length,
+                  ),
+                ),
+                Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.blockSizeVertical * 7,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.screenWidth * 0.05,
+                      vertical: SizeConfig.blockSizeVertical * 2),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(gradientColor1),
+                        Color(gradientColor2),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: MaterialButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Buy All",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: SizeConfig.blockSizeVertical * 2),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+              ],
             );
           } else {
             return Container();
