@@ -1,12 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:book_buy_and_sell/Constants/Colors.dart';
+import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/constantString.dart';
 import 'package:book_buy_and_sell/common/common_snackbar.dart';
 import 'package:book_buy_and_sell/common/compress_image_function.dart';
 import 'package:book_buy_and_sell/common/get_image_picker.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
+import 'package:book_buy_and_sell/model/ClassModel/BookDataModel.dart';
 import 'package:book_buy_and_sell/model/apiModel/requestModel/BookAdd.dart';
 import 'package:book_buy_and_sell/model/apiModel/responseModel/register_response_model.dart';
 import 'package:book_buy_and_sell/model/apis/api_response.dart';
@@ -18,7 +22,11 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SellBook extends StatefulWidget {
-  const SellBook({Key key}) : super(key: key);
+  final String catId;
+
+  SellBook(this.catId);
+
+
 
   @override
   _SellBookState createState() => _SellBookState();
@@ -50,6 +58,14 @@ class _SellBookState extends State<SellBook> {
     editionFn = FocusNode();
     semesterFn = FocusNode();
     descFn = FocusNode();
+
+    if(widget.catId.isNotEmpty) {
+      Future<BookDataModel> bookData = _callBookDataAPI();
+
+      bookName.text = bookData.;
+      mobileNoController.text = user.mobile_no;
+      addressController.text = user.address;
+    }
   }
 
   @override
@@ -816,5 +832,20 @@ class _SellBookState extends State<SellBook> {
         ),
       ),
     );
+  }
+
+  Future<BookDataModel> _callBookDataAPI() async {
+    Map<String, dynamic> body = {
+      "user_id": "${PreferenceManager.getUserId()}",
+      "session_key": PreferenceManager.getSessionKey(),
+      "id": widget.catId,
+    };
+
+    var res = await ApiCall.post(bookDetailURL, body);
+    var jsonResponse = json.decode(json.encode(res).toString());
+    var data = new BookDataModel.fromJson(jsonResponse);
+
+
+    return data;
   }
 }

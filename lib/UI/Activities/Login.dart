@@ -25,9 +25,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   TextEditingController emailController =
-      TextEditingController(text: "vendor@mailinator.com");
+      TextEditingController(text: "user@mailinator.com");
   TextEditingController passwordController =
-      TextEditingController(text: "123456");
+      TextEditingController(text: "12345678");
 
   ValidationViewModel validationController = Get.put(ValidationViewModel());
   FocusNode usernameFn = FocusNode();
@@ -139,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             pwdFn.unfocus();
                           },
                           textEditingController: passwordController,
-                          inputLength: 6,
+                          inputLength: 8,
                           regularExpression: Utility.password,
                           validationMessage: "Password is required",
                           validationType: 'password',

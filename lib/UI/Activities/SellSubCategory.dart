@@ -167,7 +167,7 @@ class _SellSubCategoryState extends State<SellSubCategory> {
                         } else if (text[index] == "Books") {
                           return Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return SellBook();
+                            return SellBook("");
                           }));
                         } else {
                           Navigator.push(context,

@@ -22,6 +22,7 @@ class SelectedBook extends StatefulWidget {
 }
 
 class _SelectedBookState extends State<SelectedBook> {
+  String selectedMenu = "";
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
