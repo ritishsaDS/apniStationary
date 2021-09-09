@@ -6,3 +6,4 @@ final String bookDetailURL = 'book-detail';
 final String cartListURL = 'cart-list';
 final String addToCartURL = 'add-to-cart';
 final String walletURL = 'wallet';
+final String withdrawAmountURL = 'withdrow-amount';

@@ -154,7 +154,7 @@ class _CartState extends State<Cart> {
               child: MaterialButton(
                 onPressed: () {},
                 child: Text(
-                  "Buy All : ₹ 1500",
+                  "Buy All",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
