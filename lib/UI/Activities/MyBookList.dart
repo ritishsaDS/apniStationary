@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
+import 'package:book_buy_and_sell/UI/Activities/SellBook.dart';
 import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/commonLV.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/common/common_snackbar.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/apiModel/responseModel/MyBooksModel.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,9 @@ class MyBookList extends StatefulWidget {
 }
 
 class _MyBookListState extends State<MyBookList> {
+
+  List<MyBooksModel> myBooksModel;
+
   Future<Widget> getBookList() async {
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
@@ -28,7 +34,7 @@ class _MyBookListState extends State<MyBookList> {
       var jsonDecoded = jsonDecode(res.body);
       if (jsonDecoded["status"] == "200") {
         var imageBaseUrl = jsonDecoded["image_url"];
-        List<MyBooksModel> myBooksModel = (jsonDecoded["date"] as List)
+        myBooksModel = (jsonDecoded["date"] as List)
             .map((e) => MyBooksModel.fromJson(e))
             .toList();
         if (myBooksModel.length > 0) {
@@ -216,13 +222,40 @@ class _MyBookListState extends State<MyBookList> {
                                   Container(
                                       width: SizeConfig.screenWidth * 0.6,
                                       alignment: Alignment.centerRight,
-                                      child: Text("More Info",
-                                          style: TextStyle(
-                                              color: Color(colorBlue),
-                                              fontWeight: FontWeight.w500,
-                                              fontSize:
-                                                  SizeConfig.blockSizeVertical *
-                                                      1.35)))
+                                      child: PopupMenuButton(
+                                          icon: Icon(Icons.more_vert),
+                                          enabled: true,
+                                          onSelected: (value) {
+                                            log("message $value");
+
+                                            // setState(() {
+                                            //   selectedMenu = value;
+                                            if (value == 1) {
+                                              CommonSnackBar.snackBar(
+                                                  message: 'Edit clicked');
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return SellBook(myBooksModel[index].id
+                                                            .toString());
+                                                      }));
+                                            } else {
+                                              deleteBookAPI(
+                                                  myBooksModel[index].id,index);
+                                            }
+
+                                            // });
+                                          },
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                              child: Text("Edit"),
+                                              value: 1,
+                                            ),
+                                            PopupMenuItem(
+                                              child: Text("Delete"),
+                                              value: 2,
+                                            )
+                                          ]))
                                 ]))
                       ])));
             },
@@ -422,4 +455,26 @@ class _MyBookListState extends State<MyBookList> {
       ),
     ));
   }
+
+  deleteBookAPI(int book_id, int index) async {
+    Map<String, dynamic> body = {
+      "user_id": "${PreferenceManager.getUserId()}",
+      "session_key": PreferenceManager.getSessionKey(),
+      "id": "$book_id",
+    };
+
+    var res = await ApiCall.apiCall(bookDeleteURL, body);
+    log("message $res");
+
+    setState(() {
+      myBooksModel = List.from(myBooksModel)
+        ..removeAt(index);
+      CommonSnackBar.snackBar(
+          message: 'Deleted successfully');
+      getBookList();
+    });
+
+  }
+
+
 }

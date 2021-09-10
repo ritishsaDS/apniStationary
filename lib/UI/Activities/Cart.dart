@@ -27,112 +27,105 @@ class _CartState extends State<Cart> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(backgroundColor),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.02,
-                  vertical: SizeConfig.blockSizeVertical * 2),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: ImageIcon(
-                      AssetImage('assets/icons/back.png'),
+      body: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth * 0.02,
+                vertical: SizeConfig.blockSizeVertical * 2),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: ImageIcon(
+                    AssetImage('assets/icons/back.png'),
+                    color: Color(colorBlue),
+                    size: SizeConfig.blockSizeVertical * 4,
+                  ),
+                ),
+                /* Container(
+                      margin: EdgeInsets.only(
+                          left: SizeConfig.blockSizeHorizontal * 5,
+                          right: SizeConfig.screenWidth * 0.35),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Current Location",
+                            style: TextStyle(color: Color(black)),
+                          ),
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 2,
+                          ),
+                          ImageIcon(
+                            AssetImage('assets/icons/current.png'),
+                            color: Color(colorBlue),
+                            size: SizeConfig.blockSizeVertical * 3,
+                          )
+                        ],
+                      ),
+                    ), */
+                /* ImageIcon(
+                      AssetImage('assets/icons/notification.png'),
                       color: Color(colorBlue),
                       size: SizeConfig.blockSizeVertical * 4,
-                    ),
-                  ),
-                  /* Container(
-                        margin: EdgeInsets.only(
-                            left: SizeConfig.blockSizeHorizontal * 5,
-                            right: SizeConfig.screenWidth * 0.35),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Current Location",
-                              style: TextStyle(color: Color(black)),
-                            ),
-                            SizedBox(
-                              width: SizeConfig.blockSizeHorizontal * 2,
-                            ),
-                            ImageIcon(
-                              AssetImage('assets/icons/current.png'),
-                              color: Color(colorBlue),
-                              size: SizeConfig.blockSizeVertical * 3,
-                            )
-                          ],
-                        ),
-                      ), */
-                  /* ImageIcon(
-                        AssetImage('assets/icons/notification.png'),
+                    )*/
+              ],
+            ),
+          ),
+          Expanded(child: _getCartData()),
+
+          
+          /*  SizedBox(
+                height: SizeConfig.screenHeight * 0.15,
+              ),
+              Container(
+                width: SizeConfig.screenWidth,
+                margin: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.screenWidth * 0.05),
+                height: SizeConfig.blockSizeVertical * 7,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: Color.fromRGBO(212, 247, 255, 0.45)),
+                child: MaterialButton(
+                  onPressed: () {},
+                  child: Row(
+                    children: [
+                      ImageIcon(
+                        AssetImage('assets/icons/offer.png'),
                         color: Color(colorBlue),
                         size: SizeConfig.blockSizeVertical * 4,
-                      )*/
-                ],
-              ),
-            ),
-
-            _getCartData(),
-            /*  SizedBox(
-                  height: SizeConfig.screenHeight * 0.15,
-                ),
-                Container(
-                  width: SizeConfig.screenWidth,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.screenWidth * 0.05),
-                  height: SizeConfig.blockSizeVertical * 7,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Color.fromRGBO(212, 247, 255, 0.45)),
-                  child: MaterialButton(
-                    onPressed: () {},
-                    child: Row(
-                      children: [
-                        ImageIcon(
-                          AssetImage('assets/icons/offer.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 4,
-                        ),
-                        Text(
-                          "Get 10% off on 1st Purchase.",
+                      ),
+                      Text(
+                        "Get 10% off on 1st Purchase.",
+                        style: TextStyle(
+                            color: Color(black),
+                            fontWeight: FontWeight.w500,
+                            fontSize: SizeConfig.blockSizeVertical * 1.65),
+                      ),
+                      SizedBox(
+                        width: SizeConfig.blockSizeHorizontal * 4,
+                      ),
+                      MaterialButton(
+                        onPressed: () {},
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25)),
+                        color: Colors.white,
+                        child: Text(
+                          "Apply Now",
                           style: TextStyle(
-                              color: Color(black),
-                              fontWeight: FontWeight.w500,
-                              fontSize: SizeConfig.blockSizeVertical * 1.65),
+                              color: Color(colorBlue),
+                              fontWeight: FontWeight.w600),
                         ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 4,
-                        ),
-                        MaterialButton(
-                          onPressed: () {},
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25)),
-                          color: Colors.white,
-                          child: Text(
-                            "Apply Now",
-                            style: TextStyle(
-                                color: Color(colorBlue),
-                                fontWeight: FontWeight.w600),
-                          ),
-                          minWidth: SizeConfig.screenWidth * 0.25,
-                          padding: EdgeInsets.zero,
-                        )
-                      ],
-                    ),
+                        minWidth: SizeConfig.screenWidth * 0.25,
+                        padding: EdgeInsets.zero,
+                      )
+                    ],
                   ),
-                ),*/
-
-            SizedBox(
-              height: SizeConfig.blockSizeVertical * 5,
-            ),
-          ],
-        ),
+                ),
+              ),*/
+        ],
       ),
     ));
   }
@@ -195,7 +188,8 @@ class _CartState extends State<Cart> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
-                                      fontSize: SizeConfig.blockSizeVertical * 2),
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 2),
                                 ),
                                 quarterTurns: 1,
                               ),
@@ -219,9 +213,10 @@ class _CartState extends State<Cart> {
                                       borderRadius: BorderRadius.circular(25)),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(25),
-                                    child: Image.network(snapshot.data.image_url +
-                                        "/" +
-                                        snapshot.data.date[index].image1),
+                                    child: Image.network(
+                                        snapshot.data.image_url +
+                                            "/" +
+                                            snapshot.data.date[index].image1),
                                   ),
                                 ),
                                 Container(
@@ -230,28 +225,30 @@ class _CartState extends State<Cart> {
                                       left: SizeConfig.blockSizeHorizontal),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             snapshot.data.date[index].name,
                                             style: TextStyle(
                                                 color: Color(black),
                                                 fontWeight: FontWeight.w500,
-                                                fontSize:
-                                                SizeConfig.blockSizeVertical *
+                                                fontSize: SizeConfig
+                                                        .blockSizeVertical *
                                                     2),
                                           ),
                                           Text(
-                                            snapshot.data.date[index].created_at,
+                                            snapshot
+                                                .data.date[index].created_at,
                                             style: TextStyle(
                                                 color: Color(0XFF656565),
                                                 fontWeight: FontWeight.w500,
-                                                fontSize:
-                                                SizeConfig.blockSizeVertical *
+                                                fontSize: SizeConfig
+                                                        .blockSizeVertical *
                                                     1.25),
                                           ),
                                         ],
@@ -261,20 +258,23 @@ class _CartState extends State<Cart> {
                                         style: TextStyle(
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w500,
-                                            fontSize: SizeConfig.blockSizeVertical *
-                                                1.75),
+                                            fontSize:
+                                                SizeConfig.blockSizeVertical *
+                                                    1.75),
                                       ),
                                       Text(
                                         "Condition: ${snapshot.data.date[index].conditions}",
                                         style: TextStyle(
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w500,
-                                            fontSize: SizeConfig.blockSizeVertical *
-                                                1.75),
+                                            fontSize:
+                                                SizeConfig.blockSizeVertical *
+                                                    1.75),
                                       ),
                                       Container(
                                         width: SizeConfig.screenWidth * 0.5,
-                                        height: SizeConfig.blockSizeVertical * 4,
+                                        height:
+                                            SizeConfig.blockSizeVertical * 4,
                                         alignment: Alignment.centerRight,
                                         child: Container(
                                           decoration: BoxDecoration(
@@ -284,7 +284,8 @@ class _CartState extends State<Cart> {
                                                 Color(gradientColor2),
                                               ],
                                             ),
-                                            borderRadius: BorderRadius.circular(15),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
                                           ),
                                           child: MaterialButton(
                                             onPressed: () {},
@@ -296,7 +297,7 @@ class _CartState extends State<Cart> {
                                             ),
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(15),
+                                                  BorderRadius.circular(15),
                                             ),
                                           ),
                                         ),
@@ -348,7 +349,9 @@ class _CartState extends State<Cart> {
               ],
             );
           } else {
-            return Container();
+            return Container(
+              child: Center(child: Text("No Data Found.")),
+            );
           }
         });
   }

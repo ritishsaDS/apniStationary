@@ -1,0 +1,264 @@
+[33mcommit 57afcb13f7a4c0d2feeb4540e6b6aa09cd53a19f[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 19:25:49 2021 +0530
+
+    transaction api
+
+[33mcommit dea0fb2f65a9aa1ef12c3d9f232bda19886b78fa[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 19:14:35 2021 +0530
+
+    transaction api
+
+[33mcommit 6628fad1c4b6a1db262543742b5ac2ba9ef6d348[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 18:38:27 2021 +0530
+
+    fixes
+
+[33mcommit f70b9f3bca46bd2b801e2f7afbe0038a779a4dad[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 17:28:23 2021 +0530
+
+    fixes
+
+[33mcommit fab7b3cf64e9835e5c4e576372f1a0e8f79bf8ea[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 17:19:06 2021 +0530
+
+    added seller api
+
+[33mcommit 76128986c400cb5eb0809a017d437efc034b0cd5[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 17:11:45 2021 +0530
+
+    fixes
+
+[33mcommit 6007873f281f179b693ab92d38ad3e6c8b81dad4[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 16:18:49 2021 +0530
+
+    fixes
+
+[33mcommit e51c8622899b363b92f6451a5f11b301af192fb2[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 16:17:40 2021 +0530
+
+    fixes
+
+[33mcommit b507153a38efa4354cce1260ecf89588e3965af4[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 16:02:30 2021 +0530
+
+    buyer order api
+
+[33mcommit 31151d4add5991d0ef1191b4638dd1c646859691[m
+Merge: 0bf13e7 ae82d85
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 15:24:23 2021 +0530
+
+    merged branch
+
+[33mcommit ae82d852e0d02b03327fc343de2b42dcf6d91993[m[33m ([m[1;31morigin/amey_new_branch[m[33m)[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Thu Sep 9 14:50:40 2021 +0530
+
+    fixes
+
+[33mcommit ea2dc4d8d63c7768dad4dca4006a36d82e86e52d[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Wed Sep 8 22:20:34 2021 +0530
+
+    fixes
+
+[33mcommit 0bf13e78ebf3cbaa03c5fa89dd47cee453ab1286[m
+Merge: 88da5ac 672e772
+Author: Deepak <deepak3051@gmail.com>
+Date:   Wed Sep 8 18:35:41 2021 +0530
+
+    Merging code
+
+[33mcommit 88da5acc506f4a829b280bce0aefc23cbef00ed6[m
+Merge: 5b26b66 ca524c5
+Author: Deepak <deepak3051@gmail.com>
+Date:   Wed Sep 8 18:15:14 2021 +0530
+
+    Merge branch 'dc_branch'
+
+[33mcommit ca524c5793e2e63f9d03f9863e3133106992b786[m[33m ([m[1;31morigin/dc_branch[m[33m)[m
+Author: Deepak <deepak3051@gmail.com>
+Date:   Wed Sep 8 18:12:37 2021 +0530
+
+    Cart status issued solved
+
+[33mcommit 672e772d452dd3af912d558d702f1eee27e57a8b[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Wed Sep 8 18:02:00 2021 +0530
+
+    fixes
+
+[33mcommit 3d3887d3ae10df489c4f71083d013937d3790347[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Wed Sep 8 15:45:18 2021 +0530
+
+    fixes
+
+[33mcommit 7b88d633398a2bd5c673c19dc6194d77de17d7b2[m
+Author: Deepak <deepak3051@gmail.com>
+Date:   Tue Sep 7 18:08:11 2021 +0530
+
+    Cart remove(test pending), home category done
+
+[33mcommit 3263447b5e51cd9b70e4bcd16edcd0dea39fe0cd[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Tue Sep 7 16:34:26 2021 +0530
+
+    geocoder
+
+[33mcommit 6772257b22302f33f5acb739953e533d200567de[m
+Author: Deepak <deepak3051@gmail.com>
+Date:   Tue Sep 7 16:24:43 2021 +0530
+
+    Book list id passed
+
+[33mcommit 5b26b6657074895500e7902ba9c6e01c96bc2e1e[m
+Merge: c251b06 f244ca9
+Author: amey00712 <amey00712@gmail.com>
+Date:   Tue Sep 7 14:54:25 2021 +0530
+
+    amey_branch merged
+
+[33mcommit c251b064a0a0503e4c8ae0c4eb496e15071e9338[m
+Author: Deepak <deepak3051@gmail.com>
+Date:   Tue Sep 7 11:46:44 2021 +0530
+
+    Mybooklist copy created
+
+[33mcommit f244ca9465ea8584b9bf24613f6aa7b86090fdcf[m[33m ([m[1;31morigin/amey_branch[m[33m)[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Sun Sep 5 14:29:09 2021 +0530
+
+    add cart api
+
+[33mcommit 3133355730392c86538b95460183496ee5ddf898[m
+Merge: f3575f7 eb1ec6b
+Author: Deepak <deepak3051@gmail.com>
+Date:   Sun Sep 5 14:27:29 2021 +0530
+
+    Merged code
+
+[33mcommit 8bd6a3c2dc04e773e41c5607141d56fb1c8cec9e[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Sun Sep 5 11:54:34 2021 +0530
+
+    fixes
+
+[33mcommit 02e876092a860ab13c1e555538a6d66eb91796c0[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Sun Sep 5 11:47:43 2021 +0530
+
+    fixes
+
+[33mcommit 154e0570bb59002d5204016f42519f4d2d971bba[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Sun Sep 5 11:14:02 2021 +0530
+
+    fixes
+
+[33mcommit 2ca0d92152c1520ebc4d7e1574c720873660f911[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Sun Sep 5 10:39:44 2021 +0530
+
+    fixes
+
+[33mcommit 567f1101e580784da68f4a0152d6dde0bc36101f[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Sun Sep 5 10:30:51 2021 +0530
+
+    fixes
+
+[33mcommit 006be8761a103206df8b6900db25d7f2ed2dde97[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Sat Sep 4 22:32:17 2021 +0530
+
+    book list done
+
+[33mcommit f3575f73cd8570d727e5547d10316de53604c4d6[m
+Merge: 4dbd394 6ee6753
+Author: Deepak <deepak3051@gmail.com>
+Date:   Sat Sep 4 17:44:32 2021 +0530
+
+    Merge branch 'vikas_branch'
+
+[33mcommit 4dbd3948d889e18f33327c51835c0cfc56c7eb82[m
+Merge: 0177fac 9a11dae
+Author: Deepak <deepak3051@gmail.com>
+Date:   Sat Sep 4 17:44:16 2021 +0530
+
+    Merge branch 'deepak_branch'
+
+[33mcommit 9a11dae57e7acd1ab906ce8d214e0a061efcc456[m[33m ([m[1;31morigin/deepak_branch[m[33m)[m
+Author: Deepak <deepak3051@gmail.com>
+Date:   Sat Sep 4 15:53:16 2021 +0530
+
+    book list api integrated
+
+[33mcommit 6ee6753f9a30e02cdad368d390a160bf1dc9378e[m[33m ([m[1;31morigin/vikas_branch[m[33m)[m
+Merge: 05080f3 98018de
+Author: ios1 <ios1@milearth.com>
+Date:   Fri Sep 3 18:13:42 2021 +0530
+
+    Merge remote-tracking branch 'origin/vikas_branch' into vikas_branch
+    
+    # Conflicts:
+    #       lib/UI/Activities/SellBook.dart
+    #       lib/viewModel/CommonVM.dart
+
+[33mcommit 05080f335576fbd0a898b6cdcd67e90f5b97a45f[m
+Author: ios1 <ios1@milearth.com>
+Date:   Fri Sep 3 18:12:45 2021 +0530
+
+    first
+
+[33mcommit eb1ec6ba3e8bebb3de8341309e3c9b6fce8b11f4[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Fri Sep 3 16:14:09 2021 +0530
+
+    slider
+
+[33mcommit 534d32361dc606ca6e5c99c410ed8b0b0fb7b6f0[m
+Merge: 0177fac f935aeb
+Author: amey00712 <amey00712@gmail.com>
+Date:   Fri Sep 3 14:36:48 2021 +0530
+
+    Merge branch 'deepak_branch' into master
+
+[33mcommit 4ad091517d1f5f9ea13f63fb95070ef66654ffd5[m
+Author: ios1 <ios1@milearth.com>
+Date:   Fri Sep 3 10:24:27 2021 +0530
+
+    first
+
+[33mcommit 98018def378dd5ca87aef14fa9c14fb8cf9ae7bc[m
+Author: ios1 <ios1@milearth.com>
+Date:   Fri Sep 3 10:24:27 2021 +0530
+
+    first
+
+[33mcommit f935aebdaf409aa4929ab9354e5ebf8e3ca5eb05[m
+Author: Deepak <deepak3051@gmail.com>
+Date:   Thu Sep 2 23:41:03 2021 +0530
+
+    New Api call with custom LV code
+
+[33mcommit 521766f92695b3984dc6a0d627d5d69ba38c7dd3[m
+Author: Deepak <deepak3051@gmail.com>
+Date:   Thu Sep 2 10:03:00 2021 +0530
+
+    Api call common method
+
+[33mcommit 0177fac560d579830432d184e384f8ed6123df95[m
+Author: amey00712 <amey00712@gmail.com>
+Date:   Wed Sep 1 17:35:41 2021 +0530
+
+    initial commit
