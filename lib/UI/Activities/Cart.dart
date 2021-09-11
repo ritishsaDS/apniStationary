@@ -349,9 +349,7 @@ class _CartState extends State<Cart> {
               ],
             );
           } else {
-            return Container(
-              child: Center(child: Text("No Data Found.")),
-            );
+            return getNodDataWidget();
           }
         });
   }
@@ -388,4 +386,10 @@ class _CartState extends State<Cart> {
       CommonSnackBar.snackBar(message: decode["message"]);
     }
   }
+}
+
+Widget getNodDataWidget(){
+  return Container(
+    child: Center(child: Text("No Data Found.")),
+  );
 }

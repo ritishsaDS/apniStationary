@@ -21,7 +21,6 @@ class MyBookList extends StatefulWidget {
 }
 
 class _MyBookListState extends State<MyBookList> {
-
   List<MyBooksModel> myBooksModel;
 
   Future<Widget> getBookList() async {
@@ -236,26 +235,29 @@ class _MyBookListState extends State<MyBookList> {
                                               Navigator.push(context,
                                                   MaterialPageRoute(
                                                       builder: (context) {
-                                                        return SellBook(myBooksModel[index].id
-                                                            .toString());
-                                                      }));
+                                                return SellBook(
+                                                    myBooksModel[index]
+                                                        .id
+                                                        .toString());
+                                              }));
                                             } else {
                                               deleteBookAPI(
-                                                  myBooksModel[index].id,index);
+                                                  myBooksModel[index].id,
+                                                  index);
                                             }
 
                                             // });
                                           },
                                           itemBuilder: (context) => [
-                                            PopupMenuItem(
-                                              child: Text("Edit"),
-                                              value: 1,
-                                            ),
-                                            PopupMenuItem(
-                                              child: Text("Delete"),
-                                              value: 2,
-                                            )
-                                          ]))
+                                                PopupMenuItem(
+                                                  child: Text("Edit"),
+                                                  value: 1,
+                                                ),
+                                                PopupMenuItem(
+                                                  child: Text("Delete"),
+                                                  value: 2,
+                                                )
+                                              ]))
                                 ]))
                       ])));
             },
@@ -267,7 +269,10 @@ class _MyBookListState extends State<MyBookList> {
           return Text("No Data found");
         }
       } else {
-        return Text(jsonDecoded['message']);
+        return Center(
+          child: Container(
+               child: Text(jsonDecoded['message'])),
+        );
       }
     } else {
       return Text("No Data found");
@@ -300,67 +305,6 @@ class _MyBookListState extends State<MyBookList> {
                       color: Color(colorBlue),
                       size: SizeConfig.blockSizeVertical * 4,
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: SizeConfig.blockSizeHorizontal * 5,
-                        right: SizeConfig.screenWidth * 0.35),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Current Location",
-                          style: TextStyle(color: Color(black)),
-                        ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        ImageIcon(
-                          AssetImage('assets/icons/current.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 3,
-                        )
-                      ],
-                    ),
-                  ),
-                  ImageIcon(
-                    AssetImage('assets/icons/notification.png'),
-                    color: Color(colorBlue),
-                    size: SizeConfig.blockSizeVertical * 4,
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Color(colorBlue))),
-              child: Row(
-                children: [
-                  Container(
-                    width: SizeConfig.screenWidth * 0.8,
-                    child: TextFormField(
-                      textInputAction: TextInputAction.search,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: SizeConfig.blockSizeVertical * 1.5,
-                              horizontal: SizeConfig.blockSizeHorizontal * 5),
-                          hintText: "Search an item",
-                          hintStyle: TextStyle(
-                            color: Color(0XFF787878),
-                            fontWeight: FontWeight.w500,
-                          ),
-                          border: InputBorder.none),
-                    ),
-                  ),
-                  Icon(
-                    Icons.search,
-                    color: Color(colorBlue),
                   ),
                 ],
               ),
@@ -467,14 +411,9 @@ class _MyBookListState extends State<MyBookList> {
     log("message $res");
 
     setState(() {
-      myBooksModel = List.from(myBooksModel)
-        ..removeAt(index);
-      CommonSnackBar.snackBar(
-          message: 'Deleted successfully');
+      myBooksModel = List.from(myBooksModel)..removeAt(index);
+      CommonSnackBar.snackBar(message: 'Deleted successfully');
       getBookList();
     });
-
   }
-
-
 }
