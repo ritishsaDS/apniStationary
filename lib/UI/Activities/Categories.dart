@@ -52,7 +52,9 @@ class _CategoriesState extends State<Categories> {
                               id: categoriesModel[index].id,
                               text: categoriesModel[index].name,
                               img: categoriesModel[index].image)
-                          : SelectedBook(searchedWord: "",catId: categoriesModel[index].id.toString());
+                          : SelectedBook(
+                              searchedWord: "",
+                              catId: categoriesModel[index].id.toString());
                     }));
                   },
                   child: Container(

@@ -34,7 +34,7 @@ class Utility {
   static String validatePassword(String value) {
     Pattern pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regex = new RegExp(pattern);
+    // RegExp regex = new RegExp(pattern);
     print(value);
     if (value.isEmpty) {
       return kPasswordEmptyValidation;
@@ -65,5 +65,13 @@ class Utility {
 
   static void hideLoading(context) {
     Navigator.pop(context); //pop dialog
+  }
+
+  static bool isNullOrEmpty(String txt) {
+    return txt == null || txt.isEmpty || txt == "" || txt == "null";
+  }
+
+  static String checkNSetData(String txt) {
+    return !isNullOrEmpty(txt) ? txt : "";
   }
 }
