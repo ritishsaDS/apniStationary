@@ -126,7 +126,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       child: MaterialButton(
                         onPressed: () {
-                          callCheckoutAPI();
+                          checkValidation();
                         },
                         child: Text(
                           "Checkout",
@@ -180,6 +180,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       ),
     );
+  }
+
+  checkValidation() {
+    if (firstNameController.text.length < 2) {
+      showAlert(context, "Please enter a valid First Name.");
+    } else if (lastNameController.text.length < 2) {
+      showAlert(context, "Please enter a valid Last Name.");
+    } else if (addressController.text.length < 10) {
+      showAlert(context, "Please enter a valid Address.");
+    } else if (cityController.text.length < 2) {
+      showAlert(context, "Please enter a valid City.");
+    } else if (stateController.text.length < 2) {
+      showAlert(context, "Please enter a valid State.");
+    } else if (pinController.text.length < 4) {
+      showAlert(context, "Please enter a valid Pincode.");
+    } else {
+      callCheckoutAPI();
+    }
   }
 
   callCheckoutAPI() async {
