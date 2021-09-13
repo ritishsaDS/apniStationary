@@ -298,10 +298,11 @@ class _HomeState extends State<Home> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                       Container(
-                        width: SizeConfig.screenWidth * 0.3,
+                        width: 80,
+                        height: 80,
                         decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(40),
                             color: Colors.white,
                             boxShadow: [
                               BoxShadow(
@@ -309,15 +310,17 @@ class _HomeState extends State<Home> {
                                   spreadRadius: 1,
                                   blurRadius: 3)
                             ]),
-                        padding: EdgeInsets.all(15),
-                        margin: EdgeInsets.only(
-                            bottom: SizeConfig.blockSizeVertical),
+                      //  padding: EdgeInsets.all(15),
+                        // margin: EdgeInsets.only(
+                        //     bottom: SizeConfig.blockSizeVertical),
                         child: ImageIcon(
                           NetworkImage(categoriesModel[index].image),
                           size: SizeConfig.blockSizeVertical * 5,
                           color: Color(colorBlue),
                         ),
                       ),
+
+                      SizedBox(height: 10,),
                       Container(
                           width: SizeConfig.screenWidth * 0.25,
                           alignment: Alignment.center,
@@ -326,7 +329,7 @@ class _HomeState extends State<Home> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Color(0XFF06070D),
-                                fontSize: SizeConfig.blockSizeVertical * 1.5),
+                                fontSize:10),
                             textAlign: TextAlign.center,
                           ))
                     ])));
@@ -503,7 +506,7 @@ class _HomeState extends State<Home> {
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(15),
                                         topLeft: Radius.circular(15)),
-                                    child: Image.asset(snapshot.data.image_url +
+                                    child: Image.network(snapshot.data.image_url +
                                         "/" +
                                         snapshot.data.date[index].image1),
                                   ),
