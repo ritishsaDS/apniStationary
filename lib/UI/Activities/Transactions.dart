@@ -81,7 +81,6 @@ class _TransactionsState extends State<Transactions> {
                             margin: EdgeInsets.only(
                                 left: 20, right: 20, bottom: 10),
                             padding: EdgeInsets.all(8),
-                            height: SizeConfig.screenHeight * 0.15,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15),
@@ -97,13 +96,18 @@ class _TransactionsState extends State<Transactions> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.all(10),
+                                  width: 50,
+                                  height: 50,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15)),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
-                                    child: Image.asset('assets/icons/axis.png'),
+                                    child:
+                                        Image.asset('assets/icons/debit.png'),
                                   ),
+                                ),
+                                SizedBox(
+                                  width: 8,
                                 ),
                                 Container(
                                   child: Column(

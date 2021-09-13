@@ -228,7 +228,7 @@ class _WalletTransState extends State<WalletTrans> {
                       ),
 
 
-                      Container(
+                    /*  Container(
                         width: SizeConfig.screenWidth,
                         margin: EdgeInsets.symmetric(
                             horizontal: SizeConfig.screenWidth * 0.05,
@@ -321,7 +321,7 @@ class _WalletTransState extends State<WalletTrans> {
                         }else{
                           return Container();
                         }
-                      }),
+                      }),*/
                    /*   Container(
                         width: SizeConfig.screenWidth,
                         margin: EdgeInsets.symmetric(
