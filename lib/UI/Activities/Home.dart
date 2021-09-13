@@ -239,19 +239,19 @@ class _HomeState extends State<Home> {
         builder: (context, AsyncSnapshot<List<SliderDataModel>> snapshot) {
           if (snapshot.hasData) {
             return CarouselSlider(
-              options: CarouselOptions(height: 100),
+              options: CarouselOptions(height: 150,autoPlay: true),
               items: snapshot.data.map((slider) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
                       width: SizeConfig.screenWidth,
                       margin: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.05,
+                          horizontal: SizeConfig.screenWidth * 0.01,
                           vertical: SizeConfig.blockSizeVertical),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15)),
                       child: ClipRRect(
-                          child: Image.network(slider.image),
+                          child: Image.network(slider.image,fit: BoxFit.fill,),
                           borderRadius: BorderRadius.circular(15)),
                     );
                   },
