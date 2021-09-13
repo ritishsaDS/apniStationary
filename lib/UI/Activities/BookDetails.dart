@@ -303,7 +303,7 @@ class _BookDetailState extends State<BookDetail> {
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.08,
                   ),
-                  Container(
+                 /* Container(
                     width: SizeConfig.screenWidth,
                     margin: EdgeInsets.symmetric(
                         horizontal: SizeConfig.screenWidth * 0.05,
@@ -348,7 +348,7 @@ class _BookDetailState extends State<BookDetail> {
                         ],
                       ),
                     ),
-                  ),
+                  ), */
                   Container(
                     width: SizeConfig.screenWidth,
                     margin: EdgeInsets.symmetric(
