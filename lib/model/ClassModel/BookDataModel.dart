@@ -43,4 +43,9 @@ class BookDataDetailsModel {
       image4: parsedJson['image4'],
     );
   }
+
+  @override
+  String toString() {
+    return 'BookDataDetailsModel{name: $name, auther_name: $auther_name, edition_detail: $edition_detail, price: $price, conditions: $conditions, description: $description, semester: $semester, image1: $image1, image2: $image2, image3: $image3, image4: $image4, category_id: $category_id}';
+  }
 }

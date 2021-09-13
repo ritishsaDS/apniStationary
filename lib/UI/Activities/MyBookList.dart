@@ -69,9 +69,7 @@ class _MyBookListState extends State<MyBookList> {
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
                                 child: Image.network(
-                                    imageBaseUrl +
-                                        "/" +
-                                        myBooksModel[index].image,
+                                    "$imageBaseUrl/${myBooksModel[index].image}",
                                     fit: BoxFit.cover))),
                         Container(
                             margin: EdgeInsets.only(
@@ -236,9 +234,8 @@ class _MyBookListState extends State<MyBookList> {
                                                   MaterialPageRoute(
                                                       builder: (context) {
                                                 return SellBook(
-                                                    myBooksModel[index]
-                                                        .id
-                                                        .toString());
+                                                    bookId:
+                                                        "${myBooksModel[index].id}");
                                               }));
                                             } else {
                                               deleteBookAPI(
@@ -270,8 +267,7 @@ class _MyBookListState extends State<MyBookList> {
         }
       } else {
         return Center(
-          child: Container(
-               child: Text(jsonDecoded['message'])),
+          child: Container(child: Text(jsonDecoded['message'])),
         );
       }
     } else {
