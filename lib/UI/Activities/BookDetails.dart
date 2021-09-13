@@ -60,7 +60,7 @@ class _BookDetailState extends State<BookDetail> {
                             size: SizeConfig.blockSizeVertical * 4,
                           ),
                         ),
-                        Container(
+                       /* Container(
                           margin: EdgeInsets.only(
                               left: SizeConfig.blockSizeHorizontal * 5,
                               right: SizeConfig.screenWidth * 0.35),
@@ -85,7 +85,7 @@ class _BookDetailState extends State<BookDetail> {
                           AssetImage('assets/icons/notification.png'),
                           color: Color(colorBlue),
                           size: SizeConfig.blockSizeVertical * 4,
-                        )
+                        ) */
                       ],
                     ),
                   ),
