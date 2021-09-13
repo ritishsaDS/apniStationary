@@ -159,42 +159,47 @@ class _CartState extends State<Cart> {
                     itemBuilder: (context, int index) {
                       return Stack(
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(gradientColor1),
-                                    Color(gradientColor2),
-                                  ],
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey[200],
-                                      spreadRadius: 2.0,
-                                      blurRadius: 5.0),
-                                ]),
-                            margin: EdgeInsets.only(
-                              bottom: SizeConfig.blockSizeVertical,
-                            ),
-                            width: SizeConfig.screenWidth,
-                            height: SizeConfig.screenHeight * 0.13,
+                          GestureDetector(
+                            onTap: (){
+                              removeCart(context,snapshot.data.date[index].orderId.toString() );
+                            },
                             child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(gradientColor1),
+                                      Color(gradientColor2),
+                                    ],
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey[200],
+                                        spreadRadius: 2.0,
+                                        blurRadius: 5.0),
+                                  ]),
                               margin: EdgeInsets.only(
-                                  right: SizeConfig.blockSizeHorizontal * 2),
-                              child: RotatedBox(
-                                child: Text(
-                                  "Remove",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical * 2),
-                                ),
-                                quarterTurns: 1,
+                                bottom: SizeConfig.blockSizeVertical,
                               ),
+                              width: SizeConfig.screenWidth,
+                              height: SizeConfig.screenHeight * 0.13,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    right: SizeConfig.blockSizeHorizontal * 2),
+                                child: RotatedBox(
+                                  child: Text(
+                                    "Remove",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize:
+                                            SizeConfig.blockSizeVertical * 2),
+                                  ),
+                                  quarterTurns: 1,
+                                ),
+                              ),
+                              alignment: Alignment.centerRight,
                             ),
-                            alignment: Alignment.centerRight,
                           ),
                           Container(
                             width: SizeConfig.screenWidth,
@@ -377,6 +382,7 @@ class _CartState extends State<Cart> {
     var res = await ApiCall.apiCall(cartRemoveURL, {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
+      "order_id": orderId,
     });
 
     var decode = jsonDecode(res.body);
@@ -385,6 +391,10 @@ class _CartState extends State<Cart> {
     } else {
       CommonSnackBar.snackBar(message: decode["message"]);
     }
+
+    setState(() {
+
+    });
   }
 }
 
