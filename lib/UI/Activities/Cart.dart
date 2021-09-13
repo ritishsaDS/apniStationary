@@ -76,6 +76,7 @@ class _CartState extends State<Cart> {
           ),
           Expanded(child: _getCartData()),
 
+
           /*  SizedBox(
                 height: SizeConfig.screenHeight * 0.15,
               ),
@@ -133,13 +134,15 @@ class _CartState extends State<Cart> {
     return FutureBuilder<CartListModel>(
         future: _callCartAPI(),
         builder: (context, AsyncSnapshot<CartListModel> snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
+
+          if (snapshot.connectionState != ConnectionState.done){
             return Container(
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                ),
               ),
             );
-          } else {
+          }else{
             if (snapshot.hasData) {
               return Column(
                 children: [
@@ -166,11 +169,8 @@ class _CartState extends State<Cart> {
                         return Stack(
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                removeCart(
-                                    context,
-                                    snapshot.data.date[index].orderId
-                                        .toString());
+                              onTap: (){
+                                removeCart(context,snapshot.data.date[index].orderId.toString() );
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -194,8 +194,7 @@ class _CartState extends State<Cart> {
                                 height: SizeConfig.screenHeight * 0.13,
                                 child: Container(
                                   margin: EdgeInsets.only(
-                                      right:
-                                          SizeConfig.blockSizeHorizontal * 2),
+                                      right: SizeConfig.blockSizeHorizontal * 2),
                                   child: RotatedBox(
                                     child: Text(
                                       "Remove",
@@ -203,7 +202,7 @@ class _CartState extends State<Cart> {
                                           color: Colors.white,
                                           fontWeight: FontWeight.w600,
                                           fontSize:
-                                              SizeConfig.blockSizeVertical * 2),
+                                          SizeConfig.blockSizeVertical * 2),
                                     ),
                                     quarterTurns: 1,
                                   ),
@@ -225,8 +224,7 @@ class _CartState extends State<Cart> {
                                   Container(
                                     width: SizeConfig.screenWidth * 0.25,
                                     decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(25)),
+                                        borderRadius: BorderRadius.circular(25)),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(25),
                                       child: Image.network(
@@ -240,14 +238,13 @@ class _CartState extends State<Cart> {
                                     margin: EdgeInsets.only(
                                         left: SizeConfig.blockSizeHorizontal),
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               snapshot.data.date[index].name,
@@ -255,7 +252,7 @@ class _CartState extends State<Cart> {
                                                   color: Color(black),
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: SizeConfig
-                                                          .blockSizeVertical *
+                                                      .blockSizeVertical *
                                                       2),
                                             ),
                                             Text(
@@ -265,7 +262,7 @@ class _CartState extends State<Cart> {
                                                   color: Color(0XFF656565),
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: SizeConfig
-                                                          .blockSizeVertical *
+                                                      .blockSizeVertical *
                                                       1.25),
                                             ),
                                           ],
@@ -276,8 +273,8 @@ class _CartState extends State<Cart> {
                                               color: Color(0XFF656565),
                                               fontWeight: FontWeight.w500,
                                               fontSize:
-                                                  SizeConfig.blockSizeVertical *
-                                                      1.75),
+                                              SizeConfig.blockSizeVertical *
+                                                  1.75),
                                         ),
                                         Text(
                                           "Condition: ${snapshot.data.date[index].conditions}",
@@ -285,13 +282,13 @@ class _CartState extends State<Cart> {
                                               color: Color(0XFF656565),
                                               fontWeight: FontWeight.w500,
                                               fontSize:
-                                                  SizeConfig.blockSizeVertical *
-                                                      1.75),
+                                              SizeConfig.blockSizeVertical *
+                                                  1.75),
                                         ),
                                         Container(
                                           width: SizeConfig.screenWidth * 0.5,
                                           height:
-                                              SizeConfig.blockSizeVertical * 4,
+                                          SizeConfig.blockSizeVertical * 4,
                                           alignment: Alignment.centerRight,
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -302,7 +299,7 @@ class _CartState extends State<Cart> {
                                                 ],
                                               ),
                                               borderRadius:
-                                                  BorderRadius.circular(15),
+                                              BorderRadius.circular(15),
                                             ),
                                             child: MaterialButton(
                                               onPressed: () {},
@@ -310,12 +307,11 @@ class _CartState extends State<Cart> {
                                                 "$rs ${snapshot.data.date[index].price}",
                                                 style: TextStyle(
                                                     color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w600),
+                                                    fontWeight: FontWeight.w600),
                                               ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(15),
+                                                BorderRadius.circular(15),
                                               ),
                                             ),
                                           ),
@@ -370,6 +366,8 @@ class _CartState extends State<Cart> {
               return getNodDataWidget();
             }
           }
+
+
         });
   }
 
@@ -406,11 +404,13 @@ class _CartState extends State<Cart> {
       CommonSnackBar.snackBar(message: decode["message"]);
     }
 
-    setState(() {});
+    setState(() {
+
+    });
   }
 }
 
-Widget getNodDataWidget() {
+Widget getNodDataWidget(){
   return Container(
     child: Center(child: Text("No Data Found.")),
   );
