@@ -598,11 +598,11 @@ class _BookDetailState extends State<BookDetail> {
 
     var res = await ApiCall.post(addToCartURL, body);
 
-    _showAlert(context,res["message"]);
+    showAlert(context,res["message"]);
   }
 }
 
-_showAlert(BuildContext context,String msg) {
+showAlert(BuildContext context,String msg) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {

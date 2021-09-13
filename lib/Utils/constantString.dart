@@ -13,3 +13,4 @@ final String sellerOrderListURL = 'seller-order-list';
 final String transactionURL = 'transaction';
 final String bookEditURL = 'book-edit';
 final String bookDeleteURL = 'book-delete';
+final String checkoutURL = 'checkout';
