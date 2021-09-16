@@ -19,6 +19,7 @@ class BookAddViewModel extends GetxController {
     apiResponse = ApiResponse.loading('Loading');
     update();
     try {
+      print("kjbwdjiidnai"+apiResponse.message);
       RegisterResponseModel response = await BookAddRepo().bookAddRepo(model);
       apiResponse = ApiResponse.complete(response);
       print("BookAdd RES:$response");

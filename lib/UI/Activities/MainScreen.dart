@@ -9,6 +9,7 @@ import 'package:book_buy_and_sell/UI/Activities/Transactions.dart';
 import 'package:book_buy_and_sell/UI/Activities/Wallet.dart';
 import 'package:book_buy_and_sell/UI/Activities/WalletTrans.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
     SizeConfig().init(context);
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Color(backgroundColor),
+          resizeToAvoidBottomInset: false,
           bottomNavigationBar: Container(
         margin: EdgeInsets.symmetric(
             horizontal: SizeConfig.screenWidth * 0.05,
@@ -152,6 +153,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               Container(
                 width: SizeConfig.screenWidth,
+                height: SizeConfig.blockSizeVertical*10,
                 margin: EdgeInsets.symmetric(
                     horizontal: SizeConfig.screenWidth * 0.08,
                     vertical: SizeConfig.blockSizeVertical * 2),
@@ -167,31 +169,34 @@ class _MainScreenState extends State<MainScreen> {
                     ]),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: SizeConfig.screenWidth * 0.23,
+                      width: SizeConfig.screenWidth * 0.18,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15)),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: Image.asset('assets/icons/profile pic.png'),
+                        child: Icon(Icons.person_outline_rounded, color: Color(colorBlue),
+                          size: 60,),
                       ),
                     ),
                     Container(
                       width: SizeConfig.screenWidth * 0.4,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Full Name",
+                            PreferenceManager.getName(),
                             style: TextStyle(
                                 color: Color(matteBlack),
                                 fontWeight: FontWeight.w600,
                                 fontSize: SizeConfig.blockSizeVertical * 2),
                           ),
+                          SizedBox(height: 10,),
                           Text(
-                            "Phone No.",
+                            PreferenceManager.getPhoneNo(),
                             style: TextStyle(
                                 color: Color(matteBlack),
                                 fontWeight: FontWeight.w400,

@@ -134,7 +134,8 @@ class _SelectedBookState extends State<SelectedBook> {
                                     style: TextStyle(color: Color(black)),
                                   ),
                                 );
-                              } else {
+                              }
+                              else {
                                 return Container();
                               }
                             }),
@@ -175,7 +176,7 @@ class _SelectedBookState extends State<SelectedBook> {
                       decoration: InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.symmetric(
-                              vertical: SizeConfig.blockSizeVertical * 1.5,
+                              verticharryal: SizeConfig.blockSizeVertical * 1.5,
                               horizontal: SizeConfig.blockSizeHorizontal * 5),
                           hintText: "Search an item",
                           hintStyle: TextStyle(
@@ -218,55 +219,55 @@ class _SelectedBookState extends State<SelectedBook> {
                       ),
                     ],
                   ),
-                  Container(
-                    width: SizeConfig.screenWidth * 0.4,
-                    height: SizeConfig.blockSizeVertical * 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: Color(colorBlue),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: SizeConfig.screenWidth * 0.25,
-                          height: SizeConfig.blockSizeVertical * 4,
-                          alignment: Alignment.center,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Nearby Products",
-                                hintStyle: TextStyle(
-                                  color: Color(hintGrey),
-                                  fontSize: SizeConfig.blockSizeVertical * 1.25,
-                                ),
-                                contentPadding: EdgeInsets.only(
-                                    bottom:
-                                        SizeConfig.blockSizeVertical * 2.5)),
-                            textAlign: TextAlign.center,
-                            readOnly: true,
-                          ),
-                        ),
-                        Container(
-                          width: SizeConfig.screenWidth * 0.1,
-                          height: SizeConfig.blockSizeVertical * 4,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(25),
-                                  topRight: Radius.circular(25)),
-                              color: Color(colorBlue)),
-                          child: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.white,
-                            size: SizeConfig.blockSizeVertical * 3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   width: SizeConfig.screenWidth * 0.4,
+                  //   height: SizeConfig.blockSizeVertical * 4,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(25),
+                  //     border: Border.all(
+                  //       color: Color(colorBlue),
+                  //     ),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       // Container(
+                  //       //   width: SizeConfig.screenWidth * 0.25,
+                  //       //   height: SizeConfig.blockSizeVertical * 4,
+                  //       //   alignment: Alignment.center,
+                  //       //   child: TextFormField(
+                  //       //     decoration: InputDecoration(
+                  //       //         border: InputBorder.none,
+                  //       //         hintText: "Nearby Products",
+                  //       //         hintStyle: TextStyle(
+                  //       //           color: Color(hintGrey),
+                  //       //           fontSize: SizeConfig.blockSizeVertical * 1.25,
+                  //       //         ),
+                  //       //         contentPadding: EdgeInsets.only(
+                  //       //             bottom:
+                  //       //                 SizeConfig.blockSizeVertical * 2.5)),
+                  //       //     textAlign: TextAlign.center,
+                  //       //     readOnly: true,
+                  //       //   ),
+                  //       // ),
+                  //       // Container(
+                  //       //   width: SizeConfig.screenWidth * 0.1,
+                  //       //   height: SizeConfig.blockSizeVertical * 4,
+                  //       //   alignment: Alignment.center,
+                  //       //   decoration: BoxDecoration(
+                  //       //       borderRadius: BorderRadius.only(
+                  //       //           bottomRight: Radius.circular(25),
+                  //       //           topRight: Radius.circular(25)),
+                  //       //       color: Color(colorBlue)),
+                  //       //   child: Icon(
+                  //       //     Icons.keyboard_arrow_down,
+                  //       //     color: Colors.white,
+                  //       //     size: SizeConfig.blockSizeVertical * 3,
+                  //       //   ),
+                  //       // ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -308,7 +309,7 @@ class _SelectedBookState extends State<SelectedBook> {
                     child: Container(
                       width: SizeConfig.screenWidth,
                       margin:
-                          EdgeInsets.only(bottom: SizeConfig.blockSizeVertical),
+                          EdgeInsets.only(bottom: SizeConfig.blockSizeVertical*2),
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -322,8 +323,8 @@ class _SelectedBookState extends State<SelectedBook> {
                       child: Row(
                         children: [
                           Container(
-                            width: SizeConfig.screenWidth * 0.2,
-                            height: SizeConfig.screenHeight * 0.15,
+                            width: SizeConfig.screenWidth * 0.3,
+                            height: SizeConfig.screenHeight * 0.18,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                             ),
@@ -331,7 +332,7 @@ class _SelectedBookState extends State<SelectedBook> {
                               borderRadius: BorderRadius.circular(15),
                               child: Image.network(snapshot.data.image_url +
                                   "/" +
-                                  snapshot.data.date[index].image1),
+                                  snapshot.data.date[index].image1,fit: BoxFit.fitHeight,),
                             ),
                           ),
                           Container(
@@ -487,8 +488,8 @@ class _SelectedBookState extends State<SelectedBook> {
                                   ],
                                 ),
                                 Container(
-                                  width: SizeConfig.screenWidth * 0.6,
-                                  alignment: Alignment.centerRight,
+                                  width: SizeConfig.screenWidth * 0.5,
+                                  alignment: Alignment.topRight,
                                   child: Text(
                                     "More Info",
                                     style: TextStyle(

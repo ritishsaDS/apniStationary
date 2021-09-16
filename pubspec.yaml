@@ -37,6 +37,7 @@ dependencies:
   image_picker: ^0.8.3+3
   flutter_image_compress: ^1.1.0
   get_storage: any
+  angles: ^2.1.1
   carousel_slider: ^4.0.0
   geolocator: ^7.6.0
   geocoding: ^2.0.1
@@ -59,45 +60,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/bg/logo.png
-    - assets/icons/edit.png
-    - assets/icons/calendar.png
-    - assets/icons/location.png
-    - assets/icons/home.png
-    - assets/icons/wallet.png
-    - assets/icons/account.png
-    - assets/icons/cart.png
-    - assets/icons/fbtn.png
-    - assets/icons/drawer.png
-    - assets/icons/profile pic.png
-    - assets/icons/help.png
-    - assets/icons/logout.png
-    - assets/icons/notification.png
-    - assets/icons/offer.png
-    - assets/icons/share.png
-    - assets/icons/transactions.png
-    - assets/icons/back.png
-    - assets/icons/current.png
-    - assets/bg/home bg.png
-    - assets/icons/eng.png
-    - assets/icons/mgt.png
-    - assets/icons/notes.png
-    - assets/icons/med.png
-    - assets/icons/book.png
-    - assets/icons/book1.png
-    - assets/icons/music.png
-    - assets/icons/exam.png
-    - assets/icons/axis.png
-    - assets/icons/mastercard.png
-    - assets/icons/debit.png
-    - assets/icons/net banking.png
-    - assets/icons/upi.png
-    - assets/icons/chat.png
-    - assets/icons/cross.png
-    - assets/icons/other.png
-    - assets/icons/orders.png
-    - assets/icons/school.png
-    - assets/icons/cardWallet.png
+    - assets/bg/
+    - assets/icons/
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -111,10 +76,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+      - family: Helvetica
+        fonts:
+          - asset: assets/fonts/Helvetica.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

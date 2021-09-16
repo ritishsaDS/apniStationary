@@ -28,6 +28,7 @@ class ApiService extends BaseService {
       log("URL ---> ${baseURL + url}");
       if (apiType == APIType.aGet) {
         var result = await http.get(Uri.parse(baseURL + url), headers: header);
+
         response = returnResponse(
           result.statusCode,
           result.body,
@@ -40,8 +41,12 @@ class ApiService extends BaseService {
             data: formData,
             options: dio.Options(contentType: "form-data", headers: header));
         print('responseType+>${result.data}');
-        response = returnResponse(result.statusCode, result.data);
-        log("response......${response}");
+
+        log("kdkkdkd-----"+result.statusCode.toString());
+
+        response = returnResponse( result.statusCode,
+            result.data);
+        log("response......}");
       } else {
         var encodeBody = jsonEncode(body);
 
@@ -94,7 +99,7 @@ class ApiService extends BaseService {
   }
 
   returnResponse(int status, String result) {
-    print("status$status");
+
     switch (status) {
       case 200:
         return jsonDecode(result);

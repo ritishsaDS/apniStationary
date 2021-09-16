@@ -94,17 +94,31 @@ class _BookDetailState extends State<BookDetail> {
                       width: SizeConfig.screenWidth,
                       child: Carousel(
                         images: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25)),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: Image.network(snapshot.data.image_url +
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(image:snapshot.data.image_url +
                                   "/" +
-                                  snapshot.data.date.image1),
+                                  snapshot.data.date.image1)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(25),
+                                child: Image.network(snapshot.data.image_url +
+                                    "/" +
+                                    snapshot.data.date.image1),
+                              ),
                             ),
                           ),
-                          Container(
+            GestureDetector(
+            onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(image:snapshot.data.image_url +
+            "/" +
+            snapshot.data.date.image2)));
+            },
+child:
+            Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),
                             child: ClipRRect(
@@ -113,7 +127,13 @@ class _BookDetailState extends State<BookDetail> {
                                   "/" +
                                   snapshot.data.date.image2),
                             ),
-                          ),
+                          ),),  GestureDetector(
+            onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(image:snapshot.data.image_url +
+            "/" +
+            snapshot.data.date.image3)));
+            },
+            child:
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),
@@ -123,7 +143,14 @@ class _BookDetailState extends State<BookDetail> {
                                   "/" +
                                   snapshot.data.date.image3),
                             ),
-                          ),
+                          ),),
+            GestureDetector(
+            onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(image:snapshot.data.image_url +
+            "/" +
+            snapshot.data.date.image4)));
+            },
+            child:
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25)),
@@ -133,7 +160,7 @@ class _BookDetailState extends State<BookDetail> {
                                   "/" +
                                   snapshot.data.date.image4),
                             ),
-                          ),
+                          ),),
                         ],
                         dotColor: Colors.grey,
                         dotIncreasedColor: Color(colorBlue),
@@ -303,7 +330,7 @@ class _BookDetailState extends State<BookDetail> {
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.08,
                   ),
-                 /* Container(
+                 Container(
                     width: SizeConfig.screenWidth,
                     margin: EdgeInsets.symmetric(
                         horizontal: SizeConfig.screenWidth * 0.05,
@@ -348,7 +375,7 @@ class _BookDetailState extends State<BookDetail> {
                         ],
                       ),
                     ),
-                  ), */
+                  ),
                   Container(
                     width: SizeConfig.screenWidth,
                     margin: EdgeInsets.symmetric(
@@ -369,7 +396,9 @@ class _BookDetailState extends State<BookDetail> {
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: MaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _callAddToCartAPI();
+                            },
                             child: Text(
                               "Buy Now: $rs ${snapshot.data.date.price}",
                               style: TextStyle(
@@ -381,6 +410,7 @@ class _BookDetailState extends State<BookDetail> {
 
                         GestureDetector(
                           onTap: (){
+                            _callAddToCartAPI();
                           },
                           child: Container(
                             width: SizeConfig.screenWidth * 0.4,
@@ -395,11 +425,11 @@ class _BookDetailState extends State<BookDetail> {
                             ),
                             child: MaterialButton(
                               onPressed: () {
-                                _callAddToCartAPI();
+                                showAlert(context,"Lorem Ipsum Dolor sir amet");
 
                               },
                               child: Text(
-                                "Add to Cart",
+                                "Chat",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600),
@@ -620,4 +650,43 @@ showAlert(BuildContext context,String msg) {
       );
     },
   );
+}
+class DetailScreen extends StatefulWidget {
+  var image;
+  DetailScreen({this.image});
+  @override
+  _DetailScreenState createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [ GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Container(
+              margin: EdgeInsets.only(right: 10,top: 20),
+              child: CircleAvatar(backgroundColor:Color(colorBlue),child: Icon(Icons.close,color: Colors.white,))),
+        )],),
+      body: GestureDetector(
+        child: Center(
+          child: Hero(
+            tag: 'imageHero',
+            child: Image.network(
+              widget.image
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
 }

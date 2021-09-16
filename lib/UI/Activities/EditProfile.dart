@@ -1,5 +1,6 @@
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
@@ -21,9 +22,9 @@ class _EditProfileState extends State<EditProfile> {
 
   GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
-  TextEditingController fullName = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController phn = TextEditingController();
+  TextEditingController fullName = TextEditingController(text: PreferenceManager.getName());
+  TextEditingController email = TextEditingController(text: PreferenceManager.getEmailId());
+  TextEditingController phn = TextEditingController(text: PreferenceManager.getPhoneNo());
   TextEditingController dob = TextEditingController();
   TextEditingController gender = TextEditingController();
   TextEditingController clgName = TextEditingController();

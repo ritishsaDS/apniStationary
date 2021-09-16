@@ -23,6 +23,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../Donescreen.dart';
+
 class SellBook extends StatefulWidget {
   String catId = "", bookId = "";
 
@@ -39,7 +41,7 @@ class _SellBookState extends State<SellBook> {
   TextEditingController semester = TextEditingController();
   TextEditingController desc = TextEditingController();
   TextEditingController price = TextEditingController();
-
+bool isLoading=false;
   TextEditingController conditions = TextEditingController();
   GlobalKey<FormState> profileForm = GlobalKey<FormState>();
 
@@ -48,6 +50,7 @@ class _SellBookState extends State<SellBook> {
   FocusNode editionFn;
   FocusNode semesterFn;
   FocusNode descFn;
+
 
   @override
   void initState() {
@@ -190,13 +193,8 @@ class _SellBookState extends State<SellBook> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(onTap: () async {
-                      ImageUploadViewModel imageUpload = Get.find();
-                      XFile file = await getImageFromGallery();
-                      Uint8List uint8List = await compressFile(File(file.path));
-                      imageUpload.addSelectedImg(uint8List);
-                      print("image selected$uint8List");
-                    }, child:
+                    GestureDetector(onTap: () =>  showAlertDialog(context,1),
+                     child:
                         GetBuilder<ImageUploadViewModel>(builder: (controller) {
                       if (controller.selectedImg == null) {
                         if (data.image1 != "") {
@@ -261,13 +259,7 @@ class _SellBookState extends State<SellBook> {
                       );
                     })),
                     GestureDetector(onTap: () async {
-                      ImageUploadViewModel imageUpload = Get.find();
-                      XFile file = await getImageFromGallery();
-
-                      Uint8List uint8List = await compressFile(File(file.path));
-
-                      imageUpload.addSelectedImg2(uint8List);
-                      print("image selected${uint8List}");
+                      showAlertDialog2(context,2);
                     }, child: GetBuilder<ImageUploadViewModel>(
                       builder: (controller) {
                         if (controller.selectedImg2 == null) {
@@ -342,16 +334,9 @@ class _SellBookState extends State<SellBook> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(onTap: () async {
-                        ImageUploadViewModel imageUpload = Get.find();
-                        XFile file = await getImageFromGallery();
+                      GestureDetector(onTap:()=>showAlertDialog3(context,3),
 
-                        Uint8List uint8List =
-                            await compressFile(File(file.path));
-
-                        imageUpload.addSelectedImg3(uint8List);
-                        print("image selected${uint8List}");
-                      }, child: GetBuilder<ImageUploadViewModel>(
+                        child: GetBuilder<ImageUploadViewModel>(
                         builder: (controller) {
                           if (controller.selectedImg3 == null) {
                             if (data.image3 != "") {
@@ -420,16 +405,8 @@ class _SellBookState extends State<SellBook> {
                                       fit: BoxFit.cover)));
                         },
                       )),
-                      GestureDetector(onTap: () async {
-                        ImageUploadViewModel imageUpload = Get.find();
-                        XFile file = await getImageFromGallery();
-
-                        Uint8List uint8List =
-                            await compressFile(File(file.path));
-
-                        imageUpload.addSelectedImg4(uint8List);
-                        print("image selected${uint8List}");
-                      }, child: GetBuilder<ImageUploadViewModel>(
+                      GestureDetector(onTap:()=>showAlertDialog4(context,4)
+                       , child: GetBuilder<ImageUploadViewModel>(
                         builder: (controller) {
                           if (controller.selectedImg4 == null) {
                             if (data.image4 != "") {
@@ -524,7 +501,7 @@ class _SellBookState extends State<SellBook> {
                             blurRadius: 4.0),
                       ]),
                   child: TextFormField(
-                    controller: bookName..text = data.name,
+                    controller: bookName,
                     focusNode: bookNameFn,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
@@ -564,7 +541,7 @@ class _SellBookState extends State<SellBook> {
                             blurRadius: 4.0),
                       ]),
                   child: TextFormField(
-                    controller: author..text = data.auther_name,
+                    controller: author,
                     focusNode: authorFn,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
@@ -603,7 +580,7 @@ class _SellBookState extends State<SellBook> {
                             blurRadius: 4.0),
                       ]),
                   child: TextFormField(
-                    controller: edition..text = data.edition_detail,
+                    controller: edition,
                     focusNode: editionFn,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
@@ -664,7 +641,7 @@ class _SellBookState extends State<SellBook> {
                                   "Semester",
                                   style: TextStyle(
                                     fontSize:
-                                        SizeConfig.blockSizeVertical * 1.50,
+                                        SizeConfig.blockSizeVertical *2,
                                   ),
                                 ),
                                 items: <String>[
@@ -721,7 +698,7 @@ class _SellBookState extends State<SellBook> {
                                   "Condition",
                                   style: TextStyle(
                                     fontSize:
-                                        SizeConfig.blockSizeVertical * 1.50,
+                                        SizeConfig.blockSizeVertical * 2,
                                   ),
                                 ),
                                 items:
@@ -762,7 +739,7 @@ class _SellBookState extends State<SellBook> {
                             blurRadius: 4.0),
                       ]),
                   child: TextFormField(
-                    controller: desc..text = data.description,
+                    controller: desc,
                     focusNode: descFn,
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.text,
@@ -805,7 +782,7 @@ class _SellBookState extends State<SellBook> {
                                 borderRadius: BorderRadius.circular(25),
                                 color: Colors.white),
                             child: TextFormField(
-                              controller: price..text = data.price,
+                              controller: price,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Price",
@@ -815,6 +792,12 @@ class _SellBookState extends State<SellBook> {
                                   contentPadding: EdgeInsets.only(top: 8),
                                   isDense: true),
                               textAlign: TextAlign.center,
+                              onChanged: (val){
+                                setState(() {
+                                  data.price=val;
+                                });
+
+                              },
                               keyboardType: TextInputType.numberWithOptions(
                                   decimal: true),
                             ),
@@ -840,6 +823,8 @@ class _SellBookState extends State<SellBook> {
                               ),
                               child: MaterialButton(
                                 onPressed: () async {
+                                  ImageUploadViewModel imaUploadViewModel =
+                                  Get.put(ImageUploadViewModel());
                                   if (profileForm.currentState.validate()) {
                                     if (bookName.text.isEmpty ||
                                         bookName.text == null) {
@@ -861,8 +846,53 @@ class _SellBookState extends State<SellBook> {
                                           message: "Please enter price");
                                       return;
                                     }
+                                    if (desc.text.isEmpty ||
+                                        desc.text == null) {
+                                      CommonSnackBar.snackBar(
+                                          message: "Please enter Description");
+                                      return;
+                                    }
+                                    if (edition.text.isEmpty ||
+                                        edition.text == null) {
+                                      CommonSnackBar.snackBar(
+                                          message: "Please enter Edition deatil");
+                                      return;
+                                    }
 
-                                    if (widget.bookId != "") {
+                                    if( imaUploadViewModel.selectedImg==null||imaUploadViewModel.selectedImg==""){
+                                      CommonSnackBar.snackBar(
+                                          message: "Please enter image");
+                                      return;
+                                    }
+if(semester.text.isEmpty||semester.text==null){
+  CommonSnackBar.snackBar(
+      message: "Please enter Semester");
+  return;
+}
+                                    if(conditions.text.isEmpty||conditions.text==null){
+                                      CommonSnackBar.snackBar(
+                                          message: "Please enter conditions");
+                                      return;
+                                    }
+                                    if( imaUploadViewModel.selectedImg2==null||imaUploadViewModel.selectedImg2==""){
+                                      CommonSnackBar.snackBar(
+                                          message: "Please enter image");
+                                      return;
+                                    }
+                                    if( imaUploadViewModel.selectedImg3==null||imaUploadViewModel.selectedImg3==""){
+                                      CommonSnackBar.snackBar(
+                                          message: "Please enter image");
+                                      return;
+                                    }
+                                    if( imaUploadViewModel.selectedImg4==null||imaUploadViewModel.selectedImg4==""){
+                                      CommonSnackBar.snackBar(
+                                          message: "Please enter image");
+                                      return;
+                                    }
+
+                                    if (widget.bookId !=null) {
+
+                                      print(BookAddViewModel().apiResponse);
                                       BookAddViewModel bookAddViewModel =
                                           Get.put(BookAddViewModel());
                                       ImageUploadViewModel imaUploadViewModel =
@@ -894,10 +924,12 @@ class _SellBookState extends State<SellBook> {
 
                                       await bookAddViewModel
                                           .bookEdit(bookEditReq);
+
                                       // if (bookAddViewModel.apiResponse.status ==
                                       //     Status.COMPLETE) {
                                       RegisterResponseModel response =
                                           bookAddViewModel.apiResponse.data;
+
                                       if (response.status == '200') {
                                         CommonSnackBar.snackBar(
                                             message: response.message);
@@ -911,7 +943,11 @@ class _SellBookState extends State<SellBook> {
                                         CommonSnackBar.snackBar(
                                             message: response.message);
                                       }
-                                    } else {
+                                    }
+                                    else {
+setState(() {
+  isLoading=true;
+});
                                       BookAddViewModel bookAddViewModel =
                                           Get.put(BookAddViewModel());
                                       ImageUploadViewModel imaUploadViewModel =
@@ -944,9 +980,17 @@ class _SellBookState extends State<SellBook> {
                                           .bookAdd(bookAddReq);
                                       // if (bookAddViewModel.apiResponse.status ==
                                       //     Status.COMPLETE) {
+                                      print(bookAddViewModel.toString());
+
                                       RegisterResponseModel response =
                                           bookAddViewModel.apiResponse.data;
-                                      if (response.status == '200') {
+                                      Future.delayed(Duration(seconds: 1),
+                                              () {
+                                               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
+                                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
+                                          });
+                                      //print("jksdajn"+response.status);
+                                      if (response.status == '256') {
                                         CommonSnackBar.snackBar(
                                             message: response.message);
 
@@ -967,7 +1011,8 @@ class _SellBookState extends State<SellBook> {
                                     }
                                   }
                                 },
-                                child: Text("Sell Now",
+                                child:isLoading?
+                                    CircularProgressIndicator(color: Colors.white,): Text("Sell Now",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold)),
@@ -992,4 +1037,315 @@ class _SellBookState extends State<SellBook> {
 
     return data;
   }
+    showAlertDialog(BuildContext context,number)  {
+
+      // set up the button
+      Widget Camera =Column(children: [
+        GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*10,child: CircleAvatar(backgroundColor: Colors.white70,backgroundImage: AssetImage("assets/icons/camera.jpeg",))),
+            onTap: () async {
+              Navigator.pop(context);
+              ImageUploadViewModel imageUpload = Get.find();
+              XFile file = await getImageFromCamera();
+
+              Uint8List uint8List =
+              await compressFile(File(file.path));
+
+              imageUpload.addSelectedImg(uint8List);
+              print("image selected${uint8List}");
+            }
+
+        ),
+        Text("Camera")
+      ],);
+      Widget gallery = Column(children: [
+        GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*14,child: CircleAvatar(
+            backgroundColor: Colors.white38,
+            backgroundImage: AssetImage("assets/icons/gallery.jpeg",))),
+            onTap: ()  async {
+              Navigator.pop(context);
+              ImageUploadViewModel imageUpload = Get.find();
+              XFile file = await getImageFromGallery();
+
+              Uint8List uint8List =
+              await compressFile(File(file.path));
+
+              imageUpload.addSelectedImg(uint8List);
+              print("image selected${uint8List}");
+            }
+
+        ),
+        Text("Gallery")
+      ],);
+
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                25.0
+            )),
+
+
+        content: Container(
+            height: SizeConfig.screenHeight*0.20,
+            child: Column(
+              children: [
+                Text("Upload Image "),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [ Camera,
+                    SizedBox(width: 30,),
+                    gallery,],)
+              ],
+            )),
+
+      );
+
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+  showAlertDialog2(BuildContext context,number)  {
+
+    // set up the button
+    Widget Camera =Column(children: [
+      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*10,child: CircleAvatar(backgroundColor: Colors.white70,backgroundImage: AssetImage("assets/icons/camera.jpeg",))),
+          onTap: () async {
+            Navigator.pop(context);
+            ImageUploadViewModel imageUpload = Get.find();
+            XFile file = await getImageFromCamera();
+
+            Uint8List uint8List =
+            await compressFile(File(file.path));
+
+            imageUpload.addSelectedImg2(uint8List);
+            print("image selected${uint8List}");
+          }
+
+      ),
+      Text("Camera")
+    ],);
+    Widget gallery = Column(children: [
+      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*14,child: CircleAvatar(
+          backgroundColor: Colors.white38,
+          backgroundImage: AssetImage("assets/icons/gallery.jpeg",))),
+          onTap: ()  async {
+            Navigator.pop(context);
+            ImageUploadViewModel imageUpload = Get.find();
+            XFile file = await getImageFromGallery();
+
+            Uint8List uint8List =
+            await compressFile(File(file.path));
+
+            imageUpload.addSelectedImg2(uint8List);
+            print("image selected${uint8List}");
+          }
+
+      ),
+      Text("Gallery")
+    ],);
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              25.0
+          )),
+
+
+      content: Container(
+          height: SizeConfig.screenHeight*0.20,
+          child: Column(
+            children: [
+              Text("Upload Image "),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [ Camera,
+                  SizedBox(width: 30,),
+                  gallery,],)
+            ],
+          )),
+
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  showAlertDialog3(BuildContext context,number) {
+
+    // set up the button
+    Widget Camera =Column(children: [
+      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*10,child: CircleAvatar(backgroundColor: Colors.white70,backgroundImage: AssetImage("assets/icons/camera.jpeg",))),
+          onTap: () async {
+            Navigator.pop(context);
+            ImageUploadViewModel imageUpload = Get.find();
+            XFile file = await getImageFromCamera();
+
+            Uint8List uint8List =
+            await compressFile(File(file.path));
+
+            imageUpload.addSelectedImg3(uint8List);
+            print("image selected${uint8List}");
+          }
+
+      ),
+      Text("Camera")
+    ],);
+    Widget gallery = Column(children: [
+      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*14,child: CircleAvatar(
+          backgroundColor: Colors.white38,
+          backgroundImage: AssetImage("assets/icons/gallery.jpeg",))),
+          onTap: ()  async {
+            Navigator.pop(context);
+            ImageUploadViewModel imageUpload = Get.find();
+            XFile file = await getImageFromGallery();
+
+            Uint8List uint8List =
+            await compressFile(File(file.path));
+
+            imageUpload.addSelectedImg3(uint8List);
+            print("image selected${uint8List}");
+          }
+
+      ),
+      Text("Gallery")
+    ],);
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+              25.0
+          )),
+
+
+      content: Container(
+          height: SizeConfig.screenHeight*0.20,
+          child: Column(
+            children: [
+              Text("Upload Image "),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [ Camera,
+                  SizedBox(width: 30,),
+                  gallery,],)
+            ],
+          )),
+
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  showAlertDialog4(BuildContext context,number) {
+
+    // set up the button
+    Widget Camera =Column(children: [
+      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*10,child: CircleAvatar(backgroundColor: Colors.white70,backgroundImage: AssetImage("assets/icons/camera.jpeg",))),
+          onTap: () async {
+            Navigator.pop(context);
+            ImageUploadViewModel imageUpload = Get.find();
+            XFile file = await getImageFromCamera();
+
+            Uint8List uint8List =
+            await compressFile(File(file.path));
+
+            imageUpload.addSelectedImg4(uint8List);
+            print("image selected${uint8List}");
+          }
+
+      ),
+      Text("Camera")
+    ],);
+    Widget gallery = Column(children: [
+      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*14,child: CircleAvatar(
+          backgroundColor: Colors.white38,
+          backgroundImage: AssetImage("assets/icons/gallery.jpeg",))),
+          onTap: ()  async {
+            Navigator.pop(context);
+            ImageUploadViewModel imageUpload = Get.find();
+            XFile file = await getImageFromGallery();
+
+            Uint8List uint8List =
+            await compressFile(File(file.path));
+
+            imageUpload.addSelectedImg4(uint8List);
+            print("image selected${uint8List}");
+          }
+
+      ),
+      Text("Gallery")
+    ],);
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                 25.0
+                )),
+
+
+      content: Container(
+          height: SizeConfig.screenHeight*0.20,
+          child: Column(
+        children: [
+          Text("Upload Image "),
+         Row(
+           mainAxisAlignment: MainAxisAlignment.center,
+           children: [ Camera,
+           SizedBox(width: 30,),
+           gallery,],)
+        ],
+      )),
+
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+// void _showBottomSheet(){
+  //   showModalBottomSheet(
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.vertical(
+  //           top: Radius.circular(80),
+  //         ),
+  //       ),
+  //       context: context,
+  //       builder: (builder){
+  //         return new Container(
+  //           height: 350.0,
+  //           color: Colors.transparent, //could change this to Color(0xFF737373),
+  //           //so you don't have to change MaterialApp canvasColor
+  //           child: new Container(
+  //               decoration: new BoxDecoration(
+  //                   color: Colors.white,
+  //                   borderRadius: new BorderRadius.only(
+  //                       topLeft: const Radius.circular(10.0),
+  //                       topRight: const Radius.circular(10.0))),
+  //               child: new Center(
+  //                 child: new Text("This is a modal sheet"),
+  //               )),
+  //         );
+  //       }
+  //   );
+  // }
 }

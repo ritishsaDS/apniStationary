@@ -10,7 +10,7 @@ import 'package:book_buy_and_sell/model/services/base_service.dart';
 class BookAddRepo extends BaseService {
   Future<RegisterResponseModel> bookAddRepo(BookAdd model) async {
     Map<String, dynamic> body = model.toJson();
-    print('Register Req :$body');
+    print('Register Reqsss :$body');
     var response = await ApiService().getResponse(
         apiType: APIType.aPost, url: bookAdd, body: body, fileUpload: true);
     log("register res :${response.runtimeType}");

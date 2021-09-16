@@ -2,12 +2,15 @@ import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/Cart.dart';
 import 'package:book_buy_and_sell/UI/Activities/ChangePassword.dart';
 import 'package:book_buy_and_sell/UI/Activities/EditProfile.dart';
+import 'package:book_buy_and_sell/UI/Activities/Login.dart';
 import 'package:book_buy_and_sell/UI/Activities/MyBookList.dart';
 import 'package:book_buy_and_sell/UI/Activities/Orders.dart';
 import 'package:book_buy_and_sell/UI/Activities/Transactions.dart';
 import 'package:book_buy_and_sell/UI/Activities/Wallet.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'WalletTrans.dart';
 
@@ -19,6 +22,7 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
+  final logout=GetStorage();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -107,30 +111,33 @@ class _AccountState extends State<Account> {
                   Container(
                     width: SizeConfig.screenWidth * 0.5,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Full Name",
+                          PreferenceManager.getName(),
                           style: TextStyle(
                               color: Color(matteBlack),
                               fontWeight: FontWeight.w600,
                               fontSize: SizeConfig.blockSizeVertical * 2),
                         ),
+SizedBox(height: 10,),
                         Text(
-                          "Phone No.",
+                          PreferenceManager.getPhoneNo(),
                           style: TextStyle(
                               color: Color(matteBlack),
                               fontWeight: FontWeight.w400,
                               fontSize: SizeConfig.blockSizeVertical * 1.75),
                         ),
+                        SizedBox(height: 10,),
                         Text(
-                          "Location Name",
+                          PreferenceManager.getEmailId(),
                           style: TextStyle(
                               color: Color(matteBlack),
                               fontWeight: FontWeight.w400,
                               fontSize: SizeConfig.blockSizeVertical * 1.75),
                         ),
+
                         InkWell(
                           onTap: () {
                             Navigator.push(context,
@@ -543,6 +550,11 @@ class _AccountState extends State<Account> {
                     margin: EdgeInsets.only(
                         bottom: SizeConfig.blockSizeVertical * 2),
                     child: ListTile(
+                      onTap: (){
+                     logout.remove("email_id");
+                     logout.remove("name");
+                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                      },
                       title: Text(
                         "Logout",
                         style: TextStyle(

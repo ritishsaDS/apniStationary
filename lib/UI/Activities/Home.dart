@@ -38,116 +38,162 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Color(backgroundColor),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.02,
-                  vertical: SizeConfig.blockSizeVertical * 2),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      var usrId = PreferenceManager.getUserId();
-                      print(usrId);
-                    },
-                    child: ImageIcon(
-                      AssetImage('assets/icons/drawer.png'),
+    return Scaffold(
+resizeToAvoidBottomInset: false,
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.screenWidth * 0.02,
+                    vertical: SizeConfig.blockSizeVertical * 2),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        var usrId = PreferenceManager.getUserId();
+                        print(usrId);
+                      },
+                      child: ImageIcon(
+                        AssetImage('assets/icons/drawer.png'),
+                        color: Color(colorBlue),
+                        size: SizeConfig.blockSizeVertical * 4,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: SizeConfig.blockSizeHorizontal * 5,
+                          right: SizeConfig.screenWidth * 0.35),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Current Location",
+                            style: TextStyle(color: Color(black)),
+                          ),
+                          SizedBox(
+                            width: SizeConfig.blockSizeHorizontal * 2,
+                          ),
+                          ImageIcon(
+                            AssetImage('assets/icons/current.png'),
+                            color: Color(colorBlue),
+                            size: SizeConfig.blockSizeVertical * 3,
+                          )
+                        ],
+                      ),
+                    ),
+                    ImageIcon(
+                      AssetImage('assets/icons/notification.png'),
                       color: Color(colorBlue),
                       size: SizeConfig.blockSizeVertical * 4,
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                width: SizeConfig.screenWidth,
+                margin: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.screenWidth * 0.05,
+                    vertical: SizeConfig.blockSizeVertical),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    border: Border.all(color: Color(colorBlue))),
+                child: Row(
+                  children: [
+                    Container(
+                      width: SizeConfig.screenWidth * 0.8,
+                      child: TextFormField(
+                        controller: _searchField,
+                        textInputAction: TextInputAction.search,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: SizeConfig.blockSizeVertical * 1.5,
+                                horizontal: SizeConfig.blockSizeHorizontal * 5),
+                            hintText: "Search an item",
+                            hintStyle: TextStyle(
+                              color: Color(hintGrey),
+                              fontWeight: FontWeight.w500,
+                            ),
+                            border: InputBorder.none),
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: SizeConfig.blockSizeHorizontal * 5,
-                        right: SizeConfig.screenWidth * 0.35),
-                    child: Row(
+                    InkWell(
+                      onTap: () {
+                        if (_searchField.text != "") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return SelectedBook(
+                                    searchedWord: _searchField.text,catId: "",);
+                              },
+                            ),
+                          );
+                        } else {
+                          CommonSnackBar.snackBar(
+                              message: "Search Item cannot be empty");
+                        }
+                      },
+                      child: Icon(
+                        Icons.search,
+                        color: Color(colorBlue),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              _getSliders(),
+              Container(
+                  width: SizeConfig.screenWidth,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.screenWidth * 0.05,
+                      vertical: SizeConfig.blockSizeVertical),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Current Location",
-                          style: TextStyle(color: Color(black)),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Categories",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(black)),
+                            ),
+                            Container(
+                              width: SizeConfig.screenWidth * 0.2,
+                              height: SizeConfig.blockSizeVertical * 0.2,
+                              decoration: BoxDecoration(color: Color(colorBlue)),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        ImageIcon(
-                          AssetImage('assets/icons/current.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 3,
-                        )
-                      ],
-                    ),
-                  ),
-                  ImageIcon(
-                    AssetImage('assets/icons/notification.png'),
-                    color: Color(colorBlue),
-                    size: SizeConfig.blockSizeVertical * 4,
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: Color(colorBlue))),
-              child: Row(
-                children: [
-                  Container(
-                    width: SizeConfig.screenWidth * 0.8,
-                    child: TextFormField(
-                      controller: _searchField,
-                      textInputAction: TextInputAction.search,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: SizeConfig.blockSizeVertical * 1.5,
-                              horizontal: SizeConfig.blockSizeHorizontal * 5),
-                          hintText: "Search an item",
-                          hintStyle: TextStyle(
-                            color: Color(hintGrey),
-                            fontWeight: FontWeight.w500,
-                          ),
-                          border: InputBorder.none),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      if (_searchField.text != "") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return SelectedBook(
-                                  searchedWord: _searchField.text,catId: "",);
+                        InkWell(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return Categories();
+                              }));
                             },
-                          ),
-                        );
-                      } else {
-                        CommonSnackBar.snackBar(
-                            message: "Search Item cannot be empty");
-                      }
-                    },
-                    child: Icon(
-                      Icons.search,
-                      color: Color(colorBlue),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            _getSliders(),
-            Container(
+                            child: Icon(Icons.arrow_forward_ios_rounded,
+                                color: Color(colorBlue),
+                                size: SizeConfig.blockSizeVertical * 2.5))
+                      ])),
+              Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight * 0.15,
+                  margin: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.screenWidth * 0.05,
+                      vertical: SizeConfig.blockSizeVertical),
+                  child: CommonLV(dataCallingMethod: getCategories())),
+              Container(
                 width: SizeConfig.screenWidth,
                 margin: EdgeInsets.symmetric(
                     horizontal: SizeConfig.screenWidth * 0.05,
@@ -155,82 +201,38 @@ class _HomeState extends State<Home> {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(15)),
                 child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Categories",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Color(black)),
-                          ),
-                          Container(
-                            width: SizeConfig.screenWidth * 0.2,
-                            height: SizeConfig.blockSizeVertical * 0.2,
-                            decoration: BoxDecoration(color: Color(colorBlue)),
-                          ),
-                        ],
-                      ),
-                      InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return Categories();
-                            }));
-                          },
-                          child: Icon(Icons.arrow_forward_ios_rounded,
-                              color: Color(colorBlue),
-                              size: SizeConfig.blockSizeVertical * 2.5))
-                    ])),
-            Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight * 0.15,
-                margin: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.screenWidth * 0.05,
-                    vertical: SizeConfig.blockSizeVertical),
-                child: CommonLV(dataCallingMethod: getCategories())),
-            Container(
-              width: SizeConfig.screenWidth,
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.05,
-                  vertical: SizeConfig.blockSizeVertical),
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Book List",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Color(black)),
-                      ),
-                      Container(
-                        width: 80,
-                        height: SizeConfig.blockSizeVertical * 0.2,
-                        decoration: BoxDecoration(color: Color(colorBlue)),
-                      ),
-                    ],
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Color(colorBlue),
-                    size: SizeConfig.blockSizeVertical * 2.5,
-                  ),
-                ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Book List",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, color: Color(black)),
+                        ),
+                        Container(
+                          width: 80,
+                          height: SizeConfig.blockSizeVertical * 0.2,
+                          decoration: BoxDecoration(color: Color(colorBlue)),
+                        ),
+                      ],
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Color(colorBlue),
+                      size: SizeConfig.blockSizeVertical * 2.5,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            _getBookList(),
-          ],
+              _getBookList(),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 
   Widget _getSliders() {
@@ -502,13 +504,14 @@ class _HomeState extends State<Home> {
                               children: [
                                 Container(
                                   height: 150,
+width: SizeConfig.blockSizeVertical * 50,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(15),
                                         topLeft: Radius.circular(15)),
                                     child: Image.network(snapshot.data.image_url +
                                         "/" +
-                                        snapshot.data.date[index].image1),
+                                        snapshot.data.date[index].image1,fit: BoxFit.fill,),
                                   ),
                                 ),
                                 Container(
@@ -544,6 +547,9 @@ class _HomeState extends State<Home> {
                                       Text(
                                         snapshot
                                             .data.date[index].edition_detail,
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             color: Color(0XFF656565),
                                             fontWeight: FontWeight.w600,

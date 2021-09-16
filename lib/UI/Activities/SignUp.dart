@@ -188,11 +188,9 @@ class _SignUpState extends State<SignUp> {
                               width: SizeConfig.screenWidth * 0.3,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
+
                                 children: [
-                                  Text(
-                                    "Upload Profile Pic",
-                                    textAlign: TextAlign.center,
-                                  ),
+Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                                 ],
                               ),
                             ),
@@ -319,8 +317,9 @@ class _SignUpState extends State<SignUp> {
                                     borderRadius: BorderRadius.circular(25)),
                                 child: Row(
                                   children: [
+                                    SizedBox(width:20),
                                     Container(
-                                      width: SizeConfig.screenWidth * 0.25,
+                                      width: SizeConfig.screenWidth * 0.15,
                                       child: TextFormField(
                                         onTap: () {
                                           selectDate(context);
@@ -336,7 +335,7 @@ class _SignUpState extends State<SignUp> {
                                             hintStyle: TextStyle(
                                               fontSize:
                                                   SizeConfig.blockSizeVertical *
-                                                      1.50,
+                                                     2,
                                             ),
                                             errorStyle: TextStyle(
                                               color: Colors.red,
@@ -356,7 +355,7 @@ class _SignUpState extends State<SignUp> {
                               Container(
                                   width: SizeConfig.screenWidth * 0.35,
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
+                                      vertical: 5, horizontal: 15),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
@@ -377,7 +376,7 @@ class _SignUpState extends State<SignUp> {
                                       "Gender",
                                       style: TextStyle(
                                         fontSize:
-                                            SizeConfig.blockSizeVertical * 1.50,
+                                            SizeConfig.blockSizeVertical * 1.90,
                                       ),
                                     ),
                                     items: <String>['Male', 'Female', 'Other']
@@ -389,7 +388,7 @@ class _SignUpState extends State<SignUp> {
                                           style: TextStyle(
                                               fontSize:
                                                   SizeConfig.blockSizeVertical *
-                                                      1.5,
+                                                    2.5,
                                               color: Color(hintGrey)),
                                           textAlign: TextAlign.center,
                                         ),
@@ -441,7 +440,7 @@ class _SignUpState extends State<SignUp> {
                           },
                           focusNode: pwdFn,
                           textEditingController: pwdController,
-                          inputLength: 6,
+                          inputLength: 12,
                           obscureValue: true,
                           regularExpression: Utility.password,
                           validationMessage: "Password is required",
@@ -457,7 +456,7 @@ class _SignUpState extends State<SignUp> {
                             cPwdFn.unfocus();
                           },
                           textEditingController: cPwdController,
-                          inputLength: 6,
+                          inputLength: 12,
                           obscureValue: true,
                           regularExpression: Utility.password,
                           validationMessage: "Password is required",
@@ -510,12 +509,19 @@ class _SignUpState extends State<SignUp> {
                                     return;
                                   }
 
-                                  RegisterViewModel registerViewModel =
-                                      Get.find();
                                   ImageUploadViewModel imaUploadViewModel =
-                                      Get.find();
+                                  Get.find();
                                   print(
                                       "image selected${imaUploadViewModel.selectedImg}");
+
+                                  if(imaUploadViewModel.selectedImg==null){
+                                    CommonSnackBar.snackBar(
+                                        message: "Please Upload Profile Picture ");
+                                    return;
+                                  }
+                                  RegisterViewModel registerViewModel =
+                                  Get.find();
+
                                   RegisterReq registerReq = RegisterReq();
                                   registerReq.email = emailController.text;
                                   registerReq.password = pwdController.text;
@@ -551,10 +557,11 @@ class _SignUpState extends State<SignUp> {
                                     }
                                   } else {
                                     CommonSnackBar.snackBar(
-                                        message: "Server Errorrr");
+                                        message: "Server Error");
                                   }
                                 }
-                              },
+                                },
+
                               child: Text(
                                 "Signup",
                                 style: TextStyle(

@@ -24,7 +24,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
-  TextEditingController firstNameController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController(text: PreferenceManager.getName());
   TextEditingController lastNameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController cityController = TextEditingController();
@@ -68,6 +68,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(backgroundColor),
+
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -98,6 +99,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   _generalTextField("First Name", firstNameController),
                   _generalTextField("Last Name", lastNameController),
                   _generalTextField("Address", addressController),
@@ -148,37 +150,49 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Widget _generalTextField(String hint, TextEditingController controller) {
-    return Container(
-      width: SizeConfig.screenWidth,
-      margin: EdgeInsets.only(
-        left: SizeConfig.screenWidth * 0.05,
-        right: SizeConfig.screenWidth * 0.05,
-        top: SizeConfig.blockSizeVertical * 2,
-        bottom: SizeConfig.blockSizeVertical,
-      ),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey[200], spreadRadius: 2.0, blurRadius: 4.0),
-          ]),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-          isDense: true,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: SizeConfig.blockSizeVertical * 1.5,
-              horizontal: SizeConfig.blockSizeHorizontal * 5),
-          hintText: hint,
-          hintStyle: TextStyle(
-            color: Color(hintGrey),
-            fontWeight: FontWeight.w500,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(margin: EdgeInsets.only(
+          left: SizeConfig.screenWidth * 0.07,
+          right: SizeConfig.screenWidth * 0.05,
+          top: SizeConfig.blockSizeVertical * 2,
+
+        ),child: Text(hint)),
+        Container(
+          width: SizeConfig.screenWidth,
+          margin: EdgeInsets.only(
+            left: SizeConfig.screenWidth * 0.05,
+            right: SizeConfig.screenWidth * 0.05,
+            top: SizeConfig.blockSizeVertical * 2,
+            bottom: SizeConfig.blockSizeVertical,
           ),
-          border: InputBorder.none,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey[200], spreadRadius: 2.0, blurRadius: 4.0),
+              ]),
+          child: TextFormField(
+            controller: controller,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+              isDense: true,
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: SizeConfig.blockSizeVertical * 1.5,
+                  horizontal: SizeConfig.blockSizeHorizontal * 5),
+              hintText: hint,
+              hintStyle: TextStyle(
+                color: Color(hintGrey),
+                fontWeight: FontWeight.w500,
+              ),
+              border: InputBorder.none,
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
