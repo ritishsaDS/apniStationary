@@ -216,19 +216,50 @@ class _MyBookListState extends State<MyBookList> {
                                                           1.5))
                                             ]))
                                   ]),
-                                  Container(
-                                      width: SizeConfig.screenWidth * 0.6,
-                                      alignment: Alignment.centerRight,
-                                      child: PopupMenuButton(
-                                          icon: Icon(Icons.more_vert),
-                                          enabled: true,
-                                          onSelected: (value) {
-                                            log("message $value");
-
-                                            // setState(() {
-                                            //   selectedMenu = value;
-                                            if (value == 1) {
-                                              CommonSnackBar.snackBar(
+                                  // Container(
+                                  //     width: SizeConfig.screenWidth * 0.6,
+                                  //     alignment: Alignment.centerRight,
+                                  //     child: PopupMenuButton(
+                                  //         icon: Icon(Icons.more_vert),
+                                  //         enabled: true,
+                                  //         onSelected: (value) {
+                                  //           log("message $value");
+                                  //
+                                  //           // setState(() {
+                                  //           //   selectedMenu = value;
+                                  //           if (value == 1) {
+                                  //             CommonSnackBar.snackBar(
+                                  //                 message: 'Edit clicked');
+                                  //             Navigator.push(context,
+                                  //                 MaterialPageRoute(
+                                  //                     builder: (context) {
+                                  //               return SellBook(
+                                  //                   bookId:
+                                  //                       "${myBooksModel[index].id}");
+                                  //             }));
+                                  //           } else {
+                                  //             deleteBookAPI(
+                                  //                 myBooksModel[index].id,
+                                  //                 index);
+                                  //           }
+                                  //
+                                  //           // });
+                                  //         },
+                                  //         itemBuilder: (context) => [
+                                  //               PopupMenuItem(
+                                  //                 child: Text("Edit"),
+                                  //                 value: 1,
+                                  //               ),
+                                  //               PopupMenuItem(
+                                  //                 child: Text("Delete"),
+                                  //                 value: 2,
+                                  //               )
+                                  //             ]))
+                                ])),
+                        Column(
+                          children: [
+                            GestureDetector(onTap:(){
+                              CommonSnackBar.snackBar(
                                                   message: 'Edit clicked');
                                               Navigator.push(context,
                                                   MaterialPageRoute(
@@ -237,29 +268,19 @@ class _MyBookListState extends State<MyBookList> {
                                                     bookId:
                                                         "${myBooksModel[index].id}");
                                               }));
-                                            } else {
-                                              deleteBookAPI(
+                            },child: CircleAvatar(radius:15,backgroundColor: Colors.blue,child: Icon(Icons.edit_outlined,color: Colors.white,size: 18,))),
+                            SizedBox(height: 20,),
+                            GestureDetector(onTap:(){
+                              deleteBookAPI(
                                                   myBooksModel[index].id,
                                                   index);
-                                            }
-
-                                            // });
-                                          },
-                                          itemBuilder: (context) => [
-                                                PopupMenuItem(
-                                                  child: Text("Edit"),
-                                                  value: 1,
-                                                ),
-                                                PopupMenuItem(
-                                                  child: Text("Delete"),
-                                                  value: 2,
-                                                )
-                                              ]))
-                                ]))
+                            },child: CircleAvatar(radius:15,backgroundColor: Colors.redAccent,child: Icon(Icons.delete,color: Colors.white,size: 18,)))
+                          ],
+                        )
                       ])));
             },
             shrinkWrap: true,
-            itemCount: 4,
+            itemCount: myBooksModel.length,
             primary: false,
           );
         } else {
@@ -320,7 +341,7 @@ class _MyBookListState extends State<MyBookList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Nearby Products",
+                        "My Posts",
                         style: TextStyle(
                             fontWeight: FontWeight.w600, color: Color(black)),
                       ),
@@ -331,55 +352,7 @@ class _MyBookListState extends State<MyBookList> {
                       ),
                     ],
                   ),
-                  Container(
-                    width: SizeConfig.screenWidth * 0.4,
-                    height: SizeConfig.blockSizeVertical * 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: Color(colorBlue),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: SizeConfig.screenWidth * 0.25,
-                          height: SizeConfig.blockSizeVertical * 4,
-                          alignment: Alignment.center,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Nearby Products",
-                                hintStyle: TextStyle(
-                                  color: Color(hintGrey),
-                                  fontSize: SizeConfig.blockSizeVertical * 1.25,
-                                ),
-                                contentPadding: EdgeInsets.only(
-                                    bottom:
-                                        SizeConfig.blockSizeVertical * 2.5)),
-                            textAlign: TextAlign.center,
-                            readOnly: true,
-                          ),
-                        ),
-                        Container(
-                          width: SizeConfig.screenWidth * 0.1,
-                          height: SizeConfig.blockSizeVertical * 4,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(25),
-                                  topRight: Radius.circular(25)),
-                              color: Color(colorBlue)),
-                          child: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.white,
-                            size: SizeConfig.blockSizeVertical * 3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+
                 ],
               ),
             ),

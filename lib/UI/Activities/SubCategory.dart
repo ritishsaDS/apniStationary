@@ -9,6 +9,7 @@ import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/commonLV.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/apiModel/responseModel/CategoriesResponseModel.dart';
 import 'package:flutter/material.dart';
@@ -84,26 +85,25 @@ class _SubCategoryState extends State<SubCategory> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                         Container(
+                          height: 80,
+                          width: 100,
                           decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(25),
+                              shape: BoxShape.circle,
+
                               color: Colors.white,
+                              image: DecorationImage(image: NetworkImage(  categoriesModel[index].image)),
                               boxShadow: [
                                 BoxShadow(
-                                    color: Colors.grey[200],
-                                    spreadRadius: 1,
+                                    color: Colors.grey,
+                                    spreadRadius: 2,
                                     blurRadius: 3)
                               ]),
                           padding: EdgeInsets.all(15),
                           margin: EdgeInsets.only(
                               bottom: SizeConfig.blockSizeVertical),
-                          child: ImageIcon(
-                            AssetImage(
-                              widget.img,
-                            ),
-                            size: SizeConfig.blockSizeVertical * 6,
-                            color: Color(colorBlue),
-                          ),
+
+
+
                         ),
                         Container(
                             width: SizeConfig.screenWidth * 0.25,
@@ -164,25 +164,26 @@ class _SubCategoryState extends State<SubCategory> {
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                        left: SizeConfig.blockSizeHorizontal * 5,
-                        right: SizeConfig.screenWidth * 0.35),
+                      left: SizeConfig.blockSizeHorizontal * 5,
+                    ),
                     child: Row(
                       children: [
                         Text(
-                          "Current Location",
+                          Constants.userlocation,
                           style: TextStyle(color: Color(black)),
                         ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        ImageIcon(
-                          AssetImage('assets/icons/current.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 3,
-                        )
+                        // SizedBox(
+                        //   width: SizeConfig.blockSizeHorizontal * 2,
+                        // ),
+                        // ImageIcon(
+                        //   AssetImage('assets/icons/current.png'),
+                        //   color: Color(colorBlue),
+                        //   size: SizeConfig.blockSizeVertical * 3,
+                        // )
                       ],
                     ),
                   ),
+                  Expanded(child: SizedBox()),
                   ImageIcon(
                     AssetImage('assets/icons/notification.png'),
                     color: Color(colorBlue),

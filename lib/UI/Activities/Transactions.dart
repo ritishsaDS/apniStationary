@@ -154,7 +154,7 @@ class _TransactionsState extends State<Transactions> {
                         shrinkWrap: true,
                       );
                     } else {
-                      return getNodDataWidget();
+                      return getNotWidget();
                     }
                   } else {
                     return Container();
@@ -165,4 +165,17 @@ class _TransactionsState extends State<Transactions> {
       ),
     ));
   }
+  Widget getNotWidget() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+
+          SizedBox(height: 10,),
+          Text("No Transaction Found",style: TextStyle(fontSize: 20),),
+        ],
+      ),
+    );
+  }
+
 }

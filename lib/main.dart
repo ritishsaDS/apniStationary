@@ -1,22 +1,41 @@
+import 'package:book_buy_and_sell/ChatUi/views/chatrooms.dart';
 import 'package:book_buy_and_sell/UI/Activities/Login.dart';
 import 'package:book_buy_and_sell/UI/Activities/MainScreen.dart';
 import 'package:book_buy_and_sell/viewModel/account_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/image_upload_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/login_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/register_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'ChatUi/views/search.dart';
+import 'Utils/helper/helperfunctions.dart';
 import 'common/preference_manager.dart';
 
 void main() async {
-  ///Get storage initialize
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await GetStorage.init();
   runApp(BookBuySell());
 }
 
-class BookBuySell extends StatelessWidget {
+class BookBuySell extends StatefulWidget {
+  @override
+  _BookBuySellState createState() => _BookBuySellState();
+}
+
+class _BookBuySellState extends State<BookBuySell> {
+  bool userIsLoggedIn;
+@override
+  void initState() {
+  getLoggedInState();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -27,9 +46,18 @@ class BookBuySell extends StatelessWidget {
       home:    PreferenceManager.getEmailId()==null?LoginScreen():MainScreen()
     );
   }
-
+  getLoggedInState() async {
+    await HelperFunctions.getUserLoggedInSharedPreference().then((value){
+      setState(() {
+        userIsLoggedIn  = value;
+      });
+    });
+  }
   LoginViewModel loginViewModel = Get.put(LoginViewModel());
+
   RegisterViewModel registerViewModel = Get.put(RegisterViewModel());
+
   ImageUploadViewModel imageUploadViewModel = Get.put(ImageUploadViewModel());
+
   AccountViewModel accountViewModel = Get.put(AccountViewModel());
 }

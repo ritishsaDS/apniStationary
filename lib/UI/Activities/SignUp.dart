@@ -1,5 +1,8 @@
 import     'dart:io';
 import 'dart:typed_data';
+import 'package:book_buy_and_sell/Utils/helper/helperfunctions.dart';
+import 'package:book_buy_and_sell/Utils/services/auth.dart';
+import 'package:book_buy_and_sell/Utils/services/database.dart';
 import 'package:book_buy_and_sell/common/compress_image_function.dart';
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/Login.dart';
@@ -14,13 +17,17 @@ import 'package:book_buy_and_sell/model/apiModel/responseModel/register_response
 import 'package:book_buy_and_sell/model/apis/api_response.dart';
 import 'package:book_buy_and_sell/viewModel/image_upload_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/register_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../Addressbar.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key key}) : super(key: key);
@@ -31,7 +38,9 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
-
+  AuthService authService = new AuthService();
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+  XFile file;
   TextEditingController fullNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phnController = TextEditingController();
@@ -40,7 +49,13 @@ class _SignUpState extends State<SignUp> {
   TextEditingController clgNameController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
   TextEditingController cPwdController = TextEditingController();
-
+  String smsOTP;
+  String verificationId;
+  String errorMessage = '';
+  FirebaseAuth _auth = FirebaseAuth.instance;
+bool isLoading=false;
+bool showpwd=true;
+bool showcnfrmpwd=true;
   FocusNode fullNameFn;
   FocusNode emailFn;
   FocusNode phnFn;
@@ -120,27 +135,15 @@ class _SignUpState extends State<SignUp> {
                 width: SizeConfig.screenWidth,
                 height: SizeConfig.screenHeight * 0.3,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Color(gradientColor1),
-                    Color(gradientColor2),
-                  ]),
-                ),
+
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/bg/logo.png',
-                      scale: SizeConfig.blockSizeVertical * 0.6,
+                        'assets/icons/applogo.png',
+                        scale: 8
                     ),
-                    Text(
-                      "App Name",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          fontSize: SizeConfig.blockSizeVertical * 2),
-                    )
                   ],
                 )),
             Container(
@@ -149,7 +152,7 @@ class _SignUpState extends State<SignUp> {
                   vertical: SizeConfig.blockSizeVertical * 2),
               alignment: Alignment.center,
               child: Text(
-                "Signup",
+                "Sign up",
                 style: TextStyle(
                     color: Color(colorBlue),
                     fontWeight: FontWeight.w600,
@@ -160,15 +163,15 @@ class _SignUpState extends State<SignUp> {
               children: [
                 GestureDetector(onTap: () async {
                   ImageUploadViewModel imageUpload = Get.find();
-                  XFile file = await getImageFromGallery();
+                   file = await getImageFromGallery();
 
                   Uint8List uint8List = await compressFile(File(file.path));
 
-                  imageUpload.addSelectedImg(uint8List);
+                  imageUpload.profileimage(uint8List);
                   print("image selected${uint8List}");
                 }, child: GetBuilder<ImageUploadViewModel>(
                   builder: (controller) {
-                    if (controller.selectedImg == null) {
+                    if (file == null) {
                       return Container(
                         width: SizeConfig.screenWidth,
                         alignment: Alignment.center,
@@ -213,7 +216,7 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                                   color: Color(colorBlue),
                                 ),
                                 image: DecorationImage(
-                                    image: MemoryImage(controller.selectedImg),
+                                    image: MemoryImage(controller.profilephoto),
                                     fit: BoxFit.cover)),
                             padding: EdgeInsets.all(8),
                             height: SizeConfig.blockSizeVertical * 14,
@@ -266,37 +269,72 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
-                        CommanWidget.getTextFormField(
+                        TextFormField(
                           focusNode: emailFn,
-                          function: (String value) {
-                            emailFn.unfocus();
-                            FocusScope.of(context).requestFocus(phnFn);
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            focusedBorder: outLineGrey,
+                            enabledBorder: outLineGrey,
+                            isDense: true,
+                            isCollapsed: true,
+                            contentPadding: EdgeInsets.only(
+                                top: Get.height * 0.016,
+                                bottom: Get.height * 0.016,
+                                left: 20),
+                            errorBorder: outLineRed,
+                            focusedErrorBorder: outLineRed,
+                            hintText: "Enter Email",
+                            hintStyle: TextStyle(
+                              color: Color(hintGrey),
+                              fontWeight: FontWeight.w500,
+
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value.length<7) {
+                              return "Please Input email in right format";
+                            } else {
+                              return null;
+                            }
                           },
-                          textEditingController: emailController,
-                          validationType: Utility.emailText,
-                          hintText: "Email",
-                          inputLength: 50,
-                          regularExpression:
-                              Utility.emailAddressValidationPattern,
-                          validationMessage: Utility.emailEmptyValidation,
+
                         ),
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
-                        CommanWidget.getTextFormField(
-                          focusNode: phnFn,
-                          function: (String value) {
-                            phnFn.unfocus();
-                            FocusScope.of(context).requestFocus(dobFn);
-                          },
-                          textEditingController: phnController,
-                          inputLength: 10,
-                          regularExpression: Utility.digitsValidationPattern,
-                          validationMessage:
-                              Utility.mobileNumberInValidValidation,
-                          validationType: 'mobileno',
-                          hintText: "Phone",
-                        ),
+                       TextFormField(
+                         focusNode: phnFn,
+                           inputFormatters: [
+                             LengthLimitingTextInputFormatter(10),
+
+                           ],
+                         controller: phnController,
+                         keyboardType: TextInputType.number,
+                         decoration: InputDecoration(
+                           focusedBorder: outLineGrey,
+                           enabledBorder: outLineGrey,
+
+                           isDense: true,
+                           isCollapsed: true,
+                           contentPadding: EdgeInsets.only(
+                               top: Get.height * 0.016,
+                               bottom: Get.height * 0.016,
+                               left: 20),
+                           errorBorder: outLineRed,
+
+                           focusedErrorBorder: outLineRed,
+                           hintText: "Phone",
+                           hintStyle: TextStyle(
+                             color: Color(hintGrey),
+                             fontWeight: FontWeight.w500,
+                           )),
+    validator: (value) {
+    if (value.length<10) {
+    return "Phone Number can't be smaller then 10 Chracters";
+    } else {
+    return null;
+    }}
+                           ),
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
@@ -305,163 +343,230 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                width: SizeConfig.screenWidth * 0.35,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 8),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Color(colorBlue),
-                                    ),
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: Row(
-                                  children: [
-                                    SizedBox(width:20),
-                                    Container(
-                                      width: SizeConfig.screenWidth * 0.15,
-                                      child: TextFormField(
-                                        onTap: () {
-                                          selectDate(context);
-                                        },
-                                        readOnly: true,
-                                        decoration: InputDecoration(
-                                            isDense: true,
-                                            contentPadding: EdgeInsets.zero,
-                                            border: InputBorder.none,
-                                            floatingLabelBehavior:
-                                                FloatingLabelBehavior.always,
-                                            hintText: "DOB",
-                                            hintStyle: TextStyle(
-                                              fontSize:
-                                                  SizeConfig.blockSizeVertical *
-                                                     2,
-                                            ),
-                                            errorStyle: TextStyle(
-                                              color: Colors.red,
-                                            )),
-                                        controller: dobController,
-                                        focusNode: dobFn,
-                                      ),
-                                    ),
-                                    ImageIcon(
-                                      AssetImage('assets/icons/calendar.png'),
-                                      color: Color(colorBlue),
-                                      size: SizeConfig.blockSizeVertical * 2,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                  width: SizeConfig.screenWidth * 0.35,
+                              Expanded(
+                                child: Container(
+
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 15),
+                                      vertical: 8, horizontal: 8),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       border: Border.all(
                                         color: Color(colorBlue),
                                       ),
                                       borderRadius: BorderRadius.circular(25)),
-                                  child: DropdownButtonFormField<String>(
-                                    decoration: InputDecoration(
-                                        isDense: true,
-                                        contentPadding: EdgeInsets.zero,
-                                        border: InputBorder.none,
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.always,
-                                        errorStyle: TextStyle(
-                                          color: Colors.red,
-                                        )),
-                                    hint: Text(
-                                      "Gender",
-                                      style: TextStyle(
-                                        fontSize:
-                                            SizeConfig.blockSizeVertical * 1.90,
-                                      ),
-                                    ),
-                                    items: <String>['Male', 'Female', 'Other']
-                                        .map((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: new Text(
-                                          value,
-                                          style: TextStyle(
-                                              fontSize:
-                                                  SizeConfig.blockSizeVertical *
-                                                    2.5,
-                                              color: Color(hintGrey)),
-                                          textAlign: TextAlign.center,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width:10),
+                                      Container(
+                                        width: SizeConfig.screenWidth * 0.23,
+                                        child: TextFormField(
+                                          onTap: () {
+                                            selectDate(context);
+                                          },
+                                          readOnly: true,
+                                          decoration: InputDecoration(
+                                              isDense: true,
+                                              contentPadding: EdgeInsets.zero,
+                                              border: InputBorder.none,
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always,
+                                              hintText: "DOB",
+                                              hintStyle: TextStyle(
+                                                fontSize:
+                                                    SizeConfig.blockSizeVertical *
+                                                       2,
+                                              ),
+                                              errorStyle: TextStyle(
+                                                color: Colors.red,
+                                              )),
+                                          controller: dobController,
+                                          focusNode: dobFn,
                                         ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      genderController.text = val;
-                                      print("gender${genderController.text}");
-                                    },
-                                  )),
+                                      ),
+                                      ImageIcon(
+                                        AssetImage('assets/icons/calendar.png'),
+                                        color: Color(colorBlue),
+                                        size: SizeConfig.blockSizeVertical * 3,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 10,),
+                              Expanded(
+                                child: Container(
+
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 15),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                          color: Color(colorBlue),
+                                        ),
+                                        borderRadius: BorderRadius.circular(25)),
+                                    child: DropdownButtonFormField<String>(
+                                      decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.zero,
+                                          border: InputBorder.none,
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          errorStyle: TextStyle(
+                                            color: Colors.red,
+                                          )),
+                                      hint: Text(
+                                        "Gender",
+                                        style: TextStyle(
+                                          fontSize:
+                                              SizeConfig.blockSizeVertical * 1.90,
+                                        ),
+                                      ),
+                                      items: <String>['Male', 'Female', 'Other']
+                                          .map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(
+                                            value,
+                                            style: TextStyle(
+                                                fontSize:
+                                                    SizeConfig.blockSizeVertical *
+                                                      2,
+                                                color: Color(hintGrey)),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        genderController.text = val;
+                                        print("gender${genderController.text}");
+                                      },
+                                    )),
+                              ),
                             ],
                           ),
                         ),
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
-                        CommanWidget.getTextFormField(
-                          focusNode: clgNameFn,
-                          function: (value) {
-                            clgNameFn.unfocus();
-                            FocusScope.of(context).requestFocus(pwdFn);
-                          },
-                          textEditingController: clgNameController,
-                          hintText: "College Name",
-                          inputLength: 30,
-                          regularExpression:
-                              Utility.alphabetSpaceValidationPattern,
-                          validationMessage: Utility.nameEmptyValidation,
-                          sIcon: Container(
-                            width: Get.width * 0.06,
-                            child: Center(
-                              child: ImageIcon(
-                                AssetImage(
-                                  'assets/icons/location.png',
-                                ),
-                                color: Color(colorBlue),
-                                size: Get.height * 0.03,
-                              ),
-                            ),
-                          ),
+                       TextFormField(
+                         focusNode: clgNameFn,
+                         controller: clgNameController,
+                         // onTap: () async {
+                         //   // should show search screen here
+                         //   showSearch(
+                         //     context: context,
+                         //     // we haven't created AddressSearch class
+                         //     // this should be extending SearchDelegate
+                         //     delegate: AddressSearch(),
+                         //   );
+                         // },
+                         decoration: InputDecoration(
+                           focusedBorder: outLineGrey,
+                           enabledBorder: outLineGrey,
+                           isDense: true,
+                           isCollapsed: true,
+                           contentPadding: EdgeInsets.only(
+                               top: Get.height * 0.016,
+                               bottom: Get.height * 0.016,
+                               left: 20),
+                           errorBorder: outLineRed,
+                           focusedErrorBorder: outLineRed,
+                           hintText: "College Name",
+                           hintStyle: TextStyle(
+                             color: Color(hintGrey),
+                             fontWeight: FontWeight.w500,
+
+                           ),
                         ),
+                         ),
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
-                        CommanWidget.getTextFormField(
-                          function: (value) {
-                            pwdFn.unfocus();
-                            FocusScope.of(context).requestFocus(cPwdFn);
-                          },
-                          focusNode: pwdFn,
-                          textEditingController: pwdController,
-                          inputLength: 12,
-                          obscureValue: true,
-                          regularExpression: Utility.password,
-                          validationMessage: "Password is required",
-                          validationType: 'password',
-                          hintText: "Password",
-                        ),
+                      TextFormField(
+                        focusNode: pwdFn,
+                        controller: pwdController,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(12),
+
+                          ],
+                        obscureText:showpwd ,
+                        decoration: InputDecoration(
+                          focusedBorder: outLineGrey,
+                          enabledBorder: outLineGrey,
+                          isDense: true,
+                          suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye_rounded,color: !showpwd?Colors.blue:Colors.grey,),onPressed: (){
+                            setState(() {
+                             if( showpwd==false){
+                               showpwd=true;
+                             }
+                             else{
+                               showpwd=false;
+                             }
+                            });
+                          },),
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.only(
+                              top: Get.height * 0.016,
+                              bottom: Get.height * 0.016,
+                              left: 20),
+                          errorBorder: outLineRed,
+                          focusedErrorBorder: outLineRed,
+                          hintText: "Enter Password",
+
+                          hintStyle: TextStyle(
+                            color: Color(hintGrey),
+                            fontWeight: FontWeight.w500,
+                        ),),
+                          validator: (value) {
+                            if (value.length<5) {
+                              return "Password must be more than 5 characters";
+                            } else {
+                              return null;
+                            }}),
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
-                        CommanWidget.getTextFormField(
-                          focusNode: cPwdFn,
-                          function: (value) {
-                            cPwdFn.unfocus();
-                          },
-                          textEditingController: cPwdController,
-                          inputLength: 12,
-                          obscureValue: true,
-                          regularExpression: Utility.password,
-                          validationMessage: "Password is required",
-                          validationType: 'password',
-                          hintText: "Re-enter Password",
+                      TextFormField(
+                        focusNode: cPwdFn,
+                        controller: cPwdController,
+                          obscureText: showcnfrmpwd,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(12),
+
+                          ],
+                        decoration: InputDecoration(
+                          focusedBorder: outLineGrey,
+                          enabledBorder: outLineGrey,
+
+                          isDense: true,
+                          suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye,color: !showcnfrmpwd?Colors.blue:Colors.grey,),onPressed: (){
+                            setState(() {
+                              if( showcnfrmpwd==false){
+                                showcnfrmpwd=true;
+                              }
+                              else{
+                                showcnfrmpwd=false;
+                              }
+                            });
+                          },),
+
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.only(
+                              top: Get.height * 0.016,
+                              bottom: Get.height * 0.016,
+                              left: 20),
+                          errorBorder: outLineRed,
+                          focusedErrorBorder: outLineRed,
+                          hintText: "Re-enter Email",
+                          hintStyle: TextStyle(
+                            color: Color(hintGrey),
+                            fontWeight: FontWeight.w500,)),
+                          validator: (value) {
+                            if (value.length<5) {
+                              return "Confirm Password must be more than 5 characters";
+                            } else {
+                              return null;
+                            }}
                         ),
                         SizedBox(
                           height: Get.height * 0.03,
@@ -489,13 +594,20 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                             child: MaterialButton(
                               onPressed: () async {
                                 if (signUpFormKey.currentState.validate()) {
+                                  // if(validateStructure()!=true){
+                                  //   CommonSnackBar.snackBar(
+                                  //       message:
+                                  //       "Email Is not in right Format");
+                                  //   return;
+                                  // }
                                   if (pwdController.text !=
                                       cPwdController.text) {
                                     CommonSnackBar.snackBar(
                                         message:
-                                            "Password and Re-enter password does not match!");
+                                        "Password and Re-enter password does not match!");
                                     return;
                                   }
+
                                   if (dobController.text.isEmpty ||
                                       dobController.text == null) {
                                     CommonSnackBar.snackBar(
@@ -508,61 +620,10 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                                         message: "Please Select Gender");
                                     return;
                                   }
+verifyPhone();
+                                }},
 
-                                  ImageUploadViewModel imaUploadViewModel =
-                                  Get.find();
-                                  print(
-                                      "image selected${imaUploadViewModel.selectedImg}");
-
-                                  if(imaUploadViewModel.selectedImg==null){
-                                    CommonSnackBar.snackBar(
-                                        message: "Please Upload Profile Picture ");
-                                    return;
-                                  }
-                                  RegisterViewModel registerViewModel =
-                                  Get.find();
-
-                                  RegisterReq registerReq = RegisterReq();
-                                  registerReq.email = emailController.text;
-                                  registerReq.password = pwdController.text;
-                                  registerReq.name = fullNameController.text;
-                                  registerReq.image =
-                                      imaUploadViewModel.selectedImg;
-                                  registerReq.number = phnController.text;
-                                  registerReq.dob = dobController.text;
-                                  registerReq.gender = genderController.text;
-                                  registerReq.college_name =
-                                      clgNameController.text;
-                                  await registerViewModel.register(registerReq);
-                                  if (registerViewModel.apiResponse.status ==
-                                      Status.COMPLETE) {
-                                    RegisterResponseModel response =
-                                        registerViewModel.apiResponse.data;
-                                    if (response.status == '200') {
-                                      CommonSnackBar.snackBar(
-                                          message: response.message);
-                                      Future.delayed(Duration(seconds: 2), () {
-                                        Get.back();
-                                        fullNameController.clear();
-                                        emailController.clear();
-                                        pwdController.clear();
-                                        genderController.clear();
-                                        clgNameController.clear();
-                                        phnController.clear();
-                                        dobController.clear();
-                                      });
-                                    } else {
-                                      CommonSnackBar.snackBar(
-                                          message: response.message);
-                                    }
-                                  } else {
-                                    CommonSnackBar.snackBar(
-                                        message: "Server Error");
-                                  }
-                                }
-                                },
-
-                              child: Text(
+                              child:isLoading?CircularProgressIndicator(color: Colors.white,): Text(
                                 "Signup",
                                 style: TextStyle(
                                     color: Colors.white,
@@ -576,7 +637,7 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                         Container(
                           width: SizeConfig.screenWidth,
                           margin: EdgeInsets.symmetric(
-                              horizontal: SizeConfig.screenWidth * 0.1,
+                              horizontal: SizeConfig.screenWidth * 0.05,
                               vertical: SizeConfig.blockSizeVertical),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -590,7 +651,7 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                                         SizeConfig.blockSizeVertical * 1.75),
                               ),
                               SizedBox(
-                                width: SizeConfig.blockSizeHorizontal * 2,
+                                width: SizeConfig.blockSizeHorizontal * 1,
                               ),
                               InkWell(
                                 onTap: () {
@@ -618,7 +679,14 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                 GetBuilder<RegisterViewModel>(
                   builder: (controller) {
                     if (controller.apiResponse.status == Status.LOADING) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                        child: new Container(
+                          color: Colors.grey[300],
+                          width: 150.0,
+                          height: 150.0,
+                          child: new Padding(padding: const EdgeInsets.all(5.0),child: new Center(child: new CircularProgressIndicator())),
+                        ),
+                      );
                     } else {
                       return SizedBox();
                     }
@@ -631,4 +699,238 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
       ),
     ));
   }
+  singUp(message) async {
+
+    if(signUpFormKey.currentState.validate()){
+      setState(() {
+
+        isLoading = true;
+      });
+
+      await authService.signUpWithEmailAndPassword(emailController.text,
+          pwdController.text).then((result){
+        if(result != null){
+
+          Map<String,String> userDataMap = {
+            "userName" : fullNameController.text,
+            "userEmail" : emailController.text
+          };
+
+          databaseMethods.addUserInfo(userDataMap);
+
+          HelperFunctions.saveUserLoggedInSharedPreference(true);
+          HelperFunctions.saveUserNameSharedPreference(fullNameController.text);
+          HelperFunctions.saveUserEmailSharedPreference(emailController.text);
+          CommonSnackBar.snackBar(
+              message: message);
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            fullNameController.clear();
+            emailController.clear();
+            pwdController.clear();
+            genderController.clear();
+            clgNameController.clear();
+            phnController.clear();
+            dobController.clear();
+          });
+          // Navigator.pushReplacement(context, MaterialPageRoute(
+          //     builder: (context) => ChatRoom()
+          // ));
+        }
+      });
+    }
+  }
+  static InputBorder outLineGrey = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(20),
+    borderSide: BorderSide(
+      color: Color(colorBlue),
+    ),
+  );
+  static InputBorder outLineRed = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(20),
+      borderSide: BorderSide(
+        color: Colors.red,
+      ));
+
+  Future<void> verifyPhone() async {
+    setState(() {
+      isLoading=true;
+    });
+    print(phnController.text);
+    final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
+      this.verificationId = verId;
+
+      smsOTPDialog(context).then((value) {
+        print('sign in');
+      });
+    };
+    try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: "+91"+phnController.text, // PHONE NUMBER TO SEND OTP
+          codeAutoRetrievalTimeout: (String verId) {
+            //Starts the phone number verification process for the given phone number.
+            //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
+            this.verificationId = verId;
+          },
+          codeSent:
+          smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
+          timeout: const Duration(seconds: 120),
+          verificationCompleted: (AuthCredential phoneAuthCredential) {
+            print(phoneAuthCredential);
+
+          },
+
+          verificationFailed: (FirebaseAuthException exceptio) {
+            print('${exceptio.message}');
+          });
+    } catch (e) {
+      //handleError(e);
+    }
+  }
+  signupapi() async {
+
+
+    ImageUploadViewModel imaUploadViewModel =
+    Get.find();
+    print(
+        "image selected${imaUploadViewModel.profilephoto}");
+
+    if(imaUploadViewModel.profilephoto==null){
+      CommonSnackBar.snackBar(
+          message: "Please Upload Profile Picture ");
+      return;
+    }
+    RegisterViewModel registerViewModel =
+    Get.find();
+
+    RegisterReq registerReq = RegisterReq();
+    registerReq.email = emailController.text;
+    registerReq.password = pwdController.text;
+    registerReq.name = fullNameController.text;
+    registerReq.image =
+        imaUploadViewModel.profilephoto;
+    registerReq.number = phnController.text;
+    registerReq.dob = dobController.text;
+    registerReq.gender = genderController.text;
+    registerReq.college_name =
+        clgNameController.text;
+    await registerViewModel.register(registerReq);
+    if (registerViewModel.apiResponse.status ==
+        Status.COMPLETE) {
+      RegisterResponseModel response =
+          registerViewModel.apiResponse.data;
+      if (response.status == '200') {
+
+        singUp(response.message);
+
+      } else {
+        CommonSnackBar.snackBar(
+            message: response.message);
+      }
+    } else {
+      CommonSnackBar.snackBar(
+          message: "Server Error");
+    }
+  }
+  Future<bool> smsOTPDialog(BuildContext context) {
+    setState(() {
+      isLoading=false;
+    });
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            title: Text('Enter OTP'),
+            content: Container(
+              height: 85,
+              child: Column(children: [
+                TextField(
+                  decoration: InputDecoration(
+                      focusedBorder: outLineGrey,
+                      enabledBorder: outLineGrey,
+                      isDense: true,
+                      isCollapsed: true,
+                      contentPadding: EdgeInsets.only(
+                          top: Get.height * 0.016,
+                          bottom: Get.height * 0.016,
+                          left: 20),
+                      errorBorder: outLineRed,
+                      focusedErrorBorder: outLineRed,
+                      hintText: "Enter Otp",
+                      hintStyle: TextStyle(
+                        color: Color(hintGrey),
+                        fontWeight: FontWeight.w500,
+                      )),
+                  onChanged: (value) {
+                    this.smsOTP = value;
+                  },
+                ),
+                (errorMessage != ''
+                    ? Text(
+                  errorMessage,
+                  style: TextStyle(color: Colors.red),
+                )
+                    : Container())
+              ]),
+            ),
+            contentPadding: EdgeInsets.all(10),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Done'),
+                onPressed: () {
+                  if(smsOTP.length!=6){
+                   CommonSnackBar.snackBar(message:"Please Enter valid Otp First");
+                  }
+                else{
+                    Navigator.pop(context);
+                    signIn();
+
+                    if (_auth.currentUser != null) {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+
+
+                      print("-------------------");
+                      // Navigator.of(context).pop();
+                      // Navigator.of(context).pushReplacementNamed('/homepage');
+                    } else {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+
+
+                    }
+                  }
+
+                },
+              )
+            ],
+          );
+        });
+  }
+  signIn() async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsOTP,
+      );
+      final user = (await _auth.signInWithCredential(credential)) ;
+      final  currentUser = await _auth.currentUser;
+      assert(FirebaseAuth.instance.currentUser.uid == currentUser.uid);
+      print("jkfnoonnjonn");
+      CommonSnackBar.snackBar(message:"OTP Verified");
+      signupapi();
+      // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+      //  Navigator.of(context).pushReplacementNamed('/homepage');
+    } catch (e) {
+      CommonSnackBar.snackBar(message:e.toString());
+      print(e);
+    }
+  }
+
+  bool validateStructure() {
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regExp = new RegExp(pattern);
+    return regExp.hasMatch(emailController.text);
+  }
 }
+

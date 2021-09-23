@@ -6,5 +6,6 @@ abstract class BaseService<T> {
   final String forgotPasswordURL = 'forget-password';
   final String bookAdd = 'book-add';
   final String bookEdit = 'book-edit';
+  final String profileEdit = 'edit-profile';
 
 }

@@ -7,7 +7,9 @@ import 'package:book_buy_and_sell/model/apiModel/requestModel/forgot_password_re
 import 'package:book_buy_and_sell/model/apiModel/responseModel/forgot_password_response_model.dart';
 import 'package:book_buy_and_sell/model/apis/api_response.dart';
 import 'package:book_buy_and_sell/viewModel/login_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -21,7 +23,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   GlobalKey<FormState> forgotFormKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController otp = TextEditingController();
-
+  String btn="Send OTP";
+  String smsOTP;
+  String verificationId;
+  String errorMessage = '';
+  FirebaseAuth _auth = FirebaseAuth.instance;
   FocusNode phnFn;
   FocusNode otpFn;
   @override
@@ -139,7 +145,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       },
                       controller: emailController,
                       textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.emailAddress,
                       cursorColor: Color(colorBlue),
                       decoration: InputDecoration(
                         isDense: true,
@@ -279,43 +285,45 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                       child: MaterialButton(
                         onPressed: () async {
-                          LoginViewModel loginViewModel = Get.find();
-                          if (forgotFormKey.currentState.validate()) {
-                            ForgotPasswordReq forgotPasswordReq =
-                                ForgotPasswordReq();
-                            forgotPasswordReq.email = emailController.text;
-                            await loginViewModel
-                                .forgotPassword(forgotPasswordReq);
-                            if (loginViewModel
-                                    .forgotPasswordApiResponse.status ==
-                                Status.COMPLETE) {
-                              ForgotPasswordResponseModel response =
-                                  loginViewModel.forgotPasswordApiResponse.data;
-                              if (response.status == '200') {
-                                CommonSnackBar.snackBar(
-                                    message: response.message);
-                                Future.delayed(Duration(seconds: 2), () {
-                                  Get.back();
-                                  emailController.clear();
-                                });
-                              } else {
-                                CommonSnackBar.snackBar(
-                                    message: response.message);
-                              }
-                            } else {
-                              CommonSnackBar.snackBar(message: 'Server error');
-                            }
-                          } else {
-                            CommonSnackBar.snackBar(
-                                message: 'Please enter email');
-                          }
+                          print("n kvw");
+                          verifyPhone();
+                          // LoginViewModel loginViewModel = Get.find();
+                          // if (forgotFormKey.currentState.validate()) {
+                          //   ForgotPasswordReq forgotPasswordReq =
+                          //       ForgotPasswordReq();
+                          //   forgotPasswordReq.email = emailController.text;
+                          //   await loginViewModel
+                          //       .forgotPassword(forgotPasswordReq);
+                          //   if (loginViewModel
+                          //           .forgotPasswordApiResponse.status ==
+                          //       Status.COMPLETE) {
+                          //     ForgotPasswordResponseModel response =
+                          //         loginViewModel.forgotPasswordApiResponse.data;
+                          //     if (response.status == '200') {
+                          //       CommonSnackBar.snackBar(
+                          //           message: response.message);
+                          //       Future.delayed(Duration(seconds: 2), () {
+                          //         Get.back();
+                          //         emailController.clear();
+                          //       });
+                          //     } else {
+                          //       CommonSnackBar.snackBar(
+                          //           message: response.message);
+                          //     }
+                          //   } else {
+                          //     CommonSnackBar.snackBar(message: 'Server error');
+                          //   }
+                          // } else {
+                          //   CommonSnackBar.snackBar(
+                          //       message: 'Please enter email');
+                          // }
                           /* Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return ForgotPassword2();
                           }));*/
                         },
                         child: Text(
-                          "Forgot Now",
+                          "Reset Now",
                           style: TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
@@ -332,5 +340,127 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ),
       ),
     ));
+  }
+  Future<void> verifyPhone() async {
+    setState(() {
+      //isLoading=true;
+    });
+    print(emailController.text);
+    final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
+      this.verificationId = verId;
+
+      smsOTPDialog(context).then((value) {
+        print('sign in');
+      });
+    };
+    try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: "+91"+emailController.text, // PHONE NUMBER TO SEND OTP
+          codeAutoRetrievalTimeout: (String verId) {
+            //Starts the phone number verification process for the given phone number.
+            //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
+            this.verificationId = verId;
+          },
+          codeSent:
+          smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
+          timeout: const Duration(seconds: 120),
+          verificationCompleted: (AuthCredential phoneAuthCredential) {
+            print(phoneAuthCredential);
+
+          },
+
+          verificationFailed: (FirebaseAuthException exceptio) {
+            print('${exceptio.message}');
+          });
+    } catch (e) {
+      //handleError(e);
+    }
+  }
+
+  Future<bool> smsOTPDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            title: Text('Enter SMS Code'),
+            content: Container(
+              height: 85,
+              child: Column(children: [
+                TextField(
+                  onChanged: (value) {
+                    this.smsOTP = value;
+                  },
+                ),
+                (errorMessage != ''
+                    ? Text(
+                  errorMessage,
+                  style: TextStyle(color: Colors.red),
+                )
+                    : Container())
+              ]),
+            ),
+            contentPadding: EdgeInsets.all(10),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Done'),
+                onPressed: () {
+                  signIn();
+                  // _auth.currentUser().then((user) {
+                  //   if (user != null) {
+                  //    // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+                  //
+                  //
+                  //     // Navigator.of(context).pop();
+                  //     // Navigator.of(context).pushReplacementNamed('/homepage');
+                  //   } else {
+                  //     // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+                  //
+                  //
+                  //   }
+                  // });
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  signIn() async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsOTP,
+      );
+     final user = (await _auth.signInWithCredential(credential)) ;
+      final  currentUser = await _auth.currentUser;
+      assert(FirebaseAuth.instance.currentUser.uid == currentUser.uid);
+     // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+      //  Navigator.of(context).pushReplacementNamed('/homepage');
+    } catch (e) {
+     print(e);
+    }
+  }
+
+  handleError(PlatformException error) {
+    print(error);
+    switch (error.code) {
+      case 'ERROR_INVALID_VERIFICATION_CODE':
+        FocusScope.of(context).requestFocus(new FocusNode());
+        setState(() {
+          errorMessage = 'Invalid Code';
+        });
+        Navigator.of(context).pop();
+        smsOTPDialog(context).then((value) {
+          print('sign in');
+        });
+        break;
+      default:
+        setState(() {
+          errorMessage = error.message;
+        });
+
+        break;
+    }
   }
 }

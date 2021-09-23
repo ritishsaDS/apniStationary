@@ -9,8 +9,11 @@ import 'package:book_buy_and_sell/UI/Activities/Transactions.dart';
 import 'package:book_buy_and_sell/UI/Activities/Wallet.dart';
 import 'package:book_buy_and_sell/UI/Activities/WalletTrans.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key key}) : super(key: key);
@@ -28,18 +31,80 @@ class _MainScreenState extends State<MainScreen> {
     Account(),
   ];
 
+  Future<String> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+
+    final location = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    var addresses =
+    await placemarkFromCoordinates(location.latitude, location.longitude);
+    print("-------------------------------------------------");
+    print(addresses);
+   setState(() {
+     Constants.userlocation =  addresses[0].street.toString();
+
+   });
+    return addresses[0].street.toString();
+  }
+
+  bool isLoading = false;
+
   int currentIndex = 0;
+  @override
+  void initState() {
+    _determinePosition();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return SafeArea(
         child: Scaffold(
+
           resizeToAvoidBottomInset: false,
           bottomNavigationBar: Container(
         margin: EdgeInsets.symmetric(
             horizontal: SizeConfig.screenWidth * 0.05,
             vertical: SizeConfig.blockSizeVertical * 2),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(35)),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(35), boxShadow: [
+          BoxShadow(
+              color: Colors.grey[300],
+              spreadRadius: 2.0,
+              blurRadius: 4.0),
+        ]),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(35),
           child: BottomNavigationBar(
@@ -114,6 +179,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
           floatingActionButton: Container(
+margin: EdgeInsets.only(top: 20),
             height: SizeConfig.blockSizeVertical * 8,
             decoration: BoxDecoration(
             border: Border.all(color: Color(colorBlue), width: 4),
@@ -132,314 +198,6 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          drawer: Drawer(
-        elevation: 0.0,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(
-                    vertical: SizeConfig.blockSizeVertical * 1.5,
-                    horizontal: SizeConfig.blockSizeHorizontal * 4),
-                child: ImageIcon(
-                  Image.asset(
-                    'assets/icons/drawer.png',
-                  ).image,
-                  color: Color(colorBlue),
-                  size: SizeConfig.blockSizeVertical * 4,
-                ),
-              ),
-              Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.blockSizeVertical*10,
-                margin: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.screenWidth * 0.08,
-                    vertical: SizeConfig.blockSizeVertical * 2),
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[200],
-                          spreadRadius: 2.0,
-                          blurRadius: 4.0),
-                    ]),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: SizeConfig.screenWidth * 0.18,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Icon(Icons.person_outline_rounded, color: Color(colorBlue),
-                          size: 60,),
-                      ),
-                    ),
-                    Container(
-                      width: SizeConfig.screenWidth * 0.4,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            PreferenceManager.getName(),
-                            style: TextStyle(
-                                color: Color(matteBlack),
-                                fontWeight: FontWeight.w600,
-                                fontSize: SizeConfig.blockSizeVertical * 2),
-                          ),
-                          SizedBox(height: 10,),
-                          Text(
-                            PreferenceManager.getPhoneNo(),
-                            style: TextStyle(
-                                color: Color(matteBlack),
-                                fontWeight: FontWeight.w400,
-                                fontSize: SizeConfig.blockSizeVertical * 1.75),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            margin: EdgeInsets.only(
-                                right: SizeConfig.blockSizeHorizontal * 4),
-                            child: Text(
-                              "Edit Profile",
-                              style: TextStyle(
-                                  color: Color(colorBlue),
-                                  fontSize: SizeConfig.blockSizeVertical * 1.25,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.screenWidth * 0.05,
-                    vertical: SizeConfig.blockSizeVertical * 4),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                      title: Text(
-                        "Cart",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/cart.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return Cart();
-                        }));
-                      },
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Wallet",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/wallet.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return WalletTrans();
-                        }));
-                      },
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Transactions",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/transactions.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return Transactions();
-                        }));
-                      },
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Orders",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/orders.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return Orders();
-                        }));
-                      },
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Offers",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/offer.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return Offers();
-                        }));
-                      },
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Notification",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/notification.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Help & Support",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/help.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Share with Friends",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/share.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Logout",
-                        style: TextStyle(
-                            fontSize: SizeConfig.blockSizeVertical * 2,
-                            fontWeight: FontWeight.w500,
-                            color: Color(matteBlack)),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.04),
-                      leading: ImageIcon(
-                        Image.asset('assets/icons/logout.png').image,
-                        color: Color(colorBlue),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Color(matteBlack),
-                        size: SizeConfig.blockSizeVertical * 2.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
           body: widgetOptions.elementAt(currentIndex),
     ));
   }

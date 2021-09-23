@@ -23,6 +23,15 @@ class ImageUploadViewModel extends GetxController {
     _selectedImg2 = value;
     update();
   }
+  //profile photo
+  Uint8List _profilephoto;
+
+  Uint8List get profilephoto => _profilephoto;
+
+  void profileimage(Uint8List value) {
+    _profilephoto = value;
+    update();
+  }
 
   // 3rd image
 

@@ -76,7 +76,7 @@ class _CheckAnimationState extends State<CheckAnimation>
                 right: SizeConfig.screenWidth * 0.05,
               ),
               alignment: Alignment.center,
-              child: Text("Successfully Uploaded", style: TextStyle(
+              child: Text("Successfully Posted", style: TextStyle(
                   fontSize: SizeConfig.blockSizeVertical * 3.5,
                   fontWeight: FontWeight.bold,
                   color: Color(0XFF77849C)

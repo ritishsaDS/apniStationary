@@ -214,7 +214,7 @@ class _CartState extends State<Cart> {
                             ),
                             Container(
                               width: SizeConfig.screenWidth,
-                              height: SizeConfig.screenHeight * 0.13,
+                              height: SizeConfig.screenHeight * 0.16,
                               margin: EdgeInsets.only(
                                   right: SizeConfig.screenWidth * 0.09),
                               decoration: BoxDecoration(
@@ -261,7 +261,7 @@ class _CartState extends State<Cart> {
                                             ),
                                             Text(
                                               snapshot
-                                                  .data.date[index].created_at,
+                                                  .data.date[index].created_at.toString().substring(0,10),
                                               style: TextStyle(
                                                   color: Color(0XFF656565),
                                                   fontWeight: FontWeight.w500,
@@ -418,6 +418,13 @@ class _CartState extends State<Cart> {
 
 Widget getNodDataWidget() {
   return Container(
-    child: Center(child: Text("No Data Found.")),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+    Icon(Icons.remove_shopping_cart_outlined,size: 100,color: Colors.blue.withOpacity(0.6),),
+    SizedBox(height: 10,),
+    Text("Your Cart is Empty",style: TextStyle(fontSize: 20),),
+      ],
+    ),
   );
 }

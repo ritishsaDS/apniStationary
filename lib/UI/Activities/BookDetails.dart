@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+import 'package:book_buy_and_sell/ChatUi/views/chat.dart';
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/Constants/StringConstants.dart';
 import 'package:book_buy_and_sell/UI/Activities/BuyNow.dart';
 import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/Utils/helper/constants.dart';
+import 'package:book_buy_and_sell/Utils/helper/helperfunctions.dart';
+import 'package:book_buy_and_sell/Utils/services/database.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/ClassModel/BookDataModel.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,8 +27,12 @@ class BookDetail extends StatefulWidget {
 }
 
 class _BookDetailState extends State<BookDetail> {
+  DatabaseMethods databaseMethods = new DatabaseMethods();
+  Stream chatRooms;
+  bool isLoading=false;
   @override
   void initState() {
+    getUserInfogetChats();
     // TODO: implement initState
     super.initState();
   }
@@ -35,7 +43,9 @@ class _BookDetailState extends State<BookDetail> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(backgroundColor),
-      body: SingleChildScrollView(
+      body:isLoading?
+          CircularProgressIndicator()
+          : SingleChildScrollView(
         child: FutureBuilder<BookDataModel>(
           future: _callBookDataAPI(),
           builder: (context, AsyncSnapshot<BookDataModel> snapshot) {
@@ -245,6 +255,15 @@ child:
                                     fontWeight: FontWeight.w500,
                                     color: Color(0XFF656565)),
                               ),
+                              SizedBox(
+                                height: SizeConfig.blockSizeVertical,
+                              ),
+                              Text(
+                                "Category :",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0XFF656565)),
+                              ),
                             ],
                           ),
                         ),
@@ -295,6 +314,15 @@ child:
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: Color(black)),
+                              ),
+                              SizedBox(
+                                height: SizeConfig.blockSizeVertical,
+                              ),
+                              Text(
+                                snapshot.data.date.category_name,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(black)),
                               )
                             ],
                           ),
@@ -324,6 +352,7 @@ child:
                           style: TextStyle(
                               fontWeight: FontWeight.w500, color: Color(black)),
                         ),
+
                       ],
                     ),
                   ),
@@ -384,30 +413,32 @@ child:
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: SizeConfig.screenWidth * 0.4,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(gradientColor1),
-                                Color(gradientColor2),
-                              ],
+                        Expanded(
+                          child: Container(
+
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color(gradientColor1),
+                                  Color(gradientColor2),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(25),
                             ),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: MaterialButton(
-                            onPressed: () {
-                              _callAddToCartAPI();
-                            },
-                            child: Text(
-                              "Buy Now: $rs ${snapshot.data.date.price}",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
+                            child: MaterialButton(
+                              onPressed: () {
+                                _callAddToCartAPI();
+                              },
+                              child: Text(
+                                "Buy Now: $rs ${snapshot.data.date.price}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ),
                         ),
-
+SizedBox(width: 10,),
                         GestureDetector(
                           onTap: (){
                             _callAddToCartAPI();
@@ -425,7 +456,9 @@ child:
                             ),
                             child: MaterialButton(
                               onPressed: () {
-                                showAlert(context,"Lorem Ipsum Dolor sir amet");
+                                print(snapshot.data.date.user_name);
+                                sendMessage(snapshot.data.date.user_name);
+                               // showAlert(context,"Lorem Ipsum Dolor sir amet");
 
                               },
                               child: Text(
@@ -618,6 +651,51 @@ child:
 
     return data;
   }
+  sendMessage(String userName){
+    print(Constants.myName);
+    List<String> users = [Constants.myName,userName];
+
+    String chatRoomId = getChatRoomId(Constants.myName,userName);
+print("chatRoomid"+chatRoomId);
+    Map<String, dynamic> chatRoom = {
+      "users": users,
+      "chatRoomId" : chatRoomId,
+    };
+
+    databaseMethods.addChatRoom(chatRoom, chatRoomId);
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => Chat(
+          chatRoomId: chatRoomId,
+        )
+    ));
+
+  }
+  getUserInfogetChats() async {
+    setState(() {
+      isLoading=true;
+    });
+    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
+      setState(()  {
+        chatRooms = snapshots;
+
+        print(
+            "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
+      });
+      print("snapshots"+snapshots);
+    });
+    setState(() {
+      isLoading=false;
+    });
+  }
+  getChatRoomId(String a, String b) {
+    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
+  }
 
   _callAddToCartAPI()async{
     Map<String, dynamic> body = {
@@ -651,6 +729,8 @@ showAlert(BuildContext context,String msg) {
     },
   );
 }
+
+
 class DetailScreen extends StatefulWidget {
   var image;
   DetailScreen({this.image});
@@ -689,4 +769,5 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
   }
+
 }

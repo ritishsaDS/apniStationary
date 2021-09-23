@@ -11,6 +11,14 @@ class PreferenceManager {
   static String getEmailId() {
     return getStorage.read("email_id");
   }
+  ///image
+  static Future setImage(String value) async {
+    await getStorage.write("image", value);
+  }
+
+  static String getImage() {
+    return getStorage.read("image");
+  }
 
   ///name
   static Future setName(String value) async {

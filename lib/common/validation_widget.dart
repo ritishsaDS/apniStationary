@@ -113,23 +113,7 @@ class CommanWidget {
                   FilteringTextInputFormatter.allow(RegExp(regularExpression))
                 ],
                 enabled: isEnable != null ? isEnable : true,
-                validator: (value) {
-                  print("isValidate  $isValidate}");
-                  return isValidate == false
-                      ? null
-                      : value.isEmpty
-                          ? validationMessage
-                          : validationType == "email"
-                              ? Utility.validateUserName(value)
-                              : validationType == "password"
-                                  ? Utility.validatePassword(value)
-                                  : validationType == "mobileno"
-                                      ? value.length != 10
-                                          ? Utility
-                                              .mobileNumberInValidValidation
-                                          : null
-                                      : null;
-                },
+
                 style: TextStyle(
                     color: isEnable != null ? Colors.black : Colors.black,
                     fontSize: Get.height * 0.019),

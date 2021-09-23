@@ -1,3 +1,4 @@
+import 'package:book_buy_and_sell/ChatUi/views/chatrooms.dart';
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/Cart.dart';
 import 'package:book_buy_and_sell/UI/Activities/ChangePassword.dart';
@@ -8,6 +9,8 @@ import 'package:book_buy_and_sell/UI/Activities/Orders.dart';
 import 'package:book_buy_and_sell/UI/Activities/Transactions.dart';
 import 'package:book_buy_and_sell/UI/Activities/Wallet.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/helper/constants.dart';
+import 'package:book_buy_and_sell/Utils/services/auth.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -39,6 +42,7 @@ class _AccountState extends State<Account> {
                   horizontal: SizeConfig.screenWidth * 0.02,
                   vertical: SizeConfig.blockSizeVertical * 2),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   InkWell(
                     onTap: () {
@@ -53,24 +57,25 @@ class _AccountState extends State<Account> {
                   Container(
                     margin: EdgeInsets.only(
                         left: SizeConfig.blockSizeHorizontal * 5,
-                        right: SizeConfig.screenWidth * 0.35),
+                       ),
                     child: Row(
                       children: [
                         Text(
-                          "Current Location",
+                          Constants.userlocation,
                           style: TextStyle(color: Color(black)),
                         ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        ImageIcon(
-                          AssetImage('assets/icons/current.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 3,
-                        )
+                        // SizedBox(
+                        //   width: SizeConfig.blockSizeHorizontal * 2,
+                        // ),
+                        // ImageIcon(
+                        //   AssetImage('assets/icons/current.png'),
+                        //   color: Color(colorBlue),
+                        //   size: SizeConfig.blockSizeVertical * 3,
+                        // )
                       ],
                     ),
                   ),
+Expanded(child: SizedBox()),
                   ImageIcon(
                     AssetImage('assets/icons/notification.png'),
                     color: Color(colorBlue),
@@ -102,7 +107,8 @@ class _AccountState extends State<Account> {
                         BoxDecoration(borderRadius: BorderRadius.circular(15)),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: Image.asset('assets/icons/profile pic.png'),
+                      child: PreferenceManager.getImage()!=null?Image.network(PreferenceManager.getImage()): Icon(Icons.person_outline_rounded, color: Color(colorBlue),
+                        size: 60,),
                     ),
                   ),
                   SizedBox(
@@ -238,7 +244,7 @@ SizedBox(height: 10,),
                         bottom: SizeConfig.blockSizeVertical * 2),
                     child: ListTile(
                       title: Text(
-                        "My Book List",
+                        "My Posts",
                         style: TextStyle(
                             fontSize: SizeConfig.blockSizeVertical * 2,
                             fontWeight: FontWeight.w500,
@@ -551,6 +557,41 @@ SizedBox(height: 10,),
                         bottom: SizeConfig.blockSizeVertical * 2),
                     child: ListTile(
                       onTap: (){
+
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatRoom()));
+                      },
+                      title: Text(
+                        "Chats",
+                        style: TextStyle(
+                            fontSize: SizeConfig.blockSizeVertical * 2,
+                            fontWeight: FontWeight.w500,
+                            color: Color(matteBlack)),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.screenWidth * 0.04),
+                      leading:Icon(Icons.chat_bubble,color: Colors.blue,),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Color(matteBlack),
+                        size: SizeConfig.blockSizeVertical * 2.5,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              blurRadius: 5,
+                              spreadRadius: 2),
+                        ],
+                        borderRadius: BorderRadius.circular(15)),
+                    margin: EdgeInsets.only(
+                        bottom: SizeConfig.blockSizeVertical * 2),
+                    child: ListTile(
+                      onTap: (){
+                        AuthService().signOut();
                      logout.remove("email_id");
                      logout.remove("name");
                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));

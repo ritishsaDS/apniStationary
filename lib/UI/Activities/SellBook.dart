@@ -7,6 +7,7 @@ import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:book_buy_and_sell/common/common_snackbar.dart';
 import 'package:book_buy_and_sell/common/compress_image_function.dart';
 import 'package:book_buy_and_sell/common/get_image_picker.dart';
@@ -44,7 +45,10 @@ class _SellBookState extends State<SellBook> {
 bool isLoading=false;
   TextEditingController conditions = TextEditingController();
   GlobalKey<FormState> profileForm = GlobalKey<FormState>();
-
+  XFile file2;
+  XFile file;
+  XFile file3;
+  XFile file4;
   FocusNode bookNameFn;
   FocusNode authorFn;
   FocusNode editionFn;
@@ -90,26 +94,32 @@ bool isLoading=false;
                           ),
                         ),
                         Container(
-                            margin: EdgeInsets.only(
-                                left: SizeConfig.blockSizeHorizontal * 5,
-                                right: SizeConfig.screenWidth * 0.35),
-                            child: Row(children: [
+                          margin: EdgeInsets.only(
+                            left: SizeConfig.blockSizeHorizontal * 5,
+                          ),
+                          child: Row(
+                            children: [
                               Text(
-                                "Current Location",
+                                Constants.userlocation,
                                 style: TextStyle(color: Color(black)),
                               ),
-                              SizedBox(
-                                width: SizeConfig.blockSizeHorizontal * 2,
-                              ),
-                              ImageIcon(
-                                AssetImage('assets/icons/current.png'),
-                                color: Color(colorBlue),
-                                size: SizeConfig.blockSizeVertical * 3,
-                              )
-                            ])),
-                        ImageIcon(AssetImage('assets/icons/notification.png'),
-                            color: Color(colorBlue),
-                            size: SizeConfig.blockSizeVertical * 4)
+                              // SizedBox(
+                              //   width: SizeConfig.blockSizeHorizontal * 2,
+                              // ),
+                              // ImageIcon(
+                              //   AssetImage('assets/icons/current.png'),
+                              //   color: Color(colorBlue),
+                              //   size: SizeConfig.blockSizeVertical * 3,
+                              // )
+                            ],
+                          ),
+                        ),
+                        Expanded(child: SizedBox()),
+                        ImageIcon(
+                          AssetImage('assets/icons/notification.png'),
+                          color: Color(colorBlue),
+                          size: SizeConfig.blockSizeVertical * 4,
+                        )
                       ])),
                   _editCheck(),
 
@@ -196,7 +206,7 @@ bool isLoading=false;
                     GestureDetector(onTap: () =>  showAlertDialog(context,1),
                      child:
                         GetBuilder<ImageUploadViewModel>(builder: (controller) {
-                      if (controller.selectedImg == null) {
+                      if (file == null) {
                         if (data.image1 != "") {
                           return Container(
                               width: SizeConfig.screenWidth * 0.4,
@@ -214,7 +224,8 @@ bool isLoading=false;
                                       image: NetworkImage(
                                           image_url + "/" + data.image1),
                                       fit: BoxFit.cover)));
-                        } else {
+                        }
+                        else {
                           return Container(
                               width: SizeConfig.screenWidth * 0.4,
                               height: SizeConfig.screenHeight * 0.15,
@@ -236,33 +247,35 @@ bool isLoading=false;
                                       color: Color(colorBlue),
                                       size: SizeConfig.blockSizeVertical * 6,
                                     ),
-                                    Text("Add Book Pic")
+                                    Text("Upload Photo")
                                   ]));
                         }
                       }
 
-                      return Container(
-                        width: SizeConfig.screenWidth * 0.4,
-                        height: SizeConfig.screenHeight * 0.15,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey[200],
-                                  spreadRadius: 1.0,
-                                  blurRadius: 2.0),
-                            ],
-                            image: DecorationImage(
-                                image: MemoryImage(controller.selectedImg),
-                                fit: BoxFit.cover)),
-                      );
+                     else{
+                        return Container(
+                          width: SizeConfig.screenWidth * 0.4,
+                          height: SizeConfig.screenHeight * 0.15,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey[200],
+                                    spreadRadius: 1.0,
+                                    blurRadius: 2.0),
+                              ],
+                              image: DecorationImage(
+                                  image: MemoryImage(controller.selectedImg),
+                                  fit: BoxFit.cover)),
+                        );
+                      }
                     })),
                     GestureDetector(onTap: () async {
                       showAlertDialog2(context,2);
                     }, child: GetBuilder<ImageUploadViewModel>(
                       builder: (controller) {
-                        if (controller.selectedImg2 == null) {
+                        if (file2 == null) {
                           if (data.image2 != "") {
                             return Container(
                               width: SizeConfig.screenWidth * 0.4,
@@ -304,7 +317,7 @@ bool isLoading=false;
                                         color: Color(colorBlue),
                                         size: SizeConfig.blockSizeVertical * 6,
                                       ),
-                                      Text("Add Book Pic")
+                                      Text("Upload Photo")
                                     ]));
                           }
                         }
@@ -338,7 +351,7 @@ bool isLoading=false;
 
                         child: GetBuilder<ImageUploadViewModel>(
                         builder: (controller) {
-                          if (controller.selectedImg3 == null) {
+                          if (file3 == null) {
                             if (data.image3 != "") {
                               return Container(
                                 width: SizeConfig.screenWidth * 0.4,
@@ -382,7 +395,7 @@ bool isLoading=false;
                                           size:
                                               SizeConfig.blockSizeVertical * 6,
                                         ),
-                                        Text("Add Book Pic")
+                                        Text("Upload Photo")
                                       ]));
                             }
                           }
@@ -408,7 +421,7 @@ bool isLoading=false;
                       GestureDetector(onTap:()=>showAlertDialog4(context,4)
                        , child: GetBuilder<ImageUploadViewModel>(
                         builder: (controller) {
-                          if (controller.selectedImg4 == null) {
+                          if (file4 == null) {
                             if (data.image4 != "") {
                               return Container(
                                 width: SizeConfig.screenWidth * 0.4,
@@ -452,7 +465,7 @@ bool isLoading=false;
                                           size:
                                               SizeConfig.blockSizeVertical * 6,
                                         ),
-                                        Text("Add Book Pic")
+                                        Text("Upload Photo")
                                       ]));
                             }
                           }
@@ -763,263 +776,265 @@ bool isLoading=false;
                   ),
                 ),
                 Container(
+                  width: SizeConfig.screenWidth,
+                  margin: EdgeInsets.only(
+                    left: SizeConfig.screenWidth * 0.05,
+                    right: SizeConfig.screenWidth * 0.05,
+                    top: SizeConfig.blockSizeVertical * 2,
+                    bottom: SizeConfig.blockSizeVertical,
+                  ),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey[200],
+                            spreadRadius: 2.0,
+                            blurRadius: 4.0),
+                      ]),
+                  child: TextFormField(
+                    controller: price,
+
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    onFieldSubmitted: (value) {
+                      editionFn.unfocus();
+                      FocusScope.of(context).requestFocus(semesterFn);
+                    },
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: SizeConfig.blockSizeVertical * 1.5,
+                          horizontal: SizeConfig.blockSizeHorizontal * 5),
+                      hintText: "Price",
+                      hintStyle: TextStyle(
+                        color: Color(hintGrey),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                Container(
                     width: SizeConfig.screenWidth,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: SizeConfig.screenWidth * 0.4,
-                            height: SizeConfig.blockSizeVertical * 5,
-                            margin: EdgeInsets.only(
-                                left: SizeConfig.screenWidth * 0.05,
-                                right: SizeConfig.screenWidth * 0.05,
-                                top: SizeConfig.blockSizeVertical * 3,
-                                bottom: SizeConfig.blockSizeVertical),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color(colorBlue),
-                                ),
-                                borderRadius: BorderRadius.circular(25),
-                                color: Colors.white),
-                            child: TextFormField(
-                              controller: price,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Price",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                  contentPadding: EdgeInsets.only(top: 8),
-                                  isDense: true),
-                              textAlign: TextAlign.center,
-                              onChanged: (val){
-                                setState(() {
-                                  data.price=val;
-                                });
-
-                              },
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                            ),
+                    child: Container(
+                        width: SizeConfig.screenWidth * 0.8,
+                        height: SizeConfig.blockSizeVertical * 5,
+                        margin: EdgeInsets.only(
+                            left: SizeConfig.screenWidth * 0.05,
+                            right: SizeConfig.screenWidth * 0.05,
+                            top: SizeConfig.blockSizeVertical * 3,
+                            bottom: SizeConfig.blockSizeVertical),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(gradientColor1),
+                              Color(gradientColor2).withOpacity(0.95),
+                            ],
+                            begin: Alignment(1.0, -3.0),
+                            end: Alignment.bottomRight,
                           ),
-                          Container(
-                              width: SizeConfig.screenWidth * 0.4,
-                              height: SizeConfig.blockSizeVertical * 5,
-                              margin: EdgeInsets.only(
-                                  left: SizeConfig.screenWidth * 0.05,
-                                  right: SizeConfig.screenWidth * 0.05,
-                                  top: SizeConfig.blockSizeVertical * 3,
-                                  bottom: SizeConfig.blockSizeVertical),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(gradientColor1),
-                                    Color(gradientColor2).withOpacity(0.95),
-                                  ],
-                                  begin: Alignment(1.0, -3.0),
-                                  end: Alignment.bottomRight,
-                                ),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: MaterialButton(
-                                onPressed: () async {
-                                  ImageUploadViewModel imaUploadViewModel =
-                                  Get.put(ImageUploadViewModel());
-                                  if (profileForm.currentState.validate()) {
-                                    if (bookName.text.isEmpty ||
-                                        bookName.text == null) {
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter book name");
-                                      return;
-                                    }
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            ImageUploadViewModel imaUploadViewModel =
+                            Get.put(ImageUploadViewModel());
+                            if (profileForm.currentState.validate()) {
+                              if (bookName.text.isEmpty ||
+                                  bookName.text == null) {
+                                CommonSnackBar.snackBar(
+                                    message: "Please enter book name");
+                                return;
+                              }
 
-                                    if (author.text.isEmpty ||
-                                        author.text == null) {
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter author name");
-                                      return;
-                                    }
+                              if (author.text.isEmpty ||
+                                  author.text == null) {
+                                CommonSnackBar.snackBar(
+                                    message: "Please enter author name");
+                                return;
+                              }
 
-                                    if (price.text.isEmpty ||
-                                        price.text == null) {
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter price");
-                                      return;
-                                    }
-                                    if (desc.text.isEmpty ||
-                                        desc.text == null) {
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter Description");
-                                      return;
-                                    }
-                                    if (edition.text.isEmpty ||
-                                        edition.text == null) {
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter Edition deatil");
-                                      return;
-                                    }
+                              if (price.text.isEmpty ||
+                                  price.text == null) {
+                                CommonSnackBar.snackBar(
+                                    message: "Please enter price");
+                                return;
+                              }
+                              if (desc.text.isEmpty ||
+                                  desc.text == null) {
+                                CommonSnackBar.snackBar(
+                                    message: "Please enter Description");
+                                return;
+                              }
+                              if (edition.text.isEmpty ||
+                                  edition.text == null) {
+                                CommonSnackBar.snackBar(
+                                    message: "Please enter Edition deatil");
+                                return;
+                              }
 
-                                    if( imaUploadViewModel.selectedImg==null||imaUploadViewModel.selectedImg==""){
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter image");
-                                      return;
-                                    }
+                              if( imaUploadViewModel.selectedImg==null||imaUploadViewModel.selectedImg==""){
+                                CommonSnackBar.snackBar(
+                                    message: "Please Upload Images");
+                                return;
+                              }
 if(semester.text.isEmpty||semester.text==null){
   CommonSnackBar.snackBar(
       message: "Please enter Semester");
   return;
 }
-                                    if(conditions.text.isEmpty||conditions.text==null){
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter conditions");
-                                      return;
-                                    }
-                                    if( imaUploadViewModel.selectedImg2==null||imaUploadViewModel.selectedImg2==""){
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter image");
-                                      return;
-                                    }
-                                    if( imaUploadViewModel.selectedImg3==null||imaUploadViewModel.selectedImg3==""){
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter image");
-                                      return;
-                                    }
-                                    if( imaUploadViewModel.selectedImg4==null||imaUploadViewModel.selectedImg4==""){
-                                      CommonSnackBar.snackBar(
-                                          message: "Please enter image");
-                                      return;
-                                    }
+                              if(conditions.text.isEmpty||conditions.text==null){
+                                CommonSnackBar.snackBar(
+                                    message: "Please enter conditions");
+                                return;
+                              }
+                              if( imaUploadViewModel.selectedImg2==null||imaUploadViewModel.selectedImg2==""){
+                                CommonSnackBar.snackBar(
+                                    message: "Please Upload Images");
+                                return;
+                              }
+                              if( imaUploadViewModel.selectedImg3==null||imaUploadViewModel.selectedImg3==""){
+                                CommonSnackBar.snackBar(
+                                    message: "Please Upload Images");
+                                return;
+                              }
+                              if( imaUploadViewModel.selectedImg4==null||imaUploadViewModel.selectedImg4==""){
+                                CommonSnackBar.snackBar(
+                                    message: "Please Upload Images");
+                                return;
+                              }
 
-                                    if (widget.bookId !=null) {
+                              if (widget.bookId !=null) {
 
-                                      print(BookAddViewModel().apiResponse);
-                                      BookAddViewModel bookAddViewModel =
-                                          Get.put(BookAddViewModel());
-                                      ImageUploadViewModel imaUploadViewModel =
-                                          Get.put(ImageUploadViewModel());
-                                      print(
-                                          "image selected${imaUploadViewModel.selectedImg}");
-                                      BookEdit bookEditReq = BookEdit();
-                                      bookEditReq.id = widget.bookId;
-                                      bookEditReq.user_id =
-                                          "${PreferenceManager.getUserId()}";
-                                      bookEditReq.session_key =
-                                          "${PreferenceManager.getSessionKey()}";
-                                      bookEditReq.category_id = widget.catId;
-                                      bookEditReq.name = bookName.text;
-                                      bookEditReq.auther_name = author.text;
-                                      bookEditReq.edition_detail = edition.text;
-                                      bookEditReq.semester = semester.text;
-                                      bookEditReq.conditions = conditions.text;
-                                      bookEditReq.description = desc.text;
-                                      bookEditReq.price = price.text;
-                                      bookEditReq.image1 =
-                                          imaUploadViewModel.selectedImg;
-                                      bookEditReq.image2 =
-                                          imaUploadViewModel.selectedImg2;
-                                      bookEditReq.image3 =
-                                          imaUploadViewModel.selectedImg3;
-                                      bookEditReq.image4 =
-                                          imaUploadViewModel.selectedImg4;
+                                print(BookAddViewModel().apiResponse);
+                                BookAddViewModel bookAddViewModel =
+                                    Get.put(BookAddViewModel());
+                                ImageUploadViewModel imaUploadViewModel =
+                                    Get.put(ImageUploadViewModel());
+                                print(
+                                    "image selected${imaUploadViewModel.selectedImg}");
+                                BookEdit bookEditReq = BookEdit();
+                                bookEditReq.id = widget.bookId;
+                                bookEditReq.user_id =
+                                    "${PreferenceManager.getUserId()}";
+                                bookEditReq.session_key =
+                                    "${PreferenceManager.getSessionKey()}";
+                                bookEditReq.category_id = widget.catId;
+                                bookEditReq.name = bookName.text;
+                                bookEditReq.auther_name = author.text;
+                                bookEditReq.edition_detail = edition.text;
+                                bookEditReq.semester = semester.text;
+                                bookEditReq.conditions = conditions.text;
+                                bookEditReq.description = desc.text;
+                                bookEditReq.price = price.text;
+                                bookEditReq.image1 =
+                                    imaUploadViewModel.selectedImg;
+                                bookEditReq.image2 =
+                                    imaUploadViewModel.selectedImg2;
+                                bookEditReq.image3 =
+                                    imaUploadViewModel.selectedImg3;
+                                bookEditReq.image4 =
+                                    imaUploadViewModel.selectedImg4;
 
-                                      await bookAddViewModel
-                                          .bookEdit(bookEditReq);
+                                await bookAddViewModel
+                                    .bookEdit(bookEditReq);
 
-                                      // if (bookAddViewModel.apiResponse.status ==
-                                      //     Status.COMPLETE) {
-                                      RegisterResponseModel response =
-                                          bookAddViewModel.apiResponse.data;
+                                // if (bookAddViewModel.apiResponse.status ==
+                                //     Status.COMPLETE) {
+                                RegisterResponseModel response =
+                                    bookAddViewModel.apiResponse.data;
 
-                                      if (response.status == '200') {
-                                        CommonSnackBar.snackBar(
-                                            message: response.message);
+                                if (response.status == '200') {
+                                  CommonSnackBar.snackBar(
+                                      message: response.message);
 
-                                        Future.delayed(Duration(seconds: 2),
-                                            () {
-                                          Get.back();
-                                        });
-                                        Navigator.pop(context);
-                                      } else {
-                                        CommonSnackBar.snackBar(
-                                            message: response.message);
-                                      }
-                                    }
-                                    else {
+                                  Future.delayed(Duration(seconds: 2),
+                                      () {
+                                    Get.back();
+                                  });
+                                  Navigator.pop(context);
+                                } else {
+                                  CommonSnackBar.snackBar(
+                                      message: response.message);
+                                }
+                              }
+                              else {
 setState(() {
   isLoading=true;
 });
-                                      BookAddViewModel bookAddViewModel =
-                                          Get.put(BookAddViewModel());
-                                      ImageUploadViewModel imaUploadViewModel =
-                                          Get.put(ImageUploadViewModel());
-                                      print(
-                                          "image selected${imaUploadViewModel.selectedImg}");
-                                      BookAdd bookAddReq = BookAdd();
-                                      bookAddReq.user_id =
-                                          "${PreferenceManager.getUserId()}";
-                                      bookAddReq.session_key =
-                                          "${PreferenceManager.getSessionKey()}";
-                                      bookAddReq.category_id = widget.catId;
-                                      bookAddReq.name = bookName.text;
-                                      bookAddReq.auther_name = author.text;
-                                      bookAddReq.edition_detail = edition.text;
-                                      bookAddReq.semester = semester.text;
-                                      bookAddReq.conditions = conditions.text;
-                                      bookAddReq.description = desc.text;
-                                      bookAddReq.price = price.text;
-                                      bookAddReq.image1 =
-                                          imaUploadViewModel.selectedImg;
-                                      bookAddReq.image2 =
-                                          imaUploadViewModel.selectedImg2;
-                                      bookAddReq.image3 =
-                                          imaUploadViewModel.selectedImg3;
-                                      bookAddReq.image4 =
-                                          imaUploadViewModel.selectedImg4;
+                                BookAddViewModel bookAddViewModel =
+                                    Get.put(BookAddViewModel());
+                                ImageUploadViewModel imaUploadViewModel =
+                                    Get.put(ImageUploadViewModel());
+                                print(
+                                    "image selected${imaUploadViewModel.selectedImg}");
+                                BookAdd bookAddReq = BookAdd();
+                                bookAddReq.user_id =
+                                    "${PreferenceManager.getUserId()}";
+                                bookAddReq.session_key =
+                                    "${PreferenceManager.getSessionKey()}";
+                                bookAddReq.category_id = widget.catId;
+                                bookAddReq.name = bookName.text;
+                                bookAddReq.auther_name = author.text;
+                                bookAddReq.edition_detail = edition.text;
+                                bookAddReq.semester = semester.text;
+                                bookAddReq.conditions = conditions.text;
+                                bookAddReq.description = desc.text;
+                                bookAddReq.price = price.text;
+                                bookAddReq.image1 =
+                                    imaUploadViewModel.selectedImg;
+                                bookAddReq.image2 =
+                                    imaUploadViewModel.selectedImg2;
+                                bookAddReq.image3 =
+                                    imaUploadViewModel.selectedImg3;
+                                bookAddReq.image4 =
+                                    imaUploadViewModel.selectedImg4;
 
-                                      await bookAddViewModel
-                                          .bookAdd(bookAddReq);
-                                      // if (bookAddViewModel.apiResponse.status ==
-                                      //     Status.COMPLETE) {
-                                      print(bookAddViewModel.toString());
+                                await bookAddViewModel
+                                    .bookAdd(bookAddReq);
+                                // if (bookAddViewModel.apiResponse.status ==
+                                //     Status.COMPLETE) {
+                                print(bookAddViewModel.toString());
 
-                                      RegisterResponseModel response =
-                                          bookAddViewModel.apiResponse.data;
-                                      Future.delayed(Duration(seconds: 1),
-                                              () {
-                                               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
-                                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
-                                          });
-                                      //print("jksdajn"+response.status);
-                                      if (response.status == '256') {
-                                        CommonSnackBar.snackBar(
-                                            message: response.message);
+                                RegisterResponseModel response =
+                                    bookAddViewModel.apiResponse.data;
+                                Future.delayed(Duration(seconds: 1),
+                                        () {
+                                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
+                                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
+                                    });
+                                //print("jksdajn"+response.status);
+                                if (response.status == '256') {
+                                  CommonSnackBar.snackBar(
+                                      message: response.message);
 
-                                        Future.delayed(Duration(seconds: 2),
-                                            () {
-                                          Get.back();
-                                          bookName.clear();
-                                          author.clear();
-                                          price.clear();
-                                          desc.clear();
-                                          edition.clear();
-                                        });
-                                        Navigator.pop(context);
-                                      } else {
-                                        CommonSnackBar.snackBar(
-                                            message: response.message);
-                                      }
-                                    }
-                                  }
-                                },
-                                child:isLoading?
-                                    CircularProgressIndicator(color: Colors.white,): Text("Sell Now",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold)),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                              ))
-                        ]))
+                                  Future.delayed(Duration(seconds: 2),
+                                      () {
+                                    Get.back();
+                                    bookName.clear();
+                                    author.clear();
+                                    price.clear();
+                                    desc.clear();
+                                    edition.clear();
+                                  });
+                                  Navigator.pop(context);
+                                } else {
+                                  CommonSnackBar.snackBar(
+                                      message: response.message);
+                                }
+                              }
+                            }
+                          },
+                          child:isLoading?
+                              CircularProgressIndicator(color: Colors.white,): Text("Sell Now",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                        ))),
+
               ]))
     ]);
   }
@@ -1045,7 +1060,7 @@ setState(() {
             onTap: () async {
               Navigator.pop(context);
               ImageUploadViewModel imageUpload = Get.find();
-              XFile file = await getImageFromCamera();
+               file = await getImageFromCamera();
 
               Uint8List uint8List =
               await compressFile(File(file.path));
@@ -1064,7 +1079,7 @@ setState(() {
             onTap: ()  async {
               Navigator.pop(context);
               ImageUploadViewModel imageUpload = Get.find();
-              XFile file = await getImageFromGallery();
+               file = await getImageFromGallery();
 
               Uint8List uint8List =
               await compressFile(File(file.path));
@@ -1116,10 +1131,10 @@ setState(() {
           onTap: () async {
             Navigator.pop(context);
             ImageUploadViewModel imageUpload = Get.find();
-            XFile file = await getImageFromCamera();
+            file2 = await getImageFromCamera();
 
             Uint8List uint8List =
-            await compressFile(File(file.path));
+            await compressFile(File(file2.path));
 
             imageUpload.addSelectedImg2(uint8List);
             print("image selected${uint8List}");
@@ -1135,10 +1150,10 @@ setState(() {
           onTap: ()  async {
             Navigator.pop(context);
             ImageUploadViewModel imageUpload = Get.find();
-            XFile file = await getImageFromGallery();
+             file2 = await getImageFromGallery();
 
             Uint8List uint8List =
-            await compressFile(File(file.path));
+            await compressFile(File(file2.path));
 
             imageUpload.addSelectedImg2(uint8List);
             print("image selected${uint8List}");
@@ -1187,10 +1202,10 @@ setState(() {
           onTap: () async {
             Navigator.pop(context);
             ImageUploadViewModel imageUpload = Get.find();
-            XFile file = await getImageFromCamera();
+             file3 = await getImageFromCamera();
 
             Uint8List uint8List =
-            await compressFile(File(file.path));
+            await compressFile(File(file3.path));
 
             imageUpload.addSelectedImg3(uint8List);
             print("image selected${uint8List}");
@@ -1206,10 +1221,10 @@ setState(() {
           onTap: ()  async {
             Navigator.pop(context);
             ImageUploadViewModel imageUpload = Get.find();
-            XFile file = await getImageFromGallery();
+             file3 = await getImageFromGallery();
 
             Uint8List uint8List =
-            await compressFile(File(file.path));
+            await compressFile(File(file3.path));
 
             imageUpload.addSelectedImg3(uint8List);
             print("image selected${uint8List}");
@@ -1258,10 +1273,10 @@ setState(() {
           onTap: () async {
             Navigator.pop(context);
             ImageUploadViewModel imageUpload = Get.find();
-            XFile file = await getImageFromCamera();
+             file4 = await getImageFromCamera();
 
             Uint8List uint8List =
-            await compressFile(File(file.path));
+            await compressFile(File(file4.path));
 
             imageUpload.addSelectedImg4(uint8List);
             print("image selected${uint8List}");
@@ -1277,10 +1292,10 @@ setState(() {
           onTap: ()  async {
             Navigator.pop(context);
             ImageUploadViewModel imageUpload = Get.find();
-            XFile file = await getImageFromGallery();
+             file4= await getImageFromGallery();
 
             Uint8List uint8List =
-            await compressFile(File(file.path));
+            await compressFile(File(file4.path));
 
             imageUpload.addSelectedImg4(uint8List);
             print("image selected${uint8List}");

@@ -1,6 +1,7 @@
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/BuyNow.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 
@@ -40,25 +41,26 @@ class _OtherItemDetailState extends State<OtherItemDetail> {
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                        left: SizeConfig.blockSizeHorizontal * 5,
-                        right: SizeConfig.screenWidth * 0.35),
+                      left: SizeConfig.blockSizeHorizontal * 5,
+                    ),
                     child: Row(
                       children: [
                         Text(
-                          "Current Location",
+                          Constants.userlocation,
                           style: TextStyle(color: Color(black)),
                         ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        ImageIcon(
-                          AssetImage('assets/icons/current.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 3,
-                        )
+                        // SizedBox(
+                        //   width: SizeConfig.blockSizeHorizontal * 2,
+                        // ),
+                        // ImageIcon(
+                        //   AssetImage('assets/icons/current.png'),
+                        //   color: Color(colorBlue),
+                        //   size: SizeConfig.blockSizeVertical * 3,
+                        // )
                       ],
                     ),
                   ),
+                  Expanded(child: SizedBox()),
                   ImageIcon(
                     AssetImage('assets/icons/notification.png'),
                     color: Color(colorBlue),

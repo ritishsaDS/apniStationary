@@ -2,6 +2,7 @@ import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
 import 'package:book_buy_and_sell/UI/Activities/OtherItemDetail.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:flutter/material.dart';
 
 class SelectedOther extends StatefulWidget {
@@ -40,25 +41,26 @@ class _SelectedOtherState extends State<SelectedOther> {
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                        left: SizeConfig.blockSizeHorizontal * 5,
-                        right: SizeConfig.screenWidth * 0.35),
+                      left: SizeConfig.blockSizeHorizontal * 5,
+                    ),
                     child: Row(
                       children: [
                         Text(
-                          "Current Location",
+                          Constants.userlocation,
                           style: TextStyle(color: Color(black)),
                         ),
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 2,
-                        ),
-                        ImageIcon(
-                          AssetImage('assets/icons/current.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 3,
-                        )
+                        // SizedBox(
+                        //   width: SizeConfig.blockSizeHorizontal * 2,
+                        // ),
+                        // ImageIcon(
+                        //   AssetImage('assets/icons/current.png'),
+                        //   color: Color(colorBlue),
+                        //   size: SizeConfig.blockSizeVertical * 3,
+                        // )
                       ],
                     ),
                   ),
+                  Expanded(child: SizedBox()),
                   ImageIcon(
                     AssetImage('assets/icons/notification.png'),
                     color: Color(colorBlue),
@@ -128,54 +130,54 @@ class _SelectedOtherState extends State<SelectedOther> {
                       ),
                     ],
                   ),
-                  Container(
-                    width: SizeConfig.screenWidth * 0.4,
-                    height: SizeConfig.blockSizeVertical * 4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: Color(colorBlue),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width:SizeConfig.screenWidth * 0.25,
-                          height: SizeConfig.blockSizeVertical * 4,
-                          alignment: Alignment.center,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Nearby Products",
-                                hintStyle: TextStyle(
-                                  color: Color(hintGrey),
-                                  fontSize: SizeConfig.blockSizeVertical * 1.25,
-                                ),
-                                contentPadding: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 2.5)
-                            ),
-                            textAlign: TextAlign.center,
-                            readOnly: true,
-                          ),
-                        ),
-                        Container(
-                          width: SizeConfig.screenWidth * 0.1,
-                          height: SizeConfig.blockSizeVertical * 4,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(25),
-                                  topRight: Radius.circular(25)
-                              ),
-                              color: Color(colorBlue)
-                          ),
-                          child: Icon(Icons.keyboard_arrow_down,
-                            color: Colors.white,
-                            size: SizeConfig.blockSizeVertical * 3,),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   width: SizeConfig.screenWidth * 0.4,
+                  //   height: SizeConfig.blockSizeVertical * 4,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(25),
+                  //     border: Border.all(
+                  //       color: Color(colorBlue),
+                  //     ),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Container(
+                  //         width:SizeConfig.screenWidth * 0.25,
+                  //         height: SizeConfig.blockSizeVertical * 4,
+                  //         alignment: Alignment.center,
+                  //         child: TextFormField(
+                  //           decoration: InputDecoration(
+                  //               border: InputBorder.none,
+                  //               hintText: "Nearby Products",
+                  //               hintStyle: TextStyle(
+                  //                 color: Color(hintGrey),
+                  //                 fontSize: SizeConfig.blockSizeVertical * 1.25,
+                  //               ),
+                  //               contentPadding: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 2.5)
+                  //           ),
+                  //           textAlign: TextAlign.center,
+                  //           readOnly: true,
+                  //         ),
+                  //       ),
+                  //       Container(
+                  //         width: SizeConfig.screenWidth * 0.1,
+                  //         height: SizeConfig.blockSizeVertical * 4,
+                  //         alignment: Alignment.center,
+                  //         decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.only(
+                  //                 bottomRight: Radius.circular(25),
+                  //                 topRight: Radius.circular(25)
+                  //             ),
+                  //             color: Color(colorBlue)
+                  //         ),
+                  //         child: Icon(Icons.keyboard_arrow_down,
+                  //           color: Colors.white,
+                  //           size: SizeConfig.blockSizeVertical * 3,),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
