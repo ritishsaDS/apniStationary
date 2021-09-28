@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/ForgotPassword.dart';
 import 'package:book_buy_and_sell/UI/Activities/MainScreen.dart';
@@ -20,6 +22,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -51,8 +54,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     usernameFn = FocusNode();
     pwdFn = FocusNode();
+    EasyLoading.showSuccess('Use in initState');
   }
-
+  Timer _timer;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -115,64 +119,83 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CommanWidget.getTextFormField(
-                          focusNode: usernameFn,
-                          function: (value) {
-                            usernameFn.unfocus();
-                            FocusScope.of(context).requestFocus(pwdFn);
-                          },
-                          textEditingController: emailController,
-                          validationType: Utility.emailText,
-                          hintText: "Email",
-                          inputLength: 50,
-                          regularExpression:
-                              Utility.emailAddressValidationPattern,
-                          validationMessage: Utility.emailEmptyValidation,
-                        ),
-                        SizedBox(
-                          height: Get.height * 0.03,
-                        ),
-                       TextFormField(
-                           focusNode: pwdFn,
-                           controller: passwordController,
-                           inputFormatters: [
-                             LengthLimitingTextInputFormatter(12),
+                        Container(
+                          height: SizeConfig.blockSizeVertical*10,
+                          child: TextFormField(
+                            controller:emailController ,
+                            focusNode: usernameFn,
+                            decoration: InputDecoration(
+                              focusedBorder: outLineGrey,
+                              enabledBorder: outLineGrey,
+                              isDense: true,
+                              isCollapsed: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: Get.height * 0.016,
+                                  bottom: Get.height * 0.016,
+                                  left: 20),
+                              errorBorder: outLineRed,
+                              focusedErrorBorder: outLineRed,
+                              hintText: "Enter Email",
+                              hintStyle: TextStyle(
+                                color: Color(hintGrey),
+                                fontWeight: FontWeight.w500,
 
-                           ],
-                           obscureText:showpwd ,
-                           decoration: InputDecoration(
-                             focusedBorder: outLineGrey,
-                             enabledBorder: outLineGrey,
-                             isDense: true,
-                             suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye_rounded,color: !showpwd?Colors.blue:Colors.grey,),onPressed: (){
-                               setState(() {
-                                 if( showpwd==false){
-                                   showpwd=true;
-                                 }
-                                 else{
-                                   showpwd=false;
-                                 }
-                               });
-                             },),
-                             isCollapsed: true,
-                             contentPadding: EdgeInsets.only(
-                                 top: Get.height * 0.016,
-                                 bottom: Get.height * 0.016,
-                                 left: 20),
-                             errorBorder: outLineRed,
-                             focusedErrorBorder: outLineRed,
-                             hintText: "Enter Password",
+                              ),
+                            ),
+                          ),
+                        ),
+                        // SizedBox(
+                        //   height: Get.height * 0.03,
+                        // ),
+                       Container(
+                         height: SizeConfig.blockSizeVertical*10,
+                         child: TextFormField(
+                             focusNode: pwdFn,
+                             controller: passwordController,
+                             textInputAction: TextInputAction.done,
+                             onFieldSubmitted: (val){
+                               signinapihit();
+                               //_fieldFocusChange(context);
+                             },
+                             inputFormatters: [
+                               LengthLimitingTextInputFormatter(12),
 
-                             hintStyle: TextStyle(
-                               color: Color(hintGrey),
-                               fontWeight: FontWeight.w500,
-                             ),),
-                           validator: (value) {
-                             if (value.length<5) {
-                               return "Password must be more than 5 characters";
-                             } else {
-                               return null;
-                             }}),
+                             ],
+                             obscureText:showpwd ,
+                             decoration: InputDecoration(
+                               focusedBorder: outLineGrey,
+                               enabledBorder: outLineGrey,
+                               isDense: true,
+                               suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye_rounded,color: !showpwd?Colors.blue:Colors.grey,),onPressed: (){
+                                 setState(() {
+                                   if( showpwd==false){
+                                     showpwd=true;
+                                   }
+                                   else{
+                                     showpwd=false;
+                                   }
+                                 });
+                               },),
+                               isCollapsed: true,
+                               contentPadding: EdgeInsets.only(
+                                   top: Get.height * 0.016,
+                                   bottom: Get.height * 0.016,
+                                   left: 20),
+                               errorBorder: outLineRed,
+                               focusedErrorBorder: outLineRed,
+                               hintText: "Enter Password",
+
+                               hintStyle: TextStyle(
+                                 color: Color(hintGrey),
+                                 fontWeight: FontWeight.w500,
+                               ),),
+                             validator: (value) {
+                               if (value.length<5) {
+                                 return "Password must be more than 5 characters";
+                               } else {
+                                 return null;
+                               }}),
+                       ),
 
                         SizedBox(
                           height: Get.height * 0.03,
@@ -261,67 +284,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: MaterialButton(
                               onPressed: () async {
-                                if (loginFormKey.currentState.validate()) {
-                                  LoginViewModel loginViewModel = Get.find();
-                                  LoginReq loginReq = LoginReq();
-                                  loginReq.email = emailController.text;
-                                  loginReq.password = passwordController.text;
-                                  /* loginReq.deviceType = "";
-                                  loginReq.deviceId = "";*/
-                                  await loginViewModel.login(loginReq);
-                                  if (loginViewModel.apiResponse.status ==
-                                      Status.COMPLETE) {
-                                    LoginResponseModel response =
-                                        loginViewModel.apiResponse.data;
-                                    if (response.status == '200') {
-                                      if (response.message ==
-                                          'Successfully logged in') {
-                                        await PreferenceManager.setEmailId(
-                                            '${response.user.email}');
-                                        print(response.user.email);
-                                        await PreferenceManager.setName(
-                                            response.user.name);
-                                        await PreferenceManager.setUserId(
-                                            response.user.id);
-                                        await PreferenceManager.setSessionKey(
-                                            response.user.sessionKey);
-                                        await PreferenceManager.setPhoneNo(
-                                            response.user.number);
-                                        await PreferenceManager.setImage(
-                                            response.user.image);
-                                        print("image:${response.user.image}");
-                                        var emailId =
-                                            PreferenceManager.getEmailId();
-                                       signIn(response.message);
-
-                                        print("email:$emailId");
-                                        // CommonSnackBar.snackBar(
-                                        //     message: response.message);
-                                        //
-                                        // Future.delayed(Duration(seconds: 2),
-                                        //     () {
-                                        //   Get.offAll(MainScreen());
-                                        //   emailController.clear();
-                                        //   passwordController.clear();
-                                        // });
-                                      } else {
-                                        CommonSnackBar.snackBar(
-                                            message: response.message);
-                                      }
-                                    } else {
-                                      CommonSnackBar.snackBar(
-                                          message:
-                                              'Invalid Email and Password.');
-                                    }
-                                  } else {
-                                    CommonSnackBar.snackBar(
-                                        message: 'Invalid Email and Password.');
-                                  }
-                                } else {
-                                  CommonSnackBar.snackBar(
-                                      message:
-                                          'Please enter email and password');
-                                }
+                                signinapihit();
                               },
                               child: Text(
                                 "Signin",
@@ -379,14 +342,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 GetBuilder<LoginViewModel>(
                   builder: (controller) {
                     if (controller.apiResponse.status == Status.LOADING) {
-                      return Center(
-                        child: new Container(
-                          color: Colors.grey[300],
-                          width: 150.0,
-                          height: 150.0,
-                          child: new Padding(padding: const EdgeInsets.all(5.0),child: new Center(child: new CircularProgressIndicator())),
-                        ),
+                      return Container(
+                        color: Colors.black,
+                        child: Center(
+                          child: TextButton(
+                            child: Text('show'),
+                            onPressed: () async {
+                              _timer?.cancel();
+                              await EasyLoading.show(
+                                status: 'loading...',
+                                maskType: EasyLoadingMaskType.black,
+                              );
+                              print('EasyLoading show');
+                            },
+                          )),
                       );
+
                     } else {
                       return SizedBox();
                     }
@@ -398,6 +369,69 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     ));
+  }
+  signinapihit() async {
+    if (loginFormKey.currentState.validate()) {
+      LoginViewModel loginViewModel = Get.find();
+      LoginReq loginReq = LoginReq();
+      loginReq.email = emailController.text;
+      loginReq.password = passwordController.text;
+      /* loginReq.deviceType = "";
+                                  loginReq.deviceId = "";*/
+      await loginViewModel.login(loginReq);
+      if (loginViewModel.apiResponse.status ==
+          Status.COMPLETE) {
+        LoginResponseModel response =
+            loginViewModel.apiResponse.data;
+        if (response.status == '200') {
+          if (response.message ==
+              'Successfully logged in') {
+            await PreferenceManager.setEmailId(
+                '${response.user.email}');
+            print(response.user.email);
+            await PreferenceManager.setName(
+                response.user.name);
+            await PreferenceManager.setUserId(
+                response.user.id);
+            await PreferenceManager.setSessionKey(
+                response.user.sessionKey);
+            await PreferenceManager.setPhoneNo(
+                response.user.number);
+            await PreferenceManager.setImage(
+                response.user.image);
+            print("image:${response.user.image}");
+            var emailId =
+            PreferenceManager.getEmailId();
+            signIn(response.message);
+
+            print("email:$emailId");
+            // CommonSnackBar.snackBar(
+            //     message: response.message);
+            //
+            // Future.delayed(Duration(seconds: 2),
+            //     () {
+            //   Get.offAll(MainScreen());
+            //   emailController.clear();
+            //   passwordController.clear();
+            // });
+          } else {
+            CommonSnackBar.snackBar(
+                message: response.message);
+          }
+        } else {
+          CommonSnackBar.snackBar(
+              message:
+              'Invalid Email and Password.');
+        }
+      } else {
+        CommonSnackBar.snackBar(
+            message: 'Invalid Email and Password.');
+      }
+    } else {
+      CommonSnackBar.snackBar(
+          message:
+          'Please enter email and password');
+    }
   }
   signIn(message) async {
     if (loginFormKey.currentState.validate()) {

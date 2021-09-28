@@ -58,7 +58,7 @@ class _SellSubCategoryState extends State<SellSubCategory> {
       if (categoriesModel.length > 0) {
         return GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 0.9,
+              childAspectRatio: 0.8,
               crossAxisCount: 3,
               crossAxisSpacing: SizeConfig.blockSizeHorizontal * 3,
               mainAxisSpacing: SizeConfig.blockSizeVertical * 2),

@@ -1,4 +1,5 @@
 import 'package:book_buy_and_sell/Constants/Colors.dart';
+import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/common/color_picker.dart';
 import 'package:book_buy_and_sell/common/utility.dart';
 import 'package:book_buy_and_sell/viewModel/validation_viewmodel.dart';
@@ -90,60 +91,64 @@ class CommanWidget {
       Function obscureOnTap,
       bool obscureValue = false,
       Function onTap}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          // height: 40,
-          // color: Colors.lightGreen,
-          child: Stack(
-            children: [
-              TextFormField(
-                obscureText: obscureValue,
-                onFieldSubmitted: function,
-                focusNode: focusNode,
-                readOnly: isReadOnly,
-                showCursor: !isReadOnly,
-                keyboardType: textInputType,
-                onTap: onTap,
-                maxLines: maxLine == null ? 1 : maxLine,
-                controller: textEditingController,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(inputLength),
-                  FilteringTextInputFormatter.allow(RegExp(regularExpression))
-                ],
-                enabled: isEnable != null ? isEnable : true,
+    return Container(
 
-                style: TextStyle(
-                    color: isEnable != null ? Colors.black : Colors.black,
-                    fontSize: Get.height * 0.019),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration: InputDecoration(
-                  focusedBorder: outLineGrey,
-                  enabledBorder: outLineGrey,
-                  isDense: true,
-                  isCollapsed: true,
-                  contentPadding: EdgeInsets.only(
-                      top: Get.height * 0.016,
-                      bottom: Get.height * 0.016,
-                      left: 20),
-                  errorBorder: outLineRed,
-                  focusedErrorBorder: outLineRed,
-                  hintText: hintText,
-                  hintStyle: TextStyle(
-                    color: Color(hintGrey),
-                    fontWeight: FontWeight.w500,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+
+            // height: 40,
+            // color: Colors.lightGreen,
+            child: Stack(
+              children: [
+                TextFormField(
+                  obscureText: obscureValue,
+                  onFieldSubmitted: function,
+                  focusNode: focusNode,
+                  readOnly: isReadOnly,
+                  showCursor: !isReadOnly,
+                  keyboardType: textInputType,
+                  onTap: onTap,
+                  maxLines: maxLine == null ? 1 : maxLine,
+                  controller: textEditingController,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(inputLength),
+                    FilteringTextInputFormatter.allow(RegExp(regularExpression))
+                  ],
+                  enabled: isEnable != null ? isEnable : true,
+
+                  style: TextStyle(
+                      color: isEnable != null ? Colors.black : Colors.black,
+                      fontSize: Get.height * 0.019),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    focusedBorder: outLineGrey,
+                    enabledBorder: outLineGrey,
+                    isDense: true,
+                    isCollapsed: true,
+                    contentPadding: EdgeInsets.only(
+                        top: Get.height * 0.016,
+                        bottom: Get.height * 0.016,
+                        left: 20),
+                    errorBorder: outLineRed,
+                    focusedErrorBorder: outLineRed,
+                    hintText: hintText,
+                    hintStyle: TextStyle(
+                      color: Color(hintGrey),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
+                  /* obscureText:
+                      validationType == 'password' ? obscureValue : false,*/
                 ),
-                /* obscureText:
-                    validationType == 'password' ? obscureValue : false,*/
-              ),
-              Positioned(
-                  right: 10, top: 0, bottom: 0, child: sIcon ?? SizedBox())
-            ],
+                Positioned(
+                    right: 10, top: 0, bottom: 0, child: sIcon ?? SizedBox())
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

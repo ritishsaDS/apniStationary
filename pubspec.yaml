@@ -33,6 +33,7 @@ dependencies:
   flutter_holo_date_picker: ^0.3.4+1
   http: ^0.13.3
   dio: ^4.0.0
+  flutter_easyloading: ^3.0.3
   get: 3.26.0
   image_picker: ^0.8.3+3
   flutter_image_compress: ^1.1.0

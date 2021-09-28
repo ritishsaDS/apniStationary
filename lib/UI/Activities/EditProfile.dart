@@ -707,6 +707,7 @@ else if(iamge!=null){
                         border: InputBorder.none),
                     ),
                   ) : Container(),
+
                   Center(
                     child: Container(
                       width: SizeConfig.screenWidth * 0.5,

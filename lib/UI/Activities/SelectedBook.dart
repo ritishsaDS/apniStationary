@@ -584,10 +584,22 @@ class _SelectedBookState extends State<SelectedBook> {
               ),
             );
           } else {
-            return getNodDataWidget();
+            return getNotDataWidget();
           }
         }
       },
+    );
+  }Widget getNotDataWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(Icons.info_outline,size: 100,color: Colors.blue.withOpacity(0.6),),
+          SizedBox(height: 10,),
+          Text("No Data Found",style: TextStyle(fontSize: 20),),
+        ],
+      ),
     );
   }
 

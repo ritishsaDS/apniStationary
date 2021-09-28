@@ -41,10 +41,10 @@ class _MyBookListState extends State<MyBookList> {
             itemBuilder: (context, int index) {
               return InkWell(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return BookDetail("");
-                    }));
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) {
+                    //   return BookDetail("");
+                    // }));
                   },
                   child: Container(
                       width: SizeConfig.screenWidth,
@@ -117,7 +117,7 @@ class _MyBookListState extends State<MyBookList> {
                                                     0.5,
                                               ),
                                               Text(
-                                                "Edition Detail: ",
+                                                "Edition: ",
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     color: Color(0XFF656565),
@@ -259,6 +259,7 @@ class _MyBookListState extends State<MyBookList> {
                         Column(
                           children: [
                             GestureDetector(onTap:(){
+                              print(myBooksModel[index].description);
                               CommonSnackBar.snackBar(
                                                   message: 'Edit clicked');
                                               Navigator.push(context,
@@ -266,7 +267,15 @@ class _MyBookListState extends State<MyBookList> {
                                                       builder: (context) {
                                                 return SellBook(
                                                     bookId:
-                                                        "${myBooksModel[index].id}");
+                                                        "${myBooksModel[index].id}",
+                                                desc:myBooksModel[index].description,
+                                                sem:myBooksModel[index].semester,
+                                                bookname:myBooksModel[index].name,
+                                                authorname:myBooksModel[index].autherName,
+                                                price:myBooksModel[index].price,
+                                                edition:myBooksModel[index].edition_detail,
+                                                condition:myBooksModel[index].condition,
+                                                );
                                               }));
                             },child: CircleAvatar(radius:15,backgroundColor: Colors.blue,child: Icon(Icons.edit_outlined,color: Colors.white,size: 18,))),
                             SizedBox(height: 20,),

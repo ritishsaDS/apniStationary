@@ -7,10 +7,11 @@ class MyBooksModel {
     this.autherName,
     this.edition_detail,
     this.semester,
-    this.condition
+    this.condition,
+    this.description,
   });
 
-  String name = "", image = "", price = "", autherName = "", edition_detail = "", semester = "", condition = "";
+  String name = "", image = "", price = "", autherName = "", edition_detail = "", semester = "", condition = "",description = "";
   int id = 0;
 
   factory MyBooksModel.fromJson(Map<String, dynamic> json) =>
@@ -22,6 +23,7 @@ class MyBooksModel {
           edition_detail: json["edition_detail"],
           semester: json["semester"],
           condition: json["conditions"],
+          description:json['description'],
           price: json["price"]);
 
   Map<String, dynamic> toJson() => {
@@ -33,5 +35,6 @@ class MyBooksModel {
         "semester": semester,
         "condition": condition,
         "price": price,
+    "description":description
       };
 }

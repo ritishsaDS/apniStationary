@@ -3,6 +3,7 @@ import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
 import 'package:book_buy_and_sell/Utils/ApiCall.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
+import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController pinController = TextEditingController();
+  TextEditingController phnController = TextEditingController();
+  TextEditingController clgController = TextEditingController();
 
   bool gstCheck = false;
 
@@ -44,6 +47,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   void initState() {
+    addressController=TextEditingController(text:Constants.userlocation);
+    cityController=TextEditingController(text:Constants.usercity);
+    pinController=TextEditingController(text: Constants.userpostal);
+    stateController=TextEditingController(text: Constants.userstate);
+    phnController=TextEditingController(text:PreferenceManager.getPhoneNo());
+   // clgController=TextEditingController(text:PreferenceManager.g());
     // TODO: implement initState
     super.initState();
   }
@@ -102,6 +111,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                   _generalTextField("First Name", firstNameController),
                   _generalTextField("Last Name", lastNameController),
+                  _generalTextField("Phone Number", phnController),
                   _generalTextField("Address", addressController),
                   _generalTextField("City", cityController),
                   _generalTextField("State", stateController),

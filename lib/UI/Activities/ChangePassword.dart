@@ -82,27 +82,16 @@ class _ChangePasswordState extends State<ChangePassword> {
                   width: SizeConfig.screenWidth,
                   height: SizeConfig.screenHeight * 0.3,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Color(gradientColor1),
-                      Color(gradientColor2),
-                    ]),
-                  ),
+
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/bg/logo.png',
-                        scale: SizeConfig.blockSizeVertical * 0.6,
+                          'assets/icons/applogo.png',
+                          scale: 8
                       ),
-                      Text(
-                        "App Name",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontSize: SizeConfig.blockSizeVertical * 2),
-                      )
+
                     ],
                   )),
               Container(
@@ -141,7 +130,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               FocusScope.of(context).requestFocus(newPwdFn);
                             },
                             textEditingController: oldPasswordController,
-                            inputLength: 6,
+                            inputLength: 10,
                             regularExpression: Utility.password,
                             validationMessage: "Old Password is required",
                             validationType: 'password',
@@ -158,7 +147,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               FocusScope.of(context).requestFocus(confirmPwdFn);
                             },
                             textEditingController: newPasswordController,
-                            inputLength: 6,
+                            inputLength: 10,
                             regularExpression: Utility.password,
                             validationMessage: "New Password is required",
                             validationType: 'password',
@@ -174,7 +163,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               confirmPwdFn.unfocus();
                             },
                             textEditingController: confirmPasswordController,
-                            inputLength: 6,
+                            inputLength: 10,
                             regularExpression: Utility.password,
                             validationMessage: "Confirm Password is required",
                             validationType: 'password',

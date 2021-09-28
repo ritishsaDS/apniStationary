@@ -370,20 +370,20 @@ SizedBox(height: 10,),
                                 fontWeight: FontWeight.w500,
                                 color: Color(matteBlack)),
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(colorBlue)),
-                            padding: EdgeInsets.all(5),
-                            child: Text(
-                              "1",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize:
-                                      SizeConfig.blockSizeVertical * 1.25),
-                            ),
-                          ),
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //       shape: BoxShape.circle,
+                          //       color: Color(colorBlue)),
+                          //   padding: EdgeInsets.all(5),
+                          //   child: Text(
+                          //     "1",
+                          //     style: TextStyle(
+                          //         color: Colors.white,
+                          //         fontWeight: FontWeight.w500,
+                          //         fontSize:
+                          //             SizeConfig.blockSizeVertical * 1.25),
+                          //   ),
+                          // ),
                         ],
                       ),
                       contentPadding: EdgeInsets.symmetric(

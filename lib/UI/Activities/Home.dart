@@ -716,7 +716,7 @@ resizeToAvoidBottomInset: false,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          height: SizeConfig.screenHeight*0.177,
+                                          height: SizeConfig.screenHeight*0.170,
                                           width: SizeConfig.blockSizeVertical * 50,
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.only(

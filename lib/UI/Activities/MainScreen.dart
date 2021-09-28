@@ -74,6 +74,9 @@ class _MainScreenState extends State<MainScreen> {
     print(addresses);
    setState(() {
      Constants.userlocation =  addresses[0].street.toString();
+     Constants.userstate =  addresses[0].administrativeArea.toString();
+     Constants.userpostal =  addresses[0].postalCode.toString();
+     Constants.usercity =  addresses[0].subAdministrativeArea.toString();
 
    });
     return addresses[0].street.toString();

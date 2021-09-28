@@ -49,7 +49,9 @@ class _SignUpState extends State<SignUp> {
   TextEditingController clgNameController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
   TextEditingController cPwdController = TextEditingController();
+  TextEditingController gstcontroller = TextEditingController();
   String smsOTP;
+  bool gstCheck = false;
   String verificationId;
   String errorMessage = '';
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -568,9 +570,71 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                               return null;
                             }}
                         ),
-                        SizedBox(
-                          height: Get.height * 0.03,
+
+                        Container(
+                          width: SizeConfig.screenWidth,
+
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Checkbox(value: gstCheck, onChanged: (value){
+                                setState(() {
+                                  gstCheck = value;
+                                });
+                              },
+                                activeColor: Color(colorBlue),
+                              ),
+
+                              Text("GST",
+                                style: TextStyle(
+                                  color: Color(hintGrey),
+                                  fontWeight: FontWeight.w500,
+                                ),),
+                              Text(" (If You have Gst Number please enter)",
+                                style: TextStyle(
+                                  color: Color(hintGrey),
+                                  fontSize: 10
+
+                                ),),
+                            ],
+                          ),
                         ),
+                        gstCheck == true ?
+                        Container(
+                          width: SizeConfig.screenWidth,
+
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey[200],
+                                    spreadRadius: 2.0,
+                                    blurRadius: 4.0
+                                ),
+                              ]
+                          ),
+                          child: TextFormField(
+                            controller: gstcontroller,
+                            //focusNode: gstFn,
+                            textInputAction: TextInputAction.done,
+                            keyboardType: TextInputType.text,
+                            onFieldSubmitted: (value) {
+                              //gstFn.unfocus();
+                            },
+                            decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: SizeConfig.blockSizeVertical * 1.5,
+                                    horizontal: SizeConfig.blockSizeHorizontal * 5),
+                                hintText: "Enter GST No.",
+                                hintStyle: TextStyle(
+                                  color: Color(hintGrey),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                border: InputBorder.none),
+                          ),
+                        ) : Container(),
                         Center(
                           child: Container(
                             width: SizeConfig.screenWidth * 0.5,
