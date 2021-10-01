@@ -351,11 +351,33 @@ resizeToAvoidBottomInset: false,
                         color: Color(colorBlue),
                       ),
                       onTap: (){
-                        AuthService().signOut();
-                        logout.remove("email_id");
-                        logout.remove("name");
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                        return showDialog(
 
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: Text("Logout"),
+                            content: Text("Are you sure you want to logout"),
+                            actions: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  AuthService().signOut();
+                                  logout.remove("email_id");
+                                  logout.remove("name");
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+
+                                },
+                                child: Text("Yes"),
+                              ),
+                              FlatButton(
+
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("No"),
+                              ),
+                            ],
+                          ),
+                        );
                       },
                       trailing: Icon(
                         Icons.arrow_forward_ios_rounded,
@@ -371,7 +393,7 @@ resizeToAvoidBottomInset: false,
         ),
       ),
 
-      body: SafeArea(
+      body: Container(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

@@ -16,7 +16,8 @@ import 'package:intl/intl.dart';
 import 'MainScreen.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({Key key}) : super(key: key);
+  dynamic id;
+   CheckoutScreen({this.id}) ;
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
@@ -25,14 +26,14 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
-  TextEditingController firstNameController = TextEditingController(text: PreferenceManager.getName());
-  TextEditingController lastNameController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController(text: PreferenceManager.getName().toString().split(" ")[0]);
+  TextEditingController lastNameController = TextEditingController(text: PreferenceManager.getName().toString().contains(" ")?PreferenceManager.getName().toString().split(" ")[1]:" " );
   TextEditingController addressController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController pinController = TextEditingController();
   TextEditingController phnController = TextEditingController();
-  TextEditingController clgController = TextEditingController();
+  TextEditingController clgController = TextEditingController(text:PreferenceManager.getcollge().toString() );
 
   bool gstCheck = false;
 
@@ -47,7 +48,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   void initState() {
-    addressController=TextEditingController(text:Constants.userlocation);
+    addressController=TextEditingController(text:Constants.userlocation+","+Constants.usercity+","+Constants.userstate+""+Constants.userpostal);
     cityController=TextEditingController(text:Constants.usercity);
     pinController=TextEditingController(text: Constants.userpostal);
     stateController=TextEditingController(text: Constants.userstate);
@@ -109,13 +110,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  _generalTextField("First Name", firstNameController),
-                  _generalTextField("Last Name", lastNameController),
-                  _generalTextField("Phone Number", phnController),
-                  _generalTextField("Address", addressController),
-                  _generalTextField("City", cityController),
-                  _generalTextField("State", stateController),
-                  _generalTextField("Pincode", pinController),
+                  _generalTextField("First Name", firstNameController,1),
+                  _generalTextField("Last Name", lastNameController,1),
+                  _generalTextField("Phone Number", phnController,1),
+                  _generalTextField("Address", addressController,4),
+                  _generalTextField("College Name", clgController,1),
+                  // _generalTextField("City", cityController),
+                  // _generalTextField("State", stateController),
+                  // _generalTextField("Pincode", pinController),
                   Center(
                     child: Container(
                       width: SizeConfig.screenWidth * 0.5,
@@ -159,7 +161,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     ));
   }
 
-  Widget _generalTextField(String hint, TextEditingController controller) {
+  Widget _generalTextField(String hint, TextEditingController controller,maxlines) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,6 +189,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ]),
           child: TextFormField(
             controller: controller,
+            maxLines: maxlines,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               isDense: true,
@@ -234,8 +237,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       "city": cityController.text,
       "state": stateController.text,
       "zip": pinController.text,
+      'book_id':widget.id.toString().replaceAll('[', "").replaceAll(']', "")
     };
-
+print(body.toString());
     var res = await ApiCall.post(checkoutURL, body);
 
     if (res["status"] == "200") {

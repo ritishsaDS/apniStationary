@@ -44,6 +44,7 @@ class User {
     this.image,
     this.userType,
     this.sessionKey,
+    this.college_name
   });
 
   int id;
@@ -52,10 +53,12 @@ class User {
   String number;
   String image;
   String userType;
+String college_name;
   String sessionKey;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
+    college_name:json['college_name'],
         name: json["name"],
         email: json["email"],
         number: json["number"],
@@ -72,5 +75,6 @@ class User {
         "image": image,
         "user_type": userType,
         "session_key": sessionKey,
+    "college_name":college_name
       };
 }

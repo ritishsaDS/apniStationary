@@ -9,6 +9,7 @@ import 'package:book_buy_and_sell/model/apiModel/responseModel/change_password_r
 import 'package:book_buy_and_sell/model/apis/api_response.dart';
 import 'package:book_buy_and_sell/viewModel/account_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/validation_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -227,8 +228,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       if (response.status == '200') {
                                         if (response.message ==
                                             'Password updated successfully') {
+
                                           CommonSnackBar.snackBar(
                                               message: response.message);
+                                          _changePassword();
                                           Future.delayed(Duration(seconds: 2),
                                               () {
                                             Get.back();
@@ -236,11 +239,24 @@ class _ChangePasswordState extends State<ChangePassword> {
                                             newPasswordController.clear();
                                             confirmPasswordController.clear();
                                           });
-                                        } else {
+                                        }
+                                        else if(response.message=="oldpassword are not same"){
+
+                                          CommonSnackBar.snackBar(
+                                              message: "Old Password is not Correct");
+                                        }
+                                        else {
+
                                           CommonSnackBar.snackBar(
                                               message: response.message);
                                         }
-                                      } else {
+                                      }
+                                      else if(response.message=="oldpassword are not same."){
+                                        print("jngnrg");
+                                        CommonSnackBar.snackBar(
+                                            message: "Old Password is not Correct");
+                                      }else {
+
                                         CommonSnackBar.snackBar(
                                             message: response.message);
                                       }
@@ -285,5 +301,35 @@ class _ChangePasswordState extends State<ChangePassword> {
         ),
       ),
     );
+  }
+  void _changePassword() async {
+    var user = await FirebaseAuth.instance.currentUser;
+    String email = user.email;
+
+    //Create field for user to input old password
+
+    //pass the password here
+    String password = "123456";
+    String newPassword = confirmPasswordController.text;
+
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      user.updatePassword(newPassword).then((_){
+        print("Successfully changed password");
+      }).catchError((error){
+        print("Password can't be changed" + error.toString());
+        //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
   }
 }

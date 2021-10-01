@@ -65,7 +65,7 @@ class _SellState extends State<Sell> {
                       return SellBook("${categoriesModel[index].id}");
                     }*/
                     else {
-                      return SellBook(catId: "${categoriesModel[index].id}");
+                      return SellBook(catId: "${categoriesModel[index].id}",name:"Sell Now");
                       // return SellOther();
                     }
                   }));

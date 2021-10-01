@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/UI/Activities/ForgotPassword.dart';
 import 'package:book_buy_and_sell/UI/Activities/MainScreen.dart';
@@ -7,22 +5,17 @@ import 'package:book_buy_and_sell/UI/Activities/SignUp.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/helper/helperfunctions.dart';
 import 'package:book_buy_and_sell/Utils/services/auth.dart';
-import 'package:book_buy_and_sell/Utils/services/database.dart';
 
 import 'package:book_buy_and_sell/common/common_snackbar.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
-import 'package:book_buy_and_sell/common/utility.dart';
-import 'package:book_buy_and_sell/common/validation_widget.dart';
 import 'package:book_buy_and_sell/model/apiModel/requestModel/login_request_model.dart';
 import 'package:book_buy_and_sell/model/apiModel/responseModel/login_response_model.dart';
 import 'package:book_buy_and_sell/model/apis/api_response.dart';
 import 'package:book_buy_and_sell/viewModel/login_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/validation_viewmodel.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -54,9 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     usernameFn = FocusNode();
     pwdFn = FocusNode();
-    EasyLoading.showSuccess('Use in initState');
   }
-  Timer _timer;
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -342,22 +334,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 GetBuilder<LoginViewModel>(
                   builder: (controller) {
                     if (controller.apiResponse.status == Status.LOADING) {
-                      return Container(
-                        color: Colors.black,
-                        child: Center(
-                          child: TextButton(
-                            child: Text('show'),
-                            onPressed: () async {
-                              _timer?.cancel();
-                              await EasyLoading.show(
-                                status: 'loading...',
-                                maskType: EasyLoadingMaskType.black,
-                              );
-                              print('EasyLoading show');
-                            },
-                          )),
+                      return Center(
+                        child: new Container(
+                          color: Colors.grey[300],
+                          width: 150.0,
+                          height: 150.0,
+                          child: new Padding(padding: const EdgeInsets.all(5.0),child: new Center(child: new CircularProgressIndicator())),
+                        ),
                       );
-
                     } else {
                       return SizedBox();
                     }
@@ -399,6 +383,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 response.user.number);
             await PreferenceManager.setImage(
                 response.user.image);
+           await PreferenceManager.setcollge(response.user.college_name);
             print("image:${response.user.image}");
             var emailId =
             PreferenceManager.getEmailId();
@@ -444,6 +429,7 @@ class _LoginScreenState extends State<LoginScreen> {
             email: emailController.text,
             password: passwordController.text
         );
+        print("jknfjkvnno");
         if(userCredential!=null){
           print(userCredential);
           HelperFunctions.saveUserLoggedInSharedPreference(true);
@@ -453,17 +439,20 @@ class _LoginScreenState extends State<LoginScreen> {
               PreferenceManager.getEmailId());
           CommonSnackBar.snackBar(
               message: message);
-          Future.delayed(Duration(seconds: 2),
-                  () {
-                Get.offAll(MainScreen());
-                emailController.clear();
-                passwordController.clear();
-              });
+
+          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>MainScreen()));
+          // Future.delayed(Duration(milliseconds: 100),
+          //         () {
+          //       Get.offAll(MainScreen());
+          //       emailController.clear();
+          //       passwordController.clear();
+          //     });
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
         } else if (e.code == 'wrong-password') {
+          print("jkndajon");
           print('Wrong password provided for that user.');
         }
       }

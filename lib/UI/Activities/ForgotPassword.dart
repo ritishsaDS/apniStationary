@@ -62,49 +62,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             Container(
                 width: SizeConfig.screenWidth,
                 height: SizeConfig.screenHeight * 0.3,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Color(gradientColor1),
-                    Color(gradientColor2),
-                  ]),
-                ),
+                alignment: Alignment.center,
+
+
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        child: ImageIcon(
-                          AssetImage('assets/icons/back.png'),
-                          color: Colors.white,
-                        ),
-                        margin: EdgeInsets.all(12),
-                      ),
+                    Image.asset(
+                        'assets/icons/applogo.png',
+                        scale: 8
                     ),
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      alignment: Alignment.center,
-                      margin:
-                          EdgeInsets.only(top: SizeConfig.screenHeight * 0.05),
-                      child: Image.asset(
-                        'assets/bg/logo.png',
-                        scale: SizeConfig.blockSizeVertical * 0.6,
-                      ),
-                    ),
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      alignment: Alignment.center,
-                      child: Text(
-                        "App Name",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontSize: SizeConfig.blockSizeVertical * 2),
-                      ),
-                    )
+
                   ],
                 )),
             Container(

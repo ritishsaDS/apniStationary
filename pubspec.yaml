@@ -32,17 +32,23 @@ dependencies:
   carousel_pro: ^1.0.0
   flutter_holo_date_picker: ^0.3.4+1
   http: ^0.13.3
+  google_place: ^0.4.3
+  flutter_dotenv: ^5.0.2
+  geocoding: ^2.0.1
   dio: ^4.0.0
   flutter_easyloading: ^3.0.3
+  vibration: ^1.7.3
   get: 3.26.0
   image_picker: ^0.8.3+3
+  multi_select_item: ^1.0.3
   flutter_image_compress: ^1.1.0
   get_storage: any
   angles: ^2.1.1
   carousel_slider: ^4.0.0
   geolocator: ^7.6.0
-  geocoding: ^2.0.1
   flutter_google_places: ^0.3.0
+  geocoder: ^0.2.1
+  google_api_headers: ^1.1.1
   google_maps_webservice: ^0.0.19
   google_sign_in:
   firebase_auth:

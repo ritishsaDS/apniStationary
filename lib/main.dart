@@ -7,6 +7,7 @@ import 'package:book_buy_and_sell/viewModel/login_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/register_view_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'ChatUi/views/search.dart';
+import 'UI/test.dart';
 import 'Utils/helper/helperfunctions.dart';
 import 'common/preference_manager.dart';
 
@@ -25,6 +27,8 @@ void main() async {
   configLoading();
   runApp(BookBuySell());
 }
+const kGoogleApiKey =  "AIzaSyCbOKNtOA92bs4we0Owf1g6kGKRBKljQQM";
+
 void configLoading() {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)

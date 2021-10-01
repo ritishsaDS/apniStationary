@@ -41,10 +41,11 @@ class _MyBookListState extends State<MyBookList> {
             itemBuilder: (context, int index) {
               return InkWell(
                   onTap: () {
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) {
-                    //   return BookDetail("");
-                    // }));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                          return BookDetail(
+                              myBooksModel[index].id.toString());
+                        }));
                   },
                   child: Container(
                       width: SizeConfig.screenWidth,
@@ -275,6 +276,7 @@ class _MyBookListState extends State<MyBookList> {
                                                 price:myBooksModel[index].price,
                                                 edition:myBooksModel[index].edition_detail,
                                                 condition:myBooksModel[index].condition,
+                                                    name:"Update"
                                                 );
                                               }));
                             },child: CircleAvatar(radius:15,backgroundColor: Colors.blue,child: Icon(Icons.edit_outlined,color: Colors.white,size: 18,))),
@@ -296,9 +298,14 @@ class _MyBookListState extends State<MyBookList> {
           return Text("No Data found");
         }
       } else {
-        return Center(
-          child: Container(child: Text(jsonDecoded['message'])),
-        );
+        return Container(child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.info_outline,color: Colors.blueAccent,size: 80,),
+            Text("You have not posted anything yet....."),
+          ],
+        ));
       }
     } else {
       return Text("No Data found");

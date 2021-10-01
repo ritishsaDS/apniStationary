@@ -5,11 +5,15 @@ import 'package:angles/angles.dart';
 import 'dart:math';
 import 'dart:core';
 
+import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
+
 class CheckAnimation extends StatefulWidget {
   final double size;
+  var text;
   final VoidCallback onComplete;
 
-  CheckAnimation({this.size, this.onComplete});
+  CheckAnimation({this.size, this.onComplete,this.text});
 
   @override
   _CheckAnimationState createState() => _CheckAnimationState();
@@ -22,12 +26,18 @@ class _CheckAnimationState extends State<CheckAnimation>
 
   @override
   void initState() {
+
     new Future.delayed(
         const Duration(seconds: 2),
-            () => Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
-        ));
+            () {
+              Vibration.vibrate(duration: 1000);
+              HapticFeedback.vibrate();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+                );
     // TODO: implement initState
     super.initState();
   }
@@ -76,7 +86,7 @@ class _CheckAnimationState extends State<CheckAnimation>
                 right: SizeConfig.screenWidth * 0.05,
               ),
               alignment: Alignment.center,
-              child: Text("Successfully Posted", style: TextStyle(
+              child: Text("Successfully ${widget.text}", style: TextStyle(
                   fontSize: SizeConfig.blockSizeVertical * 3.5,
                   fontWeight: FontWeight.bold,
                   color: Color(0XFF77849C)

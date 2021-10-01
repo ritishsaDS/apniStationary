@@ -591,11 +591,34 @@ SizedBox(height: 10,),
                         bottom: SizeConfig.blockSizeVertical * 2),
                     child: ListTile(
                       onTap: (){
-                        AuthService().signOut();
-                     logout.remove("email_id");
-                     logout.remove("name");
-                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-                      },
+                        return showDialog(
+
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: Text("Logout"),
+                            content: Text("Are you sure you want to logout"),
+                            actions: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  AuthService().signOut();
+                                  logout.remove("email_id");
+                                  logout.remove("name");
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+
+                                },
+                                child: Text("Yes"),
+                              ),
+                              FlatButton(
+
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("No"),
+                              ),
+                            ],
+                          ),
+                        );
+                         },
                       title: Text(
                         "Logout",
                         style: TextStyle(
