@@ -1,41 +1,76 @@
 {
   "project_info": {
-    "project_number": "303637380500",
-    "project_id": "book-buy-and-sell",
-    "storage_bucket": "book-buy-and-sell.appspot.com"
+    "project_number": "848723295268",
+    "project_id": "buysell-325317",
+    "storage_bucket": "buysell-325317.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:303637380500:android:334ed7aebdc2bddfd8e381",
+        "mobilesdk_app_id": "1:848723295268:android:8a84b8d187c4a106c5acb1",
         "android_client_info": {
-          "package_name": "com.example.book_buy_and_sell"
+          "package_name": "com.digitler.book_buy_and_sell"
         }
       },
       "oauth_client": [
         {
-          "client_id": "303637380500-ht1i7u0itkl338phhv72902fdtj3p587.apps.googleusercontent.com",
+          "client_id": "848723295268-a9o2c2ejv9g6vk21s070vvg4hg5cgceu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.book_buy_and_sell",
+            "package_name": "com.digitler.book_buy_and_sell",
             "certificate_hash": "bbb6439b4c3b8095212534612f4a2202ad2a9414"
           }
         },
         {
-          "client_id": "303637380500-rt5qaqd7cmrou3dp6l9lg4e7jdmk4n7i.apps.googleusercontent.com",
+          "client_id": "848723295268-e7fb21etl6g33sh2i6rgg1m8hqqc39hf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzSYrWce-dLGJs6a22ajLdGEHDZMifHJI"
+          "current_key": "AIzaSyDWVJkEV1JF7hfYR25pcctYCQ4ImxErJq8"
+        },
+        {
+          "current_key": "AIzaSyCbOKNtOA92bs4we0Owf1g6kGKRBKljQQM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "303637380500-rt5qaqd7cmrou3dp6l9lg4e7jdmk4n7i.apps.googleusercontent.com",
+              "client_id": "848723295268-e7fb21etl6g33sh2i6rgg1m8hqqc39hf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848723295268:android:fe68c654954a49ccc5acb1",
+        "android_client_info": {
+          "package_name": "com.example.book_buy_and_sell"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "848723295268-e7fb21etl6g33sh2i6rgg1m8hqqc39hf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWVJkEV1JF7hfYR25pcctYCQ4ImxErJq8"
+        },
+        {
+          "current_key": "AIzaSyCbOKNtOA92bs4we0Owf1g6kGKRBKljQQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "848723295268-e7fb21etl6g33sh2i6rgg1m8hqqc39hf.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
