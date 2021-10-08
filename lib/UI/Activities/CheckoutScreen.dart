@@ -12,6 +12,7 @@ import 'package:flutter_holo_date_picker/date_picker_theme.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_holo_date_picker/widget/date_picker_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import 'MainScreen.dart';
 
@@ -45,9 +46,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   FocusNode clgNameFn;
   FocusNode cityFn;
   FocusNode gstFn;
+  Razorpay _razorpay;
+
 
   @override
   void initState() {
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     addressController=TextEditingController(text:Constants.userlocation+","+Constants.usercity+","+Constants.userstate+""+Constants.userpostal);
     cityController=TextEditingController(text:Constants.usercity);
     pinController=TextEditingController(text: Constants.userpostal);
@@ -243,7 +250,8 @@ print(body.toString());
     var res = await ApiCall.post(checkoutURL, body);
 
     if (res["status"] == "200") {
-      showPopUp(context, res["message"]);
+      openCheckout();
+      //showPopUp(context, res["message"]);
     } else {
       showAlert(context, res["message"]);
     }
@@ -272,5 +280,37 @@ print(body.toString());
         );
       },
     );
+  }
+
+  void openCheckout() {
+    var options = {
+      'key': 'rzp_test_RLmD6p88YpUTkU',
+      'amount':'10000.00',
+      'name': 'Buy And Sell',
+      'description': 'Books for you',
+
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    showPopUp(context, "Order Place Successfully");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    showPopUp(context,
+        "ERROR: " + response.code.toString() + " - " + response.message,
+        );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    showPopUp(context, "EXTERNAL_WALLET: " + response.walletName, );
   }
 }

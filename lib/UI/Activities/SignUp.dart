@@ -1,3 +1,4 @@
+import 'dart:convert';
 import     'dart:io';
 import 'dart:typed_data';
 import 'package:book_buy_and_sell/Utils/helper/helperfunctions.dart';
@@ -17,15 +18,19 @@ import 'package:book_buy_and_sell/model/apiModel/responseModel/register_response
 import 'package:book_buy_and_sell/model/apis/api_response.dart';
 import 'package:book_buy_and_sell/viewModel/image_upload_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/register_view_model.dart';
+import 'package:book_buy_and_sell/viewModel/searchcollege.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:textfield_search/textfield_search.dart';
 
 import '../Addressbar.dart';
 
@@ -69,7 +74,9 @@ bool showcnfrmpwd=true;
 
   @override
   void initState() {
-    // TODO: implement initState
+    getfeaturedmatches();
+    // TODO: implement i
+    //  nitState
     super.initState();
     fullNameFn = FocusNode();
     emailFn = FocusNode();
@@ -450,37 +457,92 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
-                       TextFormField(
-                         focusNode: clgNameFn,
-                         controller: clgNameController,
-                         // onTap: () async {
-                         //   // should show search screen here
-                         //   showSearch(
-                         //     context: context,
-                         //     // we haven't created AddressSearch class
-                         //     // this should be extending SearchDelegate
-                         //     delegate: AddressSearch(),
-                         //   );
-                         // },
-                         decoration: InputDecoration(
-                           focusedBorder: outLineGrey,
-                           enabledBorder: outLineGrey,
-                           isDense: true,
-                           isCollapsed: true,
-                           contentPadding: EdgeInsets.only(
-                               top: Get.height * 0.016,
-                               bottom: Get.height * 0.016,
-                               left: 20),
-                           errorBorder: outLineRed,
-                           focusedErrorBorder: outLineRed,
-                           hintText: "College Name",
-                           hintStyle: TextStyle(
-                             color: Color(hintGrey),
-                             fontWeight: FontWeight.w500,
+                        // TextFieldSearch(
+                        //   label:cartdate[0]['name'],
+                        // minStringLength: 2,
+                        //
+                        // initialList:cartdate,
+                        //
+                        // // focusNode: clgNameFn,
+                        //  controller: clgNameController,
+                        //  // onTap: () async {
+                        //  //   // should show search screen here
+                        //  //   showSearch(
+                        //  //     context: context,
+                        //  //     // we haven't created AddressSearch class
+                        //  //     // this should be extending SearchDelegate
+                        //  //     delegate: AddressSearch(),
+                        //  //   );
+                        //  // },
+                        //  decoration: InputDecoration(
+                        //    focusedBorder: outLineGrey,
+                        //    enabledBorder: outLineGrey,
+                        //    isDense: true,
+                        //    isCollapsed: true,
+                        //    contentPadding: EdgeInsets.only(
+                        //        top: Get.height * 0.016,
+                        //        bottom: Get.height * 0.016,
+                        //        left: 20),
+                        //    errorBorder: outLineRed,
+                        //    focusedErrorBorder: outLineRed,
+                        //    hintText: "College Name",
+                        //    hintStyle: TextStyle(
+                        //      color: Color(hintGrey),
+                        //      fontWeight: FontWeight.w500,
+                        //
+                        //    ),
+                        // ),
+                        //   future: () {
+                        //     return fetchComplexData();
+                        //   },
+                        //   getSelectedValue: (item) {
+                        //     print(item);
+                        //   },
+                        //  ),
+                        TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
 
-                           ),
+                             
+                              controller: clgNameController,
+                            decoration: InputDecoration(
+                                focusedBorder: outLineGrey,
+                                enabledBorder: outLineGrey,
+
+                                isDense: true,
+                                isCollapsed: true,
+                                contentPadding: EdgeInsets.only(
+                                    top: Get.height * 0.016,
+                                    bottom: Get.height * 0.016,
+                                    left: 20),
+                                errorBorder: outLineRed,
+
+                                focusedErrorBorder: outLineRed,
+                                hintText: "College Name",
+                                hintStyle: TextStyle(
+                                  color: Color(hintGrey),
+                                  fontWeight: FontWeight.w500,
+                                )),
+                          ),
+                          suggestionsCallback: (pattern) async {
+                            return  getSuggestions(pattern);
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(suggestion,style: TextStyle(fontSize: 14)),
+                               // Text(suggestion['state-province'],style: TextStyle(fontSize: 14)),
+                                Divider()
+                              ],
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+setState(() {
+  clgNameController=TextEditingController(text: suggestion);
+
+});                          },
                         ),
-                         ),
                         SizedBox(
                           height: Get.height * 0.03,
                         ),
@@ -559,7 +621,7 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                               left: 20),
                           errorBorder: outLineRed,
                           focusedErrorBorder: outLineRed,
-                          hintText: "Re-enter Email",
+                          hintText: "Re-enter Password",
                           hintStyle: TextStyle(
                             color: Color(hintGrey),
                             fontWeight: FontWeight.w500,)),
@@ -743,13 +805,20 @@ verifyPhone();
                 GetBuilder<RegisterViewModel>(
                   builder: (controller) {
                     if (controller.apiResponse.status == Status.LOADING) {
-                      return Center(
-                        child: new Container(
-                          color: Colors.grey[300],
-                          width: 150.0,
-                          height: 150.0,
-                          child: new Padding(padding: const EdgeInsets.all(5.0),child: new Center(child: new CircularProgressIndicator())),
-                        ),
+                      return Container(
+                        height: 300,
+                        child: Dialog(elevation: 156,
+                            child: Container(
+                              //padding: EdgeInsets.all(10),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(),
+                                      SizedBox(height: 10),
+                                      Text("Loading...")
+                                    ]))),
                       );
                     } else {
                       return SizedBox();
@@ -996,5 +1065,55 @@ verifyPhone();
     RegExp regExp = new RegExp(pattern);
     return regExp.hasMatch(emailController.text);
   }
+  dynamic cartdate=new List();
+  List<String> namecolge=new List();
+  List<String> statecolge=new List();
+  void getfeaturedmatches() async {
+
+
+
+    try {
+      final response = await get(
+        Uri.parse(
+            "http://universities.hipolabs.com/search?name=&country=India"),);
+print(response.statusCode);
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        print(responseJson);
+        setState(() {
+          cartdate=responseJson;
+
+          ///print('setstate'+cartdata.toString());
+        });
+for(int i=0; i<cartdate.length;i++){
+  namecolge.add(cartdate[i]['name']);
+  print(namecolge);
+ // statecolge.add(cartdate[i]['state-province']);
+}
+
+      } else {
+
+        setState(() {
+
+        });
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+
+      });
+    }
+
+  }
+   List<String> getSuggestions(String query) {
+    List<String> matches = List();
+    List<String> states = List();
+    matches.addAll(namecolge);
+    states.addAll(statecolge);
+    matches.retainWhere((s) =>   s.toLowerCase().contains(query.toLowerCase()));
+
+    return matches;
+  }
+
 }
 

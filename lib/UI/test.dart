@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:http/http.dart';
 
 import '../main.dart';
 
@@ -163,14 +165,8 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(title: AppBarPlacesAutoCompleteTextField());
-    final body = PlacesAutocompleteResult(
-      onTap: (p) {
-        displayPrediction(p, searchScaffoldKey.currentState);
-      },
-      logo: Row(
-        children: [FlutterLogo()],
-        mainAxisAlignment: MainAxisAlignment.center,
-      ),
+    final body = PredictionsListView(
+
     );
     return Scaffold(key: searchScaffoldKey, appBar: appBar, body: body);
   }
@@ -191,6 +187,75 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
         SnackBar(content: Text("Got answer")),
       );
     }
+  }
+  dynamic cartdata = new List();
+  void getfeaturedmatches() async {
+
+
+
+    try {
+      final response = await get(
+          Uri.parse(
+              "http://universities.hipolabs.com/search?name=Da&country=India"),);
+      print("ffvvvf");
+      if (response.statusCode == 256) {
+        final responseJson = json.decode(response.body);
+        print(responseJson);
+        setState(() {
+          cartdata=responseJson;
+
+
+          print('setstate'+cartdata.toString());
+        });
+
+
+      } else {
+
+        setState(() {
+
+        });
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+
+      });
+    }
+  }
+}
+class PredictionsListView extends StatelessWidget {
+  final List<Prediction> predictions;
+  final ValueChanged<Prediction> onTap;
+
+  PredictionsListView({ this.predictions, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: predictions
+          .map((Prediction p) => PredictionTile(prediction: p, onTap: onTap))
+          .toList(),
+    );
+  }
+}
+
+class PredictionTile extends StatelessWidget {
+  final Prediction prediction;
+  final ValueChanged<Prediction> onTap;
+
+  PredictionTile({ this.prediction, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(Icons.location_on),
+      title: Text(prediction.description),
+      onTap: () {
+        if (onTap != null) {
+          onTap(prediction);
+        }
+      },
+    );
   }
 }
 

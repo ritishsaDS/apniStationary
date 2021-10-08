@@ -8,6 +8,7 @@ import 'package:book_buy_and_sell/Utils/services/auth.dart';
 
 import 'package:book_buy_and_sell/common/common_snackbar.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
+import 'package:book_buy_and_sell/common/utility.dart';
 import 'package:book_buy_and_sell/model/apiModel/requestModel/login_request_model.dart';
 import 'package:book_buy_and_sell/model/apiModel/responseModel/login_response_model.dart';
 import 'package:book_buy_and_sell/model/apis/api_response.dart';
@@ -334,14 +335,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 GetBuilder<LoginViewModel>(
                   builder: (controller) {
                     if (controller.apiResponse.status == Status.LOADING) {
-                      return Center(
-                        child: new Container(
-                          color: Colors.grey[300],
-                          width: 150.0,
-                          height: 150.0,
-                          child: new Padding(padding: const EdgeInsets.all(5.0),child: new Center(child: new CircularProgressIndicator())),
-                        ),
-                      );
+                    return  Container(
+                      height: 300,
+                      child: Dialog(elevation: 156,
+                          child: Container(
+                              //padding: EdgeInsets.all(10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(),
+                                    SizedBox(height: 10),
+                                    Text("Loading...")
+                                  ]))),
+                    );
                     } else {
                       return SizedBox();
                     }
