@@ -261,8 +261,7 @@ class _MyBookListState extends State<MyBookList> {
                           children: [
                             GestureDetector(onTap:(){
                               print(myBooksModel[index].description);
-                              CommonSnackBar.snackBar(
-                                                  message: 'Edit clicked');
+                              showAlert(context, 'Edit clicked');
                                               Navigator.push(context,
                                                   MaterialPageRoute(
                                                       builder: (context) {

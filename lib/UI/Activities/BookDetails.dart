@@ -17,6 +17,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 
+import 'CheckoutScreen.dart';
+
 class BookDetail extends StatefulWidget {
   final String catId;
 
@@ -256,7 +258,7 @@ child:
                                     color: Color(0XFF656565)),
                               ),
                               SizedBox(
-                                height: SizeConfig.blockSizeVertical,
+                                height: SizeConfig.blockSizeVertical*3,
                               ),
                               Text(
                                 "Category :",
@@ -310,7 +312,7 @@ child:
                                 height: SizeConfig.blockSizeVertical,
                               ),
                               Text(
-                                "College",
+                                snapshot.data.date.college_name,maxLines: 2,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: Color(black)),
@@ -408,43 +410,68 @@ child:
                   Container(
                     width: SizeConfig.screenWidth,
                     margin: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.screenWidth * 0.05,
+                        horizontal: SizeConfig.screenWidth * 0.03,
                         vertical: SizeConfig.blockSizeVertical),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          child: Container(
-
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(gradientColor1),
-                                  Color(gradientColor2),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(25),
+                        Container(
+width: SizeConfig.screenWidth*0.30,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(gradientColor1),
+                                Color(gradientColor2),
+                              ],
                             ),
-                            child: MaterialButton(
-                              onPressed: () {
-                                _callAddToCartAPI();
-                              },
-                              child: Text(
-                                "Buy Now: $rs ${snapshot.data.date.price}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600),
-                              ),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                             _callAddToCartAPI("buy");
+
+                            },
+                            child: Text(
+                              "Buy Now: $rs${snapshot.data.date.price}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),
-SizedBox(width: 10,),
+                        SizedBox(width: 10,),
+
+                        Container(
+                          width: SizeConfig.screenWidth*0.30,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(gradientColor1),
+                                Color(gradientColor2),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                              _callAddToCartAPI("cart");
+                            },
+                            child: Text(
+                              "Add to cart",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10,),
+
                         GestureDetector(
                           onTap: (){
-                            _callAddToCartAPI();
+                            _callAddToCartAPI("cart");
                           },
                           child: Container(
-                            width: SizeConfig.screenWidth * 0.4,
+                            width: SizeConfig.screenWidth * 0.25,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
@@ -683,7 +710,7 @@ print("chatRoomid"+chatRoomId);
         print(
             "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
       });
-      print("snapshots"+snapshots);
+      //print("snapshots"+snapshots);
     });
     setState(() {
       isLoading=false;
@@ -697,7 +724,7 @@ print("chatRoomid"+chatRoomId);
     }
   }
 
-  _callAddToCartAPI()async{
+  _callAddToCartAPI( text)async{
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
@@ -705,8 +732,24 @@ print("chatRoomid"+chatRoomId);
     };
 
     var res = await ApiCall.post(addToCartURL, body);
+    print(res["status"]);
+    if(res["status"]=="400"){
+      showAlert(context,res["message"]);
+    }
+    else if (res["status"]=="200"){
+      if(text=="buy"){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckoutScreen(id:widget.catId)));
+      }
+      else{
+        showAlert(context,res["message"]);
 
-    showAlert(context,res["message"]);
+      }
+    }
+
+
   }
 }
 

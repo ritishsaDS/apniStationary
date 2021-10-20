@@ -27,6 +27,7 @@ import 'package:http/http.dart'as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../Donescreen.dart';
+import 'BookDetails.dart';
 import 'MainScreen.dart';
 
 class SellBook extends StatefulWidget {
@@ -51,6 +52,7 @@ class _SellBookState extends State<SellBook> {
   TextEditingController semester = TextEditingController();
   TextEditingController desc = TextEditingController();
   TextEditingController price = TextEditingController();
+  TextEditingController collegename = TextEditingController();
 bool isLoading=false;
   TextEditingController conditions = TextEditingController();
   GlobalKey<FormState> profileForm = GlobalKey<FormState>();
@@ -73,6 +75,7 @@ bool isLoading=false;
     semester=TextEditingController(text: widget.sem==""?"semester":widget.sem);
     desc=TextEditingController(text: widget.desc);
     price=TextEditingController(text: widget.price);
+    collegename=TextEditingController(text: PreferenceManager.getcollge().toString());
     conditions=TextEditingController(text:widget.condition==""?"Conditions":widget.condition);
     // TODO: implement initState
     super.initState();
@@ -778,6 +781,47 @@ bool isLoading=false;
                               blurRadius: 4.0),
                         ]),
                     child: TextFormField(
+                      controller: collegename,
+
+                      textInputAction: TextInputAction.done,
+                      keyboardType: TextInputType.text,
+                      // onFieldSubmitted: (value) {
+                      //   descFn.unfocus();
+                      // },
+                      //maxLength: 50,
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: SizeConfig.blockSizeVertical * 1.5,
+                            horizontal: SizeConfig.blockSizeHorizontal * 5),
+                        hintText: "College Name",
+                        hintStyle: TextStyle(
+                          color: Color(hintGrey),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: SizeConfig.screenWidth,
+                    margin: EdgeInsets.only(
+                      left: SizeConfig.screenWidth * 0.05,
+                      right: SizeConfig.screenWidth * 0.05,
+                      top: SizeConfig.blockSizeVertical * 2,
+                      bottom: SizeConfig.blockSizeVertical,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              spreadRadius: 2.0,
+                              blurRadius: 4.0),
+                        ]),
+                    child: TextFormField(
                       controller: desc,
                       focusNode: descFn,
                       textInputAction: TextInputAction.done,
@@ -998,65 +1042,54 @@ bool isLoading=false;
                                   Get.put(ImageUploadViewModel());
                                   if (bookName.text.isEmpty ||
                                       bookName.text == null) {
-                                    CommonSnackBar.snackBar(
-                                        message: "Please enter book name");
+                                    showAlert(context, "Please enter book name");
                                     return;
                                   }
 
                                   if (author.text.isEmpty ||
                                       author.text == null) {
-                                    CommonSnackBar.snackBar(
-                                        message: "Please enter author name");
+                                    showAlert(context, "Please enter author name");
                                     return;
                                   }
 
                                   if (price.text.isEmpty ||
                                       price.text == null) {
-                                    CommonSnackBar.snackBar(
-                                        message: "Please enter price");
+                                    showAlert(context, "Please enter price");
                                     return;
                                   }
                                   if (desc.text.isEmpty ||
                                       desc.text == null) {
-                                    CommonSnackBar.snackBar(
-                                        message: "Please enter Description");
+                                    showAlert(context, "Please enter Description");
                                     return;
                                   }
                                   if (edition.text.isEmpty ||
                                       edition.text == null) {
-                                    CommonSnackBar.snackBar(
-                                        message: "Please enter Edition deatil");
+                                    showAlert(context, "Please enter Edition deatil");
                                     return;
                                   }
 
                                   if( imaUploadViewModel.selectedImg==null||imaUploadViewModel.selectedImg==""){
-                                    CommonSnackBar.snackBar(
-                                        message: "Please Upload Images");
+                                    showAlert(context, "Please Upload Images");
                                     return;
                                   }
                                   if(semester.text.isEmpty||semester.text==null){
-                                    CommonSnackBar.snackBar(
-                                        message: "Please enter Semester");
+                                    showAlert(context, "Please enter Semester");
                                     return;
                                   }
                                   if(conditions.text.isEmpty||conditions.text==null){
-                                    CommonSnackBar.snackBar(
-                                        message: "Please enter conditions");
+                                    showAlert(context, "Please enter conditions");
                                     return;
                                   }
                                   if( imaUploadViewModel.selectedImg2==null||imaUploadViewModel.selectedImg2==""){
-                                    CommonSnackBar.snackBar(
-                                        message: "Please Upload Images");
+                                    showAlert(context, "Please Upload Images");
                                     return;
                                   }
                                   if( imaUploadViewModel.selectedImg3==null||imaUploadViewModel.selectedImg3==""){
-                                    CommonSnackBar.snackBar(
-                                        message: "Please Upload Images");
+                                    showAlert(context, "Please Upload Images");
                                     return;
                                   }
                                   if( imaUploadViewModel.selectedImg4==null||imaUploadViewModel.selectedImg4==""){
-                                    CommonSnackBar.snackBar(
-                                        message: "Please Upload Images");
+                                    showAlert(context, "Please Upload Images");
                                     return;
                                   }
 setState(() {
@@ -1081,6 +1114,7 @@ setState(() {
                                   bookAddReq.conditions = conditions.text;
                                   bookAddReq.description = desc.text;
                                   bookAddReq.price = price.text;
+                                  bookAddReq.college_name=collegename.text;
                                   bookAddReq.image1 =
                                       imaUploadViewModel.selectedImg;
                                   bookAddReq.image2 =
@@ -1095,6 +1129,7 @@ setState(() {
                                   // if (bookAddViewModel.apiResponse.status ==
                                   //     Status.COMPLETE) {
                                   print(bookAddViewModel.toString());
+                                  print(collegename.text.toString());
 
                                   RegisterResponseModel response =
                                       bookAddViewModel.apiResponse.data;
@@ -1105,8 +1140,7 @@ setState(() {
                                       });
                                   //print("jksdajn"+response.status);
                                   if (response.status == '256') {
-                                    CommonSnackBar.snackBar(
-                                        message: response.message);
+                                    showAlert(context, response.message);
 
                                     Future.delayed(Duration(seconds: 2),
                                         () {
@@ -1119,8 +1153,7 @@ setState(() {
                                     });
                                     Navigator.pop(context);
                                   } else {
-                                    CommonSnackBar.snackBar(
-                                        message: response.message);
+                                    showAlert(context, response.message);
                                   }
                                 }
                               }
@@ -1495,6 +1528,7 @@ print(bookName.text);
     request.fields['name'] = bookName.text;
     request.fields['auther_name'] = author.text;
     request.fields['edition_detail'] = edition.text;
+    request.fields['college_name']=collegename.text;
     request.fields['semester'] = semester.text;
     request.fields['conditions'] = conditions.text;
     request.fields['description'] = desc.text;

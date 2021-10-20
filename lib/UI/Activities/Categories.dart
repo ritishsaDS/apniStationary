@@ -76,7 +76,7 @@ class _CategoriesState extends State<Categories> {
                                     spreadRadius: 1,
                                     blurRadius: 4)
                               ]),
-                          padding: EdgeInsets.all(15),
+
                           margin: EdgeInsets.only(
                               bottom: SizeConfig.blockSizeVertical),
 

@@ -27,7 +27,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
-  TextEditingController firstNameController = TextEditingController(text: PreferenceManager.getName().toString().split(" ")[0]);
+  TextEditingController firstNameController = TextEditingController(text: PreferenceManager.getName().toString());
   TextEditingController lastNameController = TextEditingController(text: PreferenceManager.getName().toString().contains(" ")?PreferenceManager.getName().toString().split(" ")[1]:" " );
   TextEditingController addressController = TextEditingController();
   TextEditingController cityController = TextEditingController();
@@ -118,7 +118,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 children: [
 
                   _generalTextField("First Name", firstNameController,1),
-                  _generalTextField("Last Name", lastNameController,1),
+                  //_generalTextField("Last Name", lastNameController,1),
                   _generalTextField("Phone Number", phnController,1),
                   _generalTextField("Address", addressController,4),
                   _generalTextField("College Name", clgController,1),
@@ -219,8 +219,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   checkValidation() {
     if (firstNameController.text.length < 2) {
       showAlert(context, "Please enter a valid First Name.");
-    } else if (lastNameController.text.length < 2) {
-      showAlert(context, "Please enter a valid Last Name.");
+
     } else if (addressController.text.length < 10) {
       showAlert(context, "Please enter a valid Address.");
     } else if (cityController.text.length < 2) {
@@ -239,7 +238,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
       "first_name": firstNameController.text,
-      "last_name": lastNameController.text,
+      "last_name": "",
       "address": addressController.text,
       "city": cityController.text,
       "state": stateController.text,
@@ -285,7 +284,7 @@ print(body.toString());
   void openCheckout() {
     var options = {
       'key': 'rzp_test_RLmD6p88YpUTkU',
-      'amount':'10000.00',
+      'amount':'10000',
       'name': 'Buy And Sell',
       'description': 'Books for you',
 

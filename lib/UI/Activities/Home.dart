@@ -20,6 +20,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart';
+import 'package:speech_recognition/speech_recognition.dart';
 
 import 'Cart.dart';
 import 'Login.dart';
@@ -40,9 +41,53 @@ class _HomeState extends State<Home> {
   TextEditingController _searchField = new TextEditingController();
 bool  isLoading=false;
   final logout=GetStorage();
+  SpeechRecognition _speechRecognition;
+  bool _isAvailable = false;
+  bool _isListening = false;
 
+  String resultText = "";
   @override
   void initState() {
+    _speechRecognition = SpeechRecognition();
+
+    _speechRecognition.setAvailabilityHandler(
+          (bool result) => setState(() => _isAvailable = result),
+    );
+
+    _speechRecognition.setRecognitionStartedHandler(
+          () => setState(() => _isListening = true),
+    );
+
+    _speechRecognition.setRecognitionResultHandler(
+          (String speech) => setState((){
+            resultText = speech;
+                _searchField=TextEditingController(text:resultText);
+                if(resultText==''){}
+                else{
+                  _fieldFocusChange(context);
+                }
+
+          }),
+    );
+
+    _speechRecognition.setRecognitionCompleteHandler(
+          () => setState(() {
+            print("khatam"+resultText);
+            _isListening = false;
+            if(resultText==''||resultText.isEmpty){}
+            else{
+              //_fieldFocusChange(context);
+            }
+          }),
+    );
+
+    _speechRecognition.activate().then(
+          (result) => setState(() {
+            _isAvailable = result;
+                print("joa"+_isAvailable.toString());
+          }
+          ),
+    );
     getCategory();
     // TODO: implement initState
     super.initState();
@@ -463,6 +508,7 @@ resizeToAvoidBottomInset: false,
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
+                          suffixIcon:  speechButton(),
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: SizeConfig.blockSizeVertical * 1.5,
@@ -491,8 +537,7 @@ resizeToAvoidBottomInset: false,
                             ),
                           );
                         } else {
-                          CommonSnackBar.snackBar(
-                              message: "Search Item cannot be empty");
+                          showAlert(context, "Search Item cannot be empty");
                         }
                       },
                       child: Icon(
@@ -538,7 +583,7 @@ resizeToAvoidBottomInset: false,
                                 return Categories();
                               }));
                             },
-                            child: Icon(Icons.arrow_forward_ios_rounded,
+                            child: Icon(Icons.double_arrow,
                                 color: Color(colorBlue),
                                 size: SizeConfig.blockSizeVertical * 2.5))
                       ])),
@@ -576,7 +621,7 @@ resizeToAvoidBottomInset: false,
                       ],
                     ),
                     Icon(
-                      Icons.arrow_forward_ios_rounded,
+                      Icons.double_arrow,
                       color: Color(colorBlue),
                       size: SizeConfig.blockSizeVertical * 2.5,
                     ),
@@ -876,8 +921,7 @@ resizeToAvoidBottomInset: false,
         ),
       );
     } else {
-      CommonSnackBar.snackBar(
-          message: "Search Item cannot be empty");
+      showAlert(context, "Search Item cannot be empty");
     }
   }
 dynamic categorylist=new List();
@@ -977,4 +1021,27 @@ print("responsestauus codee"+response.statusCode.toString());
     }
     return newcatgorylist;
   }
+  speechButton() =>Container(
+height: 20,
+    margin: EdgeInsets.all(10),
+    child: GestureDetector(
+      onTap: (){
+        if (_isAvailable && !_isListening)
+          _speechRecognition
+              .listen(locale: "en_IN")
+              .then((result) {
+            setState(() {
+
+
+            });
+          });
+      },
+      child: CircleAvatar(
+          radius: 10,
+          backgroundColor:Colors.blue,child: Icon(Icons.mic,color: Colors.white,size: 12,)),
+    ),
+
+
+    )
+  ;
 }

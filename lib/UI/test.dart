@@ -1,283 +1,169 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:google_api_headers/google_api_headers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:google_maps_webservice/places.dart';
-import 'package:http/http.dart';
-
-import '../main.dart';
+import 'package:pin_input_text_field/pin_input_text_field.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 
-
-
-final customTheme = ThemeData(
-  primarySwatch: Colors.blue,
-  brightness: Brightness.dark,
-  accentColor: Colors.redAccent,
-  inputDecorationTheme: InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(4.00)),
-    ),
-    contentPadding: EdgeInsets.symmetric(
-      vertical: 12.50,
-      horizontal: 10.00,
-    ),
-  ),
-);
-
-class RoutesWidget extends StatelessWidget {
+class HomePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) => MaterialApp(
-    title: "My App",
-    theme: customTheme,
-    routes: {
-      "/": (_) => MyApp(),
-      "/search": (_) => CustomSearchScaffold(),
-    },
-  );
+  _HomePageState createState() => _HomePageState();
 }
 
-class MyApp extends StatefulWidget {
+class _HomePageState extends State<HomePage> {
+  String _code="";
+  String signature = "{{ app signature }}";
+
   @override
-  _MyAppState createState() => _MyAppState();
-}
+  void initState() {
+    super.initState();
+  }
 
-final homeScaffoldKey = GlobalKey<ScaffoldState>();
-final searchScaffoldKey = GlobalKey<ScaffoldState>();
-
-class _MyAppState extends State<MyApp> {
-  Mode _mode = Mode.overlay;
+  @override
+  void dispose() {
+    SmsAutoFill().unregisterListener();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: homeScaffoldKey,
-      appBar: AppBar(
-        title: Text("My App"),
-      ),
-      body: Center(
+    return MaterialApp(
+      theme: ThemeData.light(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              _buildDropdownMenu(),
-              ElevatedButton(
-                onPressed: _handlePressButton,
-                child: Text("Search places"),
-              ),
-              ElevatedButton(
-                child: Text("Custom"),
-                onPressed: () {
-                  Navigator.of(context).pushNamed("/search");
+              PhoneFieldHint(),
+              Spacer(),
+              PinFieldAutoFill(
+                decoration: UnderlineDecoration(
+                  textStyle: TextStyle(fontSize: 20, color: Colors.black),
+                  colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+                ),
+                currentCode: _code,
+                onCodeSubmitted: (code) {},
+                onCodeChanged: (code) {
+                  if (code.length == 6) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
                 },
               ),
+              Spacer(),
+              TextFieldPinAutoFill(
+                currentCode: _code,
+              ),
+              Spacer(),
+              ElevatedButton(
+                child: Text('Listen for sms code'),
+                onPressed: () async {
+                  await SmsAutoFill().listenForCode;
+                },
+              ),
+              ElevatedButton(
+                child: Text('Set code to 123456'),
+                onPressed: () async {
+                  setState(() {
+                    _code = '123456';
+                  });
+                },
+              ),
+              SizedBox(height: 8.0),
+              Divider(height: 1.0),
+              SizedBox(height: 4.0),
+              Text("App Signature : $signature"),
+              SizedBox(height: 4.0),
+              ElevatedButton(
+                child: Text('Get app signature'),
+                onPressed: () async {
+                  signature = await SmsAutoFill().getAppSignature;
+                  setState(() {});
+                },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => CodeAutoFillTestPage()));
+                },
+                child: Text("Test CodeAutoFill mixin"),
+              )
             ],
-          )),
-    );
-  }
-
-  Widget _buildDropdownMenu() => DropdownButton(
-    value: _mode,
-    items: <DropdownMenuItem<Mode>>[
-      DropdownMenuItem<Mode>(
-        child: Text("Overlay"),
-        value: Mode.overlay,
-      ),
-      DropdownMenuItem<Mode>(
-        child: Text("Fullscreen"),
-        value: Mode.fullscreen,
-      ),
-    ],
-    onChanged: (m) {
-      setState(() {
-        _mode = m;
-      });
-    },
-  );
-
-  void onError(PlacesAutocompleteResponse response) {
-    homeScaffoldKey.currentState.showSnackBar(
-      SnackBar(content: Text(response.errorMessage)),
-    );
-  }
-
-  Future<void> _handlePressButton() async {
-    // show input autocomplete with selected mode
-    // then get the Prediction selected
-    Prediction p = await PlacesAutocomplete.show(
-      context: context,
-      apiKey: kGoogleApiKey,
-      onError: onError,
-      mode: _mode,
-      language: "fr",
-      decoration: InputDecoration(
-        hintText: 'Search',
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            color: Colors.white,
           ),
         ),
       ),
-      components: [Component(Component.country, "fr")],
-    );
-
-    displayPrediction(p, homeScaffoldKey.currentState);
-  }
-}
-
-Future<Null> displayPrediction(Prediction p, ScaffoldState scaffold) async {
-  if (p != null) {
-    // get detail (lat/lng)
-    GoogleMapsPlaces _places = GoogleMapsPlaces(
-      apiKey: kGoogleApiKey,
-      apiHeaders: await GoogleApiHeaders().getHeaders(),
-    );
-    PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId);
-    final lat = detail.result.geometry.location.lat;
-    final lng = detail.result.geometry.location.lng;
-
-    scaffold.showSnackBar(
-      SnackBar(content: Text("${p.description} - $lat/$lng")),
     );
   }
 }
 
-// custom scaffold that handle search
-// basically your widget need to extends [GooglePlacesAutocompleteWidget]
-// and your state [GooglePlacesAutocompleteState]
-class CustomSearchScaffold extends PlacesAutocompleteWidget {
-  CustomSearchScaffold()
-      : super(
-    apiKey: kGoogleApiKey,
-    sessionToken: Uuid().generateV4(),
-    language: "en",
-    components: [Component(Component.country, "uk")],
-  );
-
+class CodeAutoFillTestPage extends StatefulWidget {
   @override
-  _CustomSearchScaffoldState createState() => _CustomSearchScaffoldState();
+  _CodeAutoFillTestPageState createState() => _CodeAutoFillTestPageState();
 }
 
-class _CustomSearchScaffoldState extends PlacesAutocompleteState {
-  @override
-  Widget build(BuildContext context) {
-    final appBar = AppBar(title: AppBarPlacesAutoCompleteTextField());
-    final body = PredictionsListView(
+class _CodeAutoFillTestPageState extends State<CodeAutoFillTestPage> with CodeAutoFill {
+  String appSignature;
+  String otpCode;
 
-    );
-    return Scaffold(key: searchScaffoldKey, appBar: appBar, body: body);
+  @override
+  void codeUpdated() {
+    setState(() {
+      otpCode = code;
+    });
   }
 
   @override
-  void onResponseError(PlacesAutocompleteResponse response) {
-    super.onResponseError(response);
-    searchScaffoldKey.currentState.showSnackBar(
-      SnackBar(content: Text(response.errorMessage)),
-    );
-  }
+  void initState() {
+    super.initState();
+    listenForCode();
 
-  @override
-  void onResponse(PlacesAutocompleteResponse response) {
-    super.onResponse(response);
-    if (response != null && response.predictions.isNotEmpty) {
-      searchScaffoldKey.currentState.showSnackBar(
-        SnackBar(content: Text("Got answer")),
-      );
-    }
-  }
-  dynamic cartdata = new List();
-  void getfeaturedmatches() async {
-
-
-
-    try {
-      final response = await get(
-          Uri.parse(
-              "http://universities.hipolabs.com/search?name=Da&country=India"),);
-      print("ffvvvf");
-      if (response.statusCode == 256) {
-        final responseJson = json.decode(response.body);
-        print(responseJson);
-        setState(() {
-          cartdata=responseJson;
-
-
-          print('setstate'+cartdata.toString());
-        });
-
-
-      } else {
-
-        setState(() {
-
-        });
-      }
-    } catch (e) {
-      print(e);
+    SmsAutoFill().getAppSignature.then((signature) {
       setState(() {
-
+        appSignature = signature;
       });
-    }
+    });
   }
-}
-class PredictionsListView extends StatelessWidget {
-  final List<Prediction> predictions;
-  final ValueChanged<Prediction> onTap;
 
-  PredictionsListView({ this.predictions, this.onTap});
+  @override
+  void dispose() {
+    super.dispose();
+    cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: predictions
-          .map((Prediction p) => PredictionTile(prediction: p, onTap: onTap))
-          .toList(),
+    final textStyle = TextStyle(fontSize: 18);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Listening for code"),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(32, 32, 32, 0),
+            child: Text(
+              "This is the current app signature: $appSignature",
+            ),
+          ),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Builder(
+              builder: (_) {
+                if (otpCode == null) {
+                  return Text("Listening for code...", style: textStyle);
+                }
+                return Text("Code Received: $otpCode", style: textStyle);
+              },
+            ),
+          ),
+          const Spacer(),
+        ],
+      ),
     );
   }
-}
-
-class PredictionTile extends StatelessWidget {
-  final Prediction prediction;
-  final ValueChanged<Prediction> onTap;
-
-  PredictionTile({ this.prediction, this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(Icons.location_on),
-      title: Text(prediction.description),
-      onTap: () {
-        if (onTap != null) {
-          onTap(prediction);
-        }
-      },
-    );
-  }
-}
-
-class Uuid {
-  final Random _random = Random();
-
-  String generateV4() {
-    // Generate xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx / 8-4-4-4-12.
-    final int special = 8 + _random.nextInt(4);
-
-    return '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}-'
-        '${_bitsDigits(16, 4)}-'
-        '4${_bitsDigits(12, 3)}-'
-        '${_printDigits(special, 1)}${_bitsDigits(12, 3)}-'
-        '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}';
-  }
-
-  String _bitsDigits(int bitCount, int digitCount) =>
-      _printDigits(_generateBits(bitCount), digitCount);
-
-  int _generateBits(int bitCount) => _random.nextInt(1 << bitCount);
-
-  String _printDigits(int value, int count) =>
-      value.toRadixString(16).padLeft(count, '0');
 }

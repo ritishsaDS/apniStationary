@@ -15,11 +15,12 @@ class BookDataModel {
 }
 
 class BookDataDetailsModel {
-  String name,category_name, user_name, auther_name, edition_detail, price, conditions, description,semester,image1,image2,image3,image4;
+  String name,college_name,category_name, user_name, auther_name, edition_detail, price, conditions, description,semester,image1,image2,image3,image4;
   var category_id;
 
   BookDataDetailsModel(
       {this.name,
+        this.college_name,
       this.auther_name,
       this.edition_detail,
       this.price,
@@ -32,6 +33,7 @@ class BookDataDetailsModel {
   factory BookDataDetailsModel.fromJson(Map<String, dynamic> parsedJson) {
     return BookDataDetailsModel(
       name: parsedJson['name'],
+      college_name:parsedJson['college_name'],
       auther_name: parsedJson['auther_name'],
       edition_detail: parsedJson['edition_detail'],
       price: parsedJson['price'],
@@ -50,6 +52,6 @@ class BookDataDetailsModel {
 
   @override
   String toString() {
-    return 'BookDataDetailsModel{name: $name, category_name: $category_name,auther_name: $auther_name, edition_detail: $edition_detail, price: $price, conditions: $conditions, description: $description, semester: $semester, image1: $image1, image2: $image2, image3: $image3, image4: $image4, category_id: $category_id, user_name:$user_name}';
+    return 'BookDataDetailsModel{name: $name,college_name:$college_name, category_name: $category_name,auther_name: $auther_name, edition_detail: $edition_detail, price: $price, conditions: $conditions, description: $description, semester: $semester, image1: $image1, image2: $image2, image3: $image3, image4: $image4, category_id: $category_id, user_name:$user_name}';
   }
 }

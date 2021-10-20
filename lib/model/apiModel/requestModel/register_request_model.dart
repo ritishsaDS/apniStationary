@@ -12,6 +12,7 @@ class RegisterReq {
   Uint8List image;
   // String image;
   String gender;
+  String profession;
   String college_name;
 
   RegisterReq(
@@ -19,6 +20,7 @@ class RegisterReq {
       this.password,
       this.name,
       this.number,
+        this.profession,
       this.image,
       this.gender,
       this.dob,
@@ -28,6 +30,7 @@ class RegisterReq {
       'email': email,
       'password': password,
       'name': name,
+      "profession":profession,
       'number': number,
       'dob': dob,
       // 'image': image,

@@ -14,6 +14,8 @@ class BookAdd {
   String conditions;
   String description;
   String price;
+  String college_name;
+
   Uint8List image1;
   Uint8List image2;
   Uint8List image3;
@@ -25,6 +27,7 @@ class BookAdd {
         this.session_key,
         this.category_id,
         this.name,
+        this.college_name,
         this.auther_name,
         this.edition_detail,
         this.semester,
@@ -46,6 +49,7 @@ class BookAdd {
       'semester': semester,
       'conditions': conditions,
       'description': description,
+      'college_name':college_name,
       'price': price,
       'image1': dio.MultipartFile.fromBytes(image1,
           filename: '${DateTime.now().microsecondsSinceEpoch}.jpg'),

@@ -329,8 +329,7 @@ class _SelectedBookState extends State<SelectedBook> {
                               ),
                             );
                           } else {
-                            CommonSnackBar.snackBar(
-                                message: "Search Item cannot be empty");
+                            showAlert(context, "Search Item cannot be empty");
                           }
                         },
                         child: Icon(
@@ -530,7 +529,9 @@ class _SelectedBookState extends State<SelectedBook> {
                                                 0.5,
                                           ),
                                           Text(
-                                            "College Name",
+                                            snapshot
+                                                .data.date[index].college_name,
+                                            maxLines: 1,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 color: Color(0XFF656565),
@@ -615,8 +616,7 @@ class _SelectedBookState extends State<SelectedBook> {
         ),
       );
     } else {
-      CommonSnackBar.snackBar(
-          message: "Search Item cannot be empty");
+      showAlert(context, "Search Item cannot be empty");
     }
   }
 

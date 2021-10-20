@@ -13,6 +13,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'BookDetails.dart';
+
 class ChangePassword extends StatefulWidget {
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
@@ -197,8 +199,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       .validate()) {
                                     if (newPasswordController.text !=
                                         confirmPasswordController.text) {
-                                      CommonSnackBar.snackBar(
-                                          message:
+                                      showAlert(context,
                                               'new password and confirm password not match');
                                       return;
                                     }
@@ -229,8 +230,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                         if (response.message ==
                                             'Password updated successfully') {
 
-                                          CommonSnackBar.snackBar(
-                                              message: response.message);
+                                          showAlert(context, response.message);
                                           _changePassword();
                                           Future.delayed(Duration(seconds: 2),
                                               () {
@@ -242,31 +242,25 @@ class _ChangePasswordState extends State<ChangePassword> {
                                         }
                                         else if(response.message=="oldpassword are not same"){
 
-                                          CommonSnackBar.snackBar(
-                                              message: "Old Password is not Correct");
+                                          showAlert(context, "Old Password is not Correct");
                                         }
                                         else {
 
-                                          CommonSnackBar.snackBar(
-                                              message: response.message);
+                                          showAlert(context, response.message);
                                         }
                                       }
                                       else if(response.message=="oldpassword are not same."){
                                         print("jngnrg");
-                                        CommonSnackBar.snackBar(
-                                            message: "Old Password is not Correct");
+                                        showAlert(context, "Old Password is not Correct");
                                       }else {
 
-                                        CommonSnackBar.snackBar(
-                                            message: response.message);
+                                        showAlert(context, response.message);
                                       }
                                     } else {
-                                      CommonSnackBar.snackBar(
-                                          message: 'Server error');
+                                      showAlert(context, 'Server error');
                                     }
                                   } else {
-                                    CommonSnackBar.snackBar(
-                                        message: 'please enter password');
+                                    showAlert(context, 'please enter password');
                                   }
                                 },
                                 child: Text(

@@ -26,6 +26,7 @@ import 'package:http/http.dart'as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import 'BookDetails.dart';
 import 'MainScreen.dart';
 
 class EditProfile extends StatefulWidget {
@@ -883,8 +884,7 @@ if(file==null){
     setState(() {
       isbtnLoading= false;
     });
-    CommonSnackBar.snackBar(
-        message:"Profile Updated Succesfully");
+    showAlert(context,"Profile Updated Succesfully");
 
     Future.delayed(Duration(seconds: 2),
             () {
