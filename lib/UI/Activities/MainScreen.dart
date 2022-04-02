@@ -14,6 +14,7 @@ import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key key}) : super(key: key);
@@ -73,7 +74,7 @@ class _MainScreenState extends State<MainScreen> {
     print("-------------------------------------------------");
     print(addresses);
    setState(() {
-     Constants.userlocation =  addresses[0].street.toString();
+     Constants.userlocation =  addresses[0].subLocality.toString();
      Constants.userstate =  addresses[0].administrativeArea.toString();
      Constants.userpostal =  addresses[0].postalCode.toString();
      Constants.usercity =  addresses[0].subAdministrativeArea.toString();
@@ -81,13 +82,14 @@ class _MainScreenState extends State<MainScreen> {
    });
     return addresses[0].street.toString();
   }
-
+  PermissionStatus _permissionStatus;
   bool isLoading = false;
 
   int currentIndex = 0;
   @override
   void initState() {
-    _determinePosition();
+    _askCameraPermission();
+
     // TODO: implement initState
     super.initState();
   }
@@ -130,59 +132,52 @@ class _MainScreenState extends State<MainScreen> {
                   Image.asset('assets/icons/home.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                label: "Home",
-                
-                // title: Text(
-                //   "Home",
-                //   style: TextStyle(
-                //       color: Color(matteBlack),
-                //       fontWeight: FontWeight.w500,
-                //       fontSize: SizeConfig.blockSizeVertical * 1.4),
-                // ),
+                title: Text(
+                  "Home",
+                  style: TextStyle(
+                      color: Color(matteBlack),
+                      fontWeight: FontWeight.w500,
+                      fontSize: SizeConfig.blockSizeVertical * 1.4),
+                ),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(
                   Image.asset('assets/icons/wallet.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                                label: "Wallet",
-
-                // title: Text(
-                //   "Wallet",
-                //   style: TextStyle(
-                //       color: Color(matteBlack),
-                //       fontWeight: FontWeight.w500,
-                //       fontSize: SizeConfig.blockSizeVertical * 1.4),
-                // ),
+                title: Text(
+                  "Wallet",
+                  style: TextStyle(
+                      color: Color(matteBlack),
+                      fontWeight: FontWeight.w500,
+                      fontSize: SizeConfig.blockSizeVertical * 1.4),
+                ),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(
                   Image.asset('assets/icons/cart.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                       label:           "Cart",
-
-                // title: Text(
-                //   "Cart",
-                //   style: TextStyle(
-                //       color: Color(matteBlack),
-                //       fontWeight: FontWeight.w500,
-                //       fontSize: SizeConfig.blockSizeVertical * 1.4),
-                // ),
+                title: Text(
+                  "Cart",
+                  style: TextStyle(
+                      color: Color(matteBlack),
+                      fontWeight: FontWeight.w500,
+                      fontSize: SizeConfig.blockSizeVertical * 1.4),
+                ),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(
                   Image.asset('assets/icons/account.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                label: "Account",
-                // title: Text(
-                //   "Account",
-                //   style: TextStyle(
-                //       color: Color(matteBlack),
-                //       fontWeight: FontWeight.w500,
-                //       fontSize: SizeConfig.blockSizeVertical * 1.4),
-                // ),
+                title: Text(
+                  "Account",
+                  style: TextStyle(
+                      color: Color(matteBlack),
+                      fontWeight: FontWeight.w500,
+                      fontSize: SizeConfig.blockSizeVertical * 1.4),
+                ),
               ),
             ],
           ),
@@ -210,5 +205,12 @@ margin: EdgeInsets.only(top: 20),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           body: widgetOptions.elementAt(currentIndex),
     ));
+  }
+  void _askCameraPermission() async {
+    if (await Permission.microphone.request().isGranted) {
+      _permissionStatus =  await Permission.microphone.status;
+      _determinePosition();
+      setState(() {});
+    }
   }
 }

@@ -14,14 +14,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "966925932839-68rpaiija1kgluis7dkpi6v04a6nvta1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.digitlers.book_buy_and_sell",
-            "certificate_hash": "6e9555782eb0859189d1cb97aac3fc3d228e7a94"
-          }
-        },
-        {
           "client_id": "966925932839-831acs0pjb37k3ulbraad0ci8n5o0l2r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

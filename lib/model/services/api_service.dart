@@ -26,20 +26,15 @@ class ApiService extends BaseService {
 
       String mainUrl = baseURL + url;
       log("URL ---> ${baseURL + url}");
-
       if (apiType == APIType.aGet) {
-        print("UNder If");
-
         var result = await http.get(Uri.parse(baseURL + url), headers: header);
 
         response = returnResponse(
           result.statusCode,
           result.body,
         );
-        log("response......${response.toString()}");
+        log("response......${response}");
       } else if (fileUpload) {
-        print("UNder Else If");
-
         dio.FormData formData = new dio.FormData.fromMap(body);
 
         dio.Response result = await dio.Dio().post(baseURL + url,
@@ -47,13 +42,13 @@ class ApiService extends BaseService {
             options: dio.Options(contentType: "form-data", headers: header));
         print('responseType+>${result.data}');
 
-        log("kdkkdkd-----" + result.statusCode.toString());
+        log("kdkkdkd-----"+result.statusCode.toString());
 
-        response = returnResponse(result.statusCode, result.data);
+        response = returnResponse( result.statusCode,
+            result.data);
         log("response......}");
       } else {
-        // var encodeBody = jsonEncode(body);
-        print("UNder Else");
+        var encodeBody = jsonEncode(body);
 
         log("HEADER $header");
         log("REQUEST ENCODE BODY $body");
@@ -87,7 +82,7 @@ class ApiService extends BaseService {
         log("response......${result.body}");
         return result;
       } else {
-        // var encodeBody = jsonEncode(body);
+        var encodeBody = jsonEncode(body);
 
         log("HEADER $header");
         log("REQUEST ENCODE BODY $body");
@@ -104,6 +99,7 @@ class ApiService extends BaseService {
   }
 
   returnResponse(int status, String result) {
+
     switch (status) {
       case 200:
         return jsonDecode(result);

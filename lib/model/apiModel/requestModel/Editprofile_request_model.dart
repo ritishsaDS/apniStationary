@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart' as dio;
 
+import 'package:flutter/material.dart';
 
 class EditReq {
   String email;

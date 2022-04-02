@@ -129,10 +129,17 @@ class _CategoriesState extends State<Categories> {
                     horizontal: SizeConfig.screenWidth * 0.02,
                     vertical: SizeConfig.blockSizeVertical * 2),
                 child: Row(children: [
-                  ImageIcon(
-                    AssetImage('assets/icons/back.png'),
-                    color: Color(colorBlue),
-                    size: SizeConfig.blockSizeVertical * 4,
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pop(context);
+                    }
+                    ,
+                    child: ImageIcon(
+
+                      AssetImage('assets/icons/back.png'),
+                      color: Color(colorBlue),
+                      size: SizeConfig.blockSizeVertical * 4,
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(
@@ -156,11 +163,7 @@ class _CategoriesState extends State<Categories> {
                     ),
                   ),
                   Expanded(child: SizedBox()),
-                  ImageIcon(
-                    AssetImage('assets/icons/notification.png'),
-                    color: Color(colorBlue),
-                    size: SizeConfig.blockSizeVertical * 4,
-                  )
+
                 ])),
             Container(
                 width: SizeConfig.screenWidth,
