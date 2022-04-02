@@ -1,8 +1,7 @@
 import 'package:book_buy_and_sell/Utils/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:book_buy_and_sell/Utils/helper/constants.dart';
-var user;
+
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -26,10 +25,8 @@ class AuthService {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email, password: password);
-      user = FirebaseAuth.instance.currentUser;
-      print("--------------------"+user.uid.toString());
-
-      return user.uid.toString();
+      var user = FirebaseAuth.instance.currentUser;
+      return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;

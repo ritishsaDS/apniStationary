@@ -83,7 +83,11 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                     ],
                   ),
                 ),
-                 */
+                ImageIcon(
+                  AssetImage('assets/icons/notification.png'),
+                  color: Color(colorBlue),
+                  size: SizeConfig.blockSizeVertical * 4,
+                ) */
               ],
             ),
           ),
