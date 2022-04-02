@@ -29,6 +29,7 @@ bool  isError = false;
  bool isLoading = false;
  bool visibility=false;
  var orderid=[];
+ var allorderid=[];
  @override
   void initState() {
    getfeaturedmatches();
@@ -50,16 +51,7 @@ bool  isError = false;
                     vertical: SizeConfig.blockSizeVertical * 2),
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: ImageIcon(
-                        AssetImage('assets/icons/back.png'),
-                        color: Color(colorBlue),
-                        size: SizeConfig.blockSizeVertical * 4,
-                      ),
-                    ),
+
                     Container(
 
                       margin: EdgeInsets.symmetric(
@@ -94,11 +86,7 @@ bool  isError = false;
                         ],
                       ),
                     ), */
-                    /* ImageIcon(
-                      AssetImage('assets/icons/notification.png'),
-                      color: Color(colorBlue),
-                      size: SizeConfig.blockSizeVertical * 4,
-                    )*/
+                    /* */
                   ],
                 ),
               ),
@@ -126,12 +114,21 @@ bool  isError = false;
                   ),
                   child: MaterialButton(
                     onPressed: () {
-                      print(orderid.toString());
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CheckoutScreen(id:orderid)));
-                    },
+
+if(orderid.isEmpty){
+  print(allorderid.toString());
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CheckoutScreen(orderid:allorderid,type: "",)));
+}
+                     else{
+  Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CheckoutScreen(orderid:orderid,type: "",)));
+
+}    },
                     child: Text(
                       "Buy ${texts}",
                       style: TextStyle(
@@ -487,6 +484,9 @@ print(responseJson);
 
           isLoading = false;
           print('setstate'+cartdata.toString());
+          for(int i=0;i<=cartdata.length;i++){
+            allorderid.add(cartdata[i]['order_id']);
+          }
         });
 
 
@@ -639,7 +639,7 @@ else{
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(25),
                                 child: Image.network(
-                                    "https://buysell.powerdope.com//img//books" +
+                                    "http://admin.apnistationary.com/img/books" +
                                         "/" +
                                         cartdata[i]['image1']),
                               ),
@@ -728,7 +728,7 @@ else{
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) => CheckoutScreen(id: cartdata[i]['order_id'].toString())));
+                                                      builder: (context) => CheckoutScreen(orderid: cartdata[i]['order_id'].toString(),id:cartdata[i]['id'],type: "",)));
                                             },
                                             child: Text(
                                               "Buy Now",

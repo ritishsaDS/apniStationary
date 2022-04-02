@@ -14,6 +14,7 @@ class RegisterReq {
   String gender;
   String profession;
   String college_name;
+  String user_firebase_id;
 
   RegisterReq(
       {this.email,
@@ -22,6 +23,7 @@ class RegisterReq {
       this.number,
         this.profession,
       this.image,
+        this.user_firebase_id,
       this.gender,
       this.dob,
       this.college_name});
@@ -33,8 +35,9 @@ class RegisterReq {
       "profession":profession,
       'number': number,
       'dob': dob,
+      'user_firebase_id':user_firebase_id,
       // 'image': image,
-      'image': dio.MultipartFile.fromBytes(image,
+      image==null?"":'image':image==null?"https://gnws.org/wp-content/uploads/2019/07/placeholder-1400x775.jpg": dio.MultipartFile.fromBytes(image,
           filename: '${DateTime.now().microsecondsSinceEpoch}.jpg'),
       'gender': gender,
       'college_name': college_name

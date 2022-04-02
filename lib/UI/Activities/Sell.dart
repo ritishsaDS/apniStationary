@@ -48,12 +48,14 @@ class _SellState extends State<Sell> {
           itemBuilder: (context, int index) {
             return InkWell(
                 onTap: () {
+
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     if (categoriesModel[index].subcategory == "Yes") {
                       return SellSubCategory(
                           id: categoriesModel[index].id,
                           text: categoriesModel[index].name,
-                          img: categoriesModel[index].image);
+                          img: categoriesModel[index].image,
+                      name:categoriesModel[index].name);
                     }
                     /* else if (categoriesModel[index].name == "CBSE Boards" ||
                         categoriesModel[index].name == "PSEB") {
@@ -65,7 +67,7 @@ class _SellState extends State<Sell> {
                       return SellBook("${categoriesModel[index].id}");
                     }*/
                     else {
-                      return SellBook(catId: "${categoriesModel[index].id}",name:"Sell Now");
+                      return SellBook(catId: "${categoriesModel[index].id}",name:"Sell Now",catname:categoriesModel[index].name);
                       // return SellOther();
                     }
                   }));
@@ -134,10 +136,15 @@ class _SellState extends State<Sell> {
                         vertical: SizeConfig.blockSizeVertical * 2),
                     child: Row(
                       children: [
-                        ImageIcon(
-                          AssetImage('assets/icons/back.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 4,
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: ImageIcon(
+                            AssetImage('assets/icons/back.png'),
+                            color: Color(colorBlue),
+                            size: SizeConfig.blockSizeVertical * 4,
+                          ),
                         ),
                         Container(
                           margin: EdgeInsets.only(
@@ -161,11 +168,7 @@ class _SellState extends State<Sell> {
                           ),
                         ),
                         Expanded(child: SizedBox()),
-                        ImageIcon(
-                          AssetImage('assets/icons/notification.png'),
-                          color: Color(colorBlue),
-                          size: SizeConfig.blockSizeVertical * 4,
-                        )
+
                       ],
                     ),
                   ),

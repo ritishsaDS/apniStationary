@@ -60,11 +60,7 @@ class _BuyNowState extends State<BuyNow> {
                         ],
                       ),
                     ),
-                    ImageIcon(
-                      AssetImage('assets/icons/notification.png'),
-                      color: Color(colorBlue),
-                      size: SizeConfig.blockSizeVertical * 4,
-                    )
+
                   ],
                 ),
               ),

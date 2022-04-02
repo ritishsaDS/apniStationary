@@ -20,8 +20,9 @@ class BookListModel {
 }
 
 class BookListDataModel {
-  String name, auther_name,college_name, edition_detail, price,conditions,image1;
-  var category_id,id;
+  String name, auther_name,college_name, edition_detail,conditions,image1;
+  var category_id,id,price;
+
 
   BookListDataModel(
       {this.name,this.college_name, this.auther_name, this.edition_detail, this.price,this.conditions,this.category_id,this.id,this.image1});

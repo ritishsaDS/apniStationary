@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/Utils/ApiCall.dart';
+import 'package:book_buy_and_sell/Utils/Dialog.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
 import 'package:book_buy_and_sell/Utils/helper/constants.dart';
@@ -22,6 +23,7 @@ import 'package:book_buy_and_sell/viewModel/image_upload_view_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart'as http;
 import 'package:image_picker/image_picker.dart';
@@ -34,12 +36,12 @@ class SellBook extends StatefulWidget {
   String catId = "", bookId = "";
   String bookname = "", condition = "";
   String price = "", authorname = "";
-  String edition = "", sem='',desc="";
+  String edition = "", sem='',desc="",catname="";
   var name;
 
 
 
-  SellBook({this.catId, this.bookId,this.desc,this.condition,this.name,this.sem,this.price,this.edition,this.authorname,this.bookname});
+  SellBook({this.catId,this.catname, this.bookId,this.desc,this.condition,this.name,this.sem,this.price,this.edition,this.authorname,this.bookname});
 
   @override
   _SellBookState createState() => _SellBookState();
@@ -53,6 +55,7 @@ class _SellBookState extends State<SellBook> {
   TextEditingController desc = TextEditingController();
   TextEditingController price = TextEditingController();
   TextEditingController collegename = TextEditingController();
+  final GlobalKey<State> loginLoader = new GlobalKey<State>();
 bool isLoading=false;
   TextEditingController conditions = TextEditingController();
   GlobalKey<FormState> profileForm = GlobalKey<FormState>();
@@ -69,6 +72,8 @@ bool isLoading=false;
 
   @override
   void initState() {
+    print(widget.name);
+
     bookName=TextEditingController(text: widget.bookname);
     author=TextEditingController(text: widget.authorname);
     edition=TextEditingController(text: widget.edition);
@@ -138,11 +143,7 @@ bool isLoading=false;
                                 ),
                               ),
                               Expanded(child: SizedBox()),
-                              ImageIcon(
-                                AssetImage('assets/icons/notification.png'),
-                                color: Color(colorBlue),
-                                size: SizeConfig.blockSizeVertical * 4,
-                              )
+
                             ])),
                         _editCheck(),
 
@@ -655,63 +656,63 @@ bool isLoading=false;
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                                width: SizeConfig.screenWidth * 0.35,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 8),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey[200],
-                                          spreadRadius: 2.0,
-                                          blurRadius: 4.0)
-                                    ]),
-                                child: DropdownButtonFormField<String>(
-                                  // value: Utility.checkNSetData(data.semester),
-                                  decoration: InputDecoration(
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.zero,
-                                      border: InputBorder.none,
-                                      floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
-                                      errorStyle: TextStyle(
-                                        color: Colors.red,
-                                      )),
-                                  hint: Text(
-                                    data.semester==""?"semester":widget.sem,
-                                    style: TextStyle(
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical *2,
-                                    ),
-                                  ),
-                                  items: <String>[
-                                    'Semester 1',
-                                    'Semester 2',
-                                    'Semester 3',
-                                    'Semester 4',
-                                    'Semester 5',
-                                    'Semester 6',
-                                    'Semester 7',
-                                    'Semester 8'
-                                  ].map((String value) {
-                                    return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: new Text(
-                                          value,
-                                          style: TextStyle(
-                                              fontSize:
-                                                  SizeConfig.blockSizeVertical *
-                                                      1.75,
-                                              color: Color(hintGrey)),
-                                          textAlign: TextAlign.center,
-                                        ));
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    semester.text = val;
-                                  },
-                                )),
+                            // Container(
+                            //     width: SizeConfig.screenWidth * 0.35,
+                            //     padding: EdgeInsets.symmetric(
+                            //         vertical: 5, horizontal: 8),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.white,
+                            //         borderRadius: BorderRadius.circular(15),
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //               color: Colors.grey[200],
+                            //               spreadRadius: 2.0,
+                            //               blurRadius: 4.0)
+                            //         ]),
+                            //     child: DropdownButtonFormField<String>(
+                            //       // value: Utility.checkNSetData(data.semester),
+                            //       decoration: InputDecoration(
+                            //           isDense: true,
+                            //           contentPadding: EdgeInsets.zero,
+                            //           border: InputBorder.none,
+                            //           floatingLabelBehavior:
+                            //               FloatingLabelBehavior.always,
+                            //           errorStyle: TextStyle(
+                            //             color: Colors.red,
+                            //           )),
+                            //       hint: Text(
+                            //         data.semester==""?"semester":widget.sem,
+                            //         style: TextStyle(
+                            //           fontSize:
+                            //               SizeConfig.blockSizeVertical *2,
+                            //         ),
+                            //       ),
+                            //       items: <String>[
+                            //         'Semester 1',
+                            //         'Semester 2',
+                            //         'Semester 3',
+                            //         'Semester 4',
+                            //         'Semester 5',
+                            //         'Semester 6',
+                            //         'Semester 7',
+                            //         'Semester 8'
+                            //       ].map((String value) {
+                            //         return DropdownMenuItem<String>(
+                            //             value: value,
+                            //             child: new Text(
+                            //               value,
+                            //               style: TextStyle(
+                            //                   fontSize:
+                            //                       SizeConfig.blockSizeVertical *
+                            //                           1.75,
+                            //                   color: Color(hintGrey)),
+                            //               textAlign: TextAlign.center,
+                            //             ));
+                            //       }).toList(),
+                            //       onChanged: (val) {
+                            //         semester.text = val;
+                            //       },
+                            //     )),
                             Container(
                                 width: SizeConfig.screenWidth * 0.35,
                                 padding: EdgeInsets.symmetric(
@@ -825,7 +826,10 @@ bool isLoading=false;
                       controller: desc,
                       focusNode: descFn,
                       textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.name,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+                      ],
                       onFieldSubmitted: (value) {
                         descFn.unfocus();
                       },
@@ -1067,15 +1071,18 @@ bool isLoading=false;
                                     showAlert(context, "Please enter Edition deatil");
                                     return;
                                   }
-
+if(int.parse(price.text)<=0){
+  showAlert(context, "Please Enter Amount");
+  return;
+}
                                   if( imaUploadViewModel.selectedImg==null||imaUploadViewModel.selectedImg==""){
                                     showAlert(context, "Please Upload Images");
                                     return;
                                   }
-                                  if(semester.text.isEmpty||semester.text==null){
-                                    showAlert(context, "Please enter Semester");
-                                    return;
-                                  }
+                                  // if(semester.text.isEmpty||semester.text==null){
+                                  //   showAlert(context, "Please enter Semester");
+                                  //   return;
+                                  // }
                                   if(conditions.text.isEmpty||conditions.text==null){
                                     showAlert(context, "Please enter conditions");
                                     return;
@@ -1095,6 +1102,7 @@ bool isLoading=false;
 setState(() {
   isLoading=true;
 });
+                                  Dialogs.showLoadingDialog(context, loginLoader);
                                   BookAddViewModel bookAddViewModel =
                                       Get.put(BookAddViewModel());
                                   // ImageUploadViewModel imaUploadViewModel =
@@ -1130,10 +1138,13 @@ setState(() {
                                   //     Status.COMPLETE) {
                                   print(bookAddViewModel.toString());
                                   print(collegename.text.toString());
-
+                                //  imaUploadViewModel.selectedImg.remove( imaUploadViewModel.selectedImg3);
                                   RegisterResponseModel response =
                                       bookAddViewModel.apiResponse.data;
-                                  Future.delayed(Duration(seconds: 1),
+                                  Navigator.of(loginLoader.currentContext,
+                                      rootNavigator: true) .pop();
+                                  imaUploadViewModel.clearSelectedImg();
+                                  Future.delayed(Duration(seconds: 2),
                                           () {
                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation(text:"Posted")));
                                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
@@ -1153,6 +1164,8 @@ setState(() {
                                     });
                                     Navigator.pop(context);
                                   } else {
+                                    Navigator.of(loginLoader.currentContext,
+                                        rootNavigator: true) .pop();
                                     showAlert(context, response.message);
                                   }
                                 }
@@ -1504,7 +1517,7 @@ Future<void> editbook() async {
   final map = {
     };
 print(bookName.text);
-    var url = "https://buysell.powerdope.com/api/book-edit";
+    var url = "http://admin.apnistationary.com/api/book-edit";
 
     var request =http.MultipartRequest('POST', Uri.parse(url));
 

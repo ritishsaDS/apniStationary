@@ -21,16 +21,17 @@ class BookOrderModel {
 
 class BookOrderDataModel {
   String product_price, discount, pay_amount, order_status,book_name,book_image;
-  var order_id;
+  var order_id,price;
 
   BookOrderDataModel(
-      {this.product_price, this.discount, this.pay_amount, this.order_status,this.book_name,this.book_image,this.order_id});
+      {this.product_price, this.discount, this.pay_amount, this.price,this.order_status,this.book_name,this.book_image,this.order_id});
 
   factory BookOrderDataModel.fromJson(Map<String, dynamic> parsedJson) {
     return BookOrderDataModel(
       product_price: parsedJson['product_price'],
       discount: parsedJson['discount'],
       pay_amount: parsedJson['pay_amount'],
+      price:parsedJson['price'],
       order_status: parsedJson['order_status'],
       book_name: parsedJson['book_name'],
       book_image: parsedJson['book_image'],

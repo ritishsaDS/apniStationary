@@ -167,11 +167,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                   Expanded(child: SizedBox()),
-                  ImageIcon(
-                    AssetImage('assets/icons/notification.png'),
-                    color: Color(colorBlue),
-                    size: SizeConfig.blockSizeVertical * 4,
-                  )
+
                 ],
               ),
             ),
@@ -600,48 +596,48 @@ else if(iamge!=null){
                       ),
                     ),
                   ),
-                  Container(
-                    width: SizeConfig.screenWidth,
-                    margin: EdgeInsets.only(
-                      left: SizeConfig.screenWidth * 0.05,
-                      right: SizeConfig.screenWidth * 0.05,
-                      top: SizeConfig.blockSizeVertical * 2,
-                      bottom: SizeConfig.blockSizeVertical,
-                    ),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey[200],
-                              spreadRadius: 2.0,
-                              blurRadius: 4.0
-                          ),
-                        ]
-                    ),
-                    child: TextFormField(
-                      controller: city,
-                      focusNode: cityFn,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.text,
-                      onFieldSubmitted: (value) {
-                        cityFn.unfocus();
-                        FocusScope.of(context).requestFocus(gstFn);
-                      },
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: SizeConfig.blockSizeVertical * 1.5,
-                            horizontal: SizeConfig.blockSizeHorizontal * 5),
-                        hintText: "City/State",
-                        hintStyle: TextStyle(
-                          color: Color(hintGrey),
-                          fontWeight: FontWeight.w500,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   width: SizeConfig.screenWidth,
+                  //   margin: EdgeInsets.only(
+                  //     left: SizeConfig.screenWidth * 0.05,
+                  //     right: SizeConfig.screenWidth * 0.05,
+                  //     top: SizeConfig.blockSizeVertical * 2,
+                  //     bottom: SizeConfig.blockSizeVertical,
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       borderRadius: BorderRadius.circular(15),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //             color: Colors.grey[200],
+                  //             spreadRadius: 2.0,
+                  //             blurRadius: 4.0
+                  //         ),
+                  //       ]
+                  //   ),
+                  //   child: TextFormField(
+                  //     controller: city,
+                  //     focusNode: cityFn,
+                  //     textInputAction: TextInputAction.next,
+                  //     keyboardType: TextInputType.text,
+                  //     onFieldSubmitted: (value) {
+                  //       cityFn.unfocus();
+                  //       FocusScope.of(context).requestFocus(gstFn);
+                  //     },
+                  //     decoration: InputDecoration(
+                  //       isDense: true,
+                  //       contentPadding: EdgeInsets.symmetric(
+                  //           vertical: SizeConfig.blockSizeVertical * 1.5,
+                  //           horizontal: SizeConfig.blockSizeHorizontal * 5),
+                  //       hintText: "City/State",
+                  //       hintStyle: TextStyle(
+                  //         color: Color(hintGrey),
+                  //         fontWeight: FontWeight.w500,
+                  //       ),
+                  //       border: InputBorder.none,
+                  //     ),
+                  //   ),
+                  // ),
                   Container(
                     width: SizeConfig.screenWidth,
                     margin: EdgeInsets.only(
@@ -818,7 +814,7 @@ else if(iamge!=null){
   Future<void> getprofile() async {
     isLoading=true;
     try {
-      final response = await http.post(Uri.parse("https://buysell.powerdope.com/api/user-data"),
+      final response = await http.post(Uri.parse("http://admin.apnistationary.com/api/user-data"),
          body: {"user_id":PreferenceManager.getUserId().toString(),
           "session_key":PreferenceManager.getSessionKey().toString()});
 
@@ -852,7 +848,7 @@ setState(() {
       isbtnLoading=true;
     });
 if(file==null){
-  var url = "https://buysell.powerdope.com/api/edit-profile";
+  var url = "http://admin.apnistationary.com/api/edit-profile";
 
   var request = http.MultipartRequest('POST', Uri.parse(url));
 
@@ -904,7 +900,7 @@ if(file==null){
 
 }
     else{
-  var url = "https://buysell.powerdope.com/api/edit-profile";
+  var url = "http://admin.apnistationary.com/api/edit-profile";
 
   var request = http.MultipartRequest('POST', Uri.parse(url));
 
@@ -929,7 +925,7 @@ if(file==null){
   print(res.statusCode);
 
   if (res.statusCode == 200) {
-    print(res);
+
     await PreferenceManager.setEmailId(
         '${email.text}');
 
@@ -939,6 +935,7 @@ if(file==null){
 
     await PreferenceManager.setPhoneNo(
        phn.text);
+
     // await PreferenceManager.setImage(
     //     response.user.image);
    // print("image:${response.user.image}");
@@ -973,7 +970,7 @@ CommonSnackBar.snackBar(
 
 }
 //     try {
-//       final response = await http.post(Uri.parse("https://buysell.powerdope.com/api/edit-profile"),
+//       final response = await http.post(Uri.parse("http://admin.apnistationary.com/api/edit-profile"),
 //           body: {
 //         "user_id":PreferenceManager.getUserId().toString(),
 //             "session_key":PreferenceManager.getSessionKey().toString(),

@@ -74,11 +74,7 @@ class _SchoolSubCategoryState extends State<SchoolSubCategory> {
                       ],
                     ),
                   ),
-                  ImageIcon(
-                    AssetImage('assets/icons/notification.png'),
-                    color: Color(colorBlue),
-                    size: SizeConfig.blockSizeVertical * 4,
-                  )
+
                 ],
               ),
             ),

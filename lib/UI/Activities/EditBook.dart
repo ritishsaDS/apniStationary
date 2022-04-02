@@ -130,11 +130,7 @@ class _EditBookState extends State<EditBook> {
                               ),
                             ),
                             Expanded(child: SizedBox()),
-                            ImageIcon(
-                              AssetImage('assets/icons/notification.png'),
-                              color: Color(colorBlue),
-                              size: SizeConfig.blockSizeVertical * 4,
-                            )
+
                           ])),
                       _editCheck(),
 
@@ -1285,7 +1281,7 @@ class _EditBookState extends State<EditBook> {
     final map = {
     };
 
-    var url = "https://buysell.powerdope.com/api/book-edit";
+    var url = "http://admin.apnistationary.com/api/book-edit";
 
     var request =http.MultipartRequest('POST', Uri.parse(url));
 

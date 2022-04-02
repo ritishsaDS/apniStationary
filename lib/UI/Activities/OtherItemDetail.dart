@@ -61,11 +61,7 @@ class _OtherItemDetailState extends State<OtherItemDetail> {
                     ),
                   ),
                   Expanded(child: SizedBox()),
-                  ImageIcon(
-                    AssetImage('assets/icons/notification.png'),
-                    color: Color(colorBlue),
-                    size: SizeConfig.blockSizeVertical * 4,
-                  )
+
                 ],
               ),
             ),

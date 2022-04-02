@@ -54,7 +54,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(backgroundColor),
-      body: SingleChildScrollView(
+      body: Container(
+        decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/bg/loginbg.png'),fit: BoxFit.fill)),
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,42 +256,44 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                       child: MaterialButton(
                         onPressed: () async {
-                          print("n kvw");
-                          verifyPhone();
-                          // LoginViewModel loginViewModel = Get.find();
-                          // if (forgotFormKey.currentState.validate()) {
-                          //   ForgotPasswordReq forgotPasswordReq =
-                          //       ForgotPasswordReq();
-                          //   forgotPasswordReq.email = emailController.text;
-                          //   await loginViewModel
-                          //       .forgotPassword(forgotPasswordReq);
-                          //   if (loginViewModel
-                          //           .forgotPasswordApiResponse.status ==
-                          //       Status.COMPLETE) {
-                          //     ForgotPasswordResponseModel response =
-                          //         loginViewModel.forgotPasswordApiResponse.data;
-                          //     if (response.status == '200') {
-                          //       CommonSnackBar.snackBar(
-                          //           message: response.message);
-                          //       Future.delayed(Duration(seconds: 2), () {
-                          //         Get.back();
-                          //         emailController.clear();
-                          //       });
-                          //     } else {
-                          //       CommonSnackBar.snackBar(
-                          //           message: response.message);
-                          //     }
-                          //   } else {
-                          //     CommonSnackBar.snackBar(message: 'Server error');
-                          //   }
-                          // } else {
-                          //   CommonSnackBar.snackBar(
-                          //       message: 'Please enter email');
-                          // }
-                          /* Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return ForgotPassword2();
-                          }));*/
+                          // print("n kvw");
+                          // verifyPhone();
+                          LoginViewModel loginViewModel = Get.find();
+                          if (forgotFormKey.currentState.validate()) {
+                            ForgotPasswordReq forgotPasswordReq =
+                                ForgotPasswordReq();
+                            forgotPasswordReq.email = emailController.text;
+                            await loginViewModel
+                                .forgotPassword(forgotPasswordReq);
+                            if (loginViewModel
+                                    .forgotPasswordApiResponse.status ==
+                                Status.COMPLETE) {
+                              ForgotPasswordResponseModel response =
+                                  loginViewModel.forgotPasswordApiResponse.data;
+                              if (response.status == '200') {
+                                CommonSnackBar.snackBar(
+                                    message: response.message);
+                                // Future.delayed(Duration(seconds: 2), () {
+                                //   Get.back();
+                                  emailController.clear();
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return ForgotPassword2(email: emailController.text);
+                                    }));
+                               // });
+                              }
+                              else {
+                                CommonSnackBar.snackBar(
+                                    message: response.message);
+                              }
+                            } else {
+                              CommonSnackBar.snackBar(message: 'Server error');
+                            }
+                          } else {
+                            CommonSnackBar.snackBar(
+                                message: 'Please enter email');
+                          }
+
                         },
                         child: Text(
                           "Reset Now",

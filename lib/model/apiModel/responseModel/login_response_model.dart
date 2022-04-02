@@ -44,7 +44,8 @@ class User {
     this.image,
     this.userType,
     this.sessionKey,
-    this.college_name
+    this.college_name,
+    this.user_firebase_id
   });
 
   int id;
@@ -55,6 +56,7 @@ class User {
   String userType;
 String college_name;
   String sessionKey;
+  String user_firebase_id;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -65,6 +67,7 @@ String college_name;
         image: json["image"],
         userType: json["user_type"],
         sessionKey: json["session_key"],
+      user_firebase_id:json['user_firebase_id']
       );
 
   Map<String, dynamic> toJson() => {
@@ -75,6 +78,7 @@ String college_name;
         "image": image,
         "user_type": userType,
         "session_key": sessionKey,
-    "college_name":college_name
+    "college_name":college_name,
+    'user_firebase_id':user_firebase_id
       };
 }

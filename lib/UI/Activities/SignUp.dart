@@ -2,6 +2,8 @@ import 'dart:convert';
 import     'dart:io';
 import 'dart:typed_data';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
+import 'package:book_buy_and_sell/UI/Activities/OtpScreen.dart';
+import 'package:book_buy_and_sell/Utils/Dialog.dart';
 import 'package:book_buy_and_sell/Utils/helper/helperfunctions.dart';
 import 'package:book_buy_and_sell/Utils/services/auth.dart';
 import 'package:book_buy_and_sell/Utils/services/database.dart';
@@ -33,12 +35,29 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/style.dart';
 import 'package:textfield_search/textfield_search.dart';
 
 import '../Addressbar.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key key}) : super(key: key);
+  var email;
+  var phone;
+  var name;
+  var college;
+  var gender;
+  var dob;
+  var pass;
+
+  SignUp(
+      {this.name,
+        this.phone,
+        this.college,
+        this.gender,
+        this.dob,
+        this.pass,
+        this.email});
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -98,6 +117,13 @@ bool showcnfrmpwd=true;
     clgNameFn = FocusNode();
     pwdFn = FocusNode();
     cPwdFn = FocusNode();
+    fullNameController = TextEditingController(text: widget.name);
+
+    dobController = TextEditingController(text: widget.dob);
+    genderController = TextEditingController(text: widget.gender);
+    clgNameController = TextEditingController(text: widget.college);
+
+
   }
 
   @override
@@ -142,60 +168,92 @@ bool showcnfrmpwd=true;
   }
   bool show=false;
   TextEditingController textEditingController=TextEditingController();
+  final GlobalKey<State> loginLoader = new GlobalKey<State>();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Color(backgroundColor),
-      body: LoaderOverlay(
+    return LoaderOverlay(
+      child: SafeArea(
+          child: Scaffold(
+        backgroundColor: Color(backgroundColor),
+        body: LoaderOverlay(
 
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    width: SizeConfig.screenWidth,
+                    height: SizeConfig.screenHeight * 0.3,
+                    alignment: Alignment.center,
+
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                            'assets/icons/applogo.png',
+                            scale: 8
+                        ),
+                      ],
+                    )),
+                Container(
                   width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight * 0.3,
+                  margin: EdgeInsets.symmetric(
+                      vertical: SizeConfig.blockSizeVertical * 2),
                   alignment: Alignment.center,
-
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                          'assets/icons/applogo.png',
-                          scale: 8
-                      ),
-                    ],
-                  )),
-              Container(
-                width: SizeConfig.screenWidth,
-                margin: EdgeInsets.symmetric(
-                    vertical: SizeConfig.blockSizeVertical * 2),
-                alignment: Alignment.center,
-                child: Text(
-                  "Sign up",
-                  style: TextStyle(
-                      color: Color(colorBlue),
-                      fontWeight: FontWeight.w600,
-                      fontSize: SizeConfig.blockSizeVertical * 3),
+                  child: Text(
+                    "Sign up",
+                    style: TextStyle(
+                        color: Color(colorBlue),
+                        fontWeight: FontWeight.w600,
+                        fontSize: SizeConfig.blockSizeVertical * 3),
+                  ),
                 ),
-              ),
-              Stack(
-                children: [
-                  GestureDetector(onTap: () async {
-                    ImageUploadViewModel imageUpload = Get.find();
-                     file = await getImageFromGallery();
+                Stack(
+                  children: [
+                    GestureDetector(onTap: () async {
+                      ImageUploadViewModel imageUpload = Get.find();
+                       file = await getImageFromGallery();
 
-                    Uint8List uint8List = await compressFile(File(file.path));
+                      Uint8List uint8List = await compressFile(File(file.path));
 
-                    imageUpload.profileimage(uint8List);
-                    print("image selected${uint8List}");
-                  }, child: GetBuilder<ImageUploadViewModel>(
-                    builder: (controller) {
-                      if (file == null) {
+                      imageUpload.profileimage(uint8List);
+                      print("image selected${uint8List}");
+                    }, child: GetBuilder<ImageUploadViewModel>(
+                      builder: (controller) {
+                        if (file == null) {
+                          return Container(
+                            width: SizeConfig.screenWidth,
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Color(colorBlue),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(8),
+                                  height: SizeConfig.blockSizeVertical * 14,
+                                  width: SizeConfig.screenWidth * 0.3,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+
+                                    children: [
+Icon(Icons.person_outline_rounded,size: SizeConfig.blockSizeVertical * 8,color: Color(colorBlue),)
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
                         return Container(
                           width: SizeConfig.screenWidth,
                           alignment: Alignment.center,
@@ -204,330 +262,57 @@ bool showcnfrmpwd=true;
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Color(colorBlue),
-                                  ),
-                                ),
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Color(colorBlue),
+                                    ),
+                                    image: DecorationImage(
+                                        image: MemoryImage(controller.profilephoto),
+                                        fit: BoxFit.cover)),
                                 padding: EdgeInsets.all(8),
                                 height: SizeConfig.blockSizeVertical * 14,
                                 width: SizeConfig.screenWidth * 0.3,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-
-                                  children: [
-Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
-                                  ],
-                                ),
                               ),
                             ],
                           ),
                         );
-                      }
-
-                      return Container(
+                      },
+                    )),
+                    Container(
+                        margin: EdgeInsets.only(
+                            top: SizeConfig.screenHeight * 0.1,
+                            left: SizeConfig.screenWidth * 0.3),
                         width: SizeConfig.screenWidth,
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Color(colorBlue),
-                                  ),
-                                  image: DecorationImage(
-                                      image: MemoryImage(controller.profilephoto),
-                                      fit: BoxFit.cover)),
-                              padding: EdgeInsets.all(8),
-                              height: SizeConfig.blockSizeVertical * 14,
-                              width: SizeConfig.screenWidth * 0.3,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  )),
-                  Container(
-                      margin: EdgeInsets.only(
-                          top: SizeConfig.screenHeight * 0.1,
-                          left: SizeConfig.screenWidth * 0.3),
-                      width: SizeConfig.screenWidth,
-                      child: ImageIcon(
-                        AssetImage('assets/icons/edit.png'),
-                        color: Color(colorBlue),
-                      )),
-                ],
-              ),
-              Stack(
-                children: [
-                  Container(
-                    child: Form(
-                      key: signUpFormKey,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.08,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: Get.height * 0.03,
-                            ),
-                            CommanWidget.getTextFormField(
-                              focusNode: fullNameFn,
-                              function: (value) {
-                                fullNameFn.unfocus();
-                                FocusScope.of(context).requestFocus(emailFn);
-                              },
-                              textEditingController: fullNameController,
-                              hintText: "Full Name",
-                              inputLength: 30,
-                              regularExpression:
-                                  Utility.alphabetSpaceValidationPattern,
-                              validationMessage: Utility.nameEmptyValidation,
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.03,
-                            ),
-                            TextFormField(
-                              focusNode: emailFn,
-                              controller: emailController,
-                              decoration: InputDecoration(
-                                focusedBorder: outLineGrey,
-                                enabledBorder: outLineGrey,
-                                isDense: true,
-                                isCollapsed: true,
-                                contentPadding: EdgeInsets.only(
-                                    top: Get.height * 0.016,
-                                    bottom: Get.height * 0.016,
-                                    left: 20),
-                                errorBorder: outLineRed,
-                                focusedErrorBorder: outLineRed,
-                                hintText: "Enter Email",
-                                hintStyle: TextStyle(
-                                  color: Color(hintGrey),
-                                  fontWeight: FontWeight.w500,
-
-                                ),
+                        child: ImageIcon(
+                          AssetImage('assets/icons/edit.png'),
+                          color: Color(colorBlue),
+                        )),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      child: Form(
+                        key: signUpFormKey,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: SizeConfig.screenWidth * 0.08,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: Get.height * 0.03,
                               ),
-                              validator: (value) {
-                                if (value.length<3) {
-                                  return "Please Input email in right format";
-                                } else {
-                                  return null;
-                                }
-                              },
+                              TextFormField(
 
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.03,
-                            ),
-                           TextFormField(
-                             focusNode: phnFn,
-                               inputFormatters: [
-                                 LengthLimitingTextInputFormatter(10),
-
-                               ],
-                             controller: phnController,
-                             keyboardType: TextInputType.number,
-                             decoration: InputDecoration(
-                               focusedBorder: outLineGrey,
-                               enabledBorder: outLineGrey,
-
-                               isDense: true,
-                               isCollapsed: true,
-                               contentPadding: EdgeInsets.only(
-                                   top: Get.height * 0.016,
-                                   bottom: Get.height * 0.016,
-                                   left: 20),
-                               errorBorder: outLineRed,
-
-                               focusedErrorBorder: outLineRed,
-                               hintText: "Phone",
-                               hintStyle: TextStyle(
-                                 color: Color(hintGrey),
-                                 fontWeight: FontWeight.w500,
-                               )),
-    validator: (value) {
-    if (value.length<10) {
-    return "Phone Number can't be smaller then 10 Chracters";
-    } else {
-    return null;
-    }}
-                               ),
-                            SizedBox(
-                              height: Get.height * 0.03,
-                            ),
-                            Container(
-                              width: SizeConfig.screenWidth,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 8, horizontal: 8),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Color(colorBlue),
-                                          ),
-                                          borderRadius: BorderRadius.circular(25)),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(width:10),
-                                          Container(
-                                            width: SizeConfig.screenWidth * 0.23,
-                                            child: TextFormField(
-                                              onTap: () {
-                                                selectDate(context);
-                                              },
-                                              readOnly: true,
-                                              decoration: InputDecoration(
-                                                  isDense: true,
-                                                  contentPadding: EdgeInsets.zero,
-                                                  border: InputBorder.none,
-                                                  floatingLabelBehavior:
-                                                      FloatingLabelBehavior.always,
-                                                  hintText: "DOB",
-                                                  hintStyle: TextStyle(
-                                                    fontSize:
-                                                        SizeConfig.blockSizeVertical *
-                                                           2,
-                                                  ),
-                                                  errorStyle: TextStyle(
-                                                    color: Colors.red,
-                                                  )),
-                                              controller: dobController,
-                                              focusNode: dobFn,
-                                            ),
-                                          ),
-                                          ImageIcon(
-                                            AssetImage('assets/icons/calendar.png'),
-                                            color: Color(colorBlue),
-                                            size: SizeConfig.blockSizeVertical * 3,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  Expanded(
-                                    child: Container(
-
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 15),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                              color: Color(colorBlue),
-                                            ),
-                                            borderRadius: BorderRadius.circular(25)),
-                                        child: DropdownButtonFormField<String>(
-                                          decoration: InputDecoration(
-                                              isDense: true,
-                                              contentPadding: EdgeInsets.zero,
-                                              border: InputBorder.none,
-                                              floatingLabelBehavior:
-                                                  FloatingLabelBehavior.always,
-                                              errorStyle: TextStyle(
-                                                color: Colors.red,
-                                              )),
-                                          hint: Text(
-                                            "Gender",
-                                            style: TextStyle(
-                                              fontSize:
-                                                  SizeConfig.blockSizeVertical * 1.90,
-                                            ),
-                                          ),
-                                          items: <String>['Male', 'Female', 'Other']
-                                              .map((String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: new Text(
-                                                value,
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        SizeConfig.blockSizeVertical *
-                                                          2,
-                                                    color: Color(hintGrey)),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            );
-                                          }).toList(),
-                                          onChanged: (val) {
-                                            genderController.text = val;
-                                            print("gender${genderController.text}");
-                                          },
-                                        )),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.03,
-                            ),
-                            // TextFieldSearch(
-                            //   label:cartdate[0]['name'],
-                            // minStringLength: 2,
-                            //
-                            // initialList:cartdate,
-                            //
-                            // // focusNode: clgNameFn,
-                            //  controller: clgNameController,
-                            //  // onTap: () async {
-                            //  //   // should show search screen here
-                            //  //   showSearch(
-                            //  //     context: context,
-                            //  //     // we haven't created AddressSearch class
-                            //  //     // this should be extending SearchDelegate
-                            //  //     delegate: AddressSearch(),
-                            //  //   );
-                            //  // },
-                            //  decoration: InputDecoration(
-                            //    focusedBorder: outLineGrey,
-                            //    enabledBorder: outLineGrey,
-                            //    isDense: true,
-                            //    isCollapsed: true,
-                            //    contentPadding: EdgeInsets.only(
-                            //        top: Get.height * 0.016,
-                            //        bottom: Get.height * 0.016,
-                            //        left: 20),
-                            //    errorBorder: outLineRed,
-                            //    focusedErrorBorder: outLineRed,
-                            //    hintText: "College Name",
-                            //    hintStyle: TextStyle(
-                            //      color: Color(hintGrey),
-                            //      fontWeight: FontWeight.w500,
-                            //
-                            //    ),
-                            // ),
-                            //   future: () {
-                            //     return fetchComplexData();
-                            //   },
-                            //   getSelectedValue: (item) {
-                            //     print(item);
-                            //   },
-                            //  ),
-                            other == true ?  TextFormField(
-
-                                controller: profession,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12),
-
-                                ],
-
+                                controller: fullNameController,
                                 decoration: InputDecoration(
                                   focusedBorder: outLineGrey,
                                   enabledBorder: outLineGrey,
                                   isDense: true,
-
                                   isCollapsed: true,
                                   contentPadding: EdgeInsets.only(
                                       top: Get.height * 0.016,
@@ -535,443 +320,726 @@ Icon(Icons.person_outline_rounded,size: 80,color: Color(colorBlue),)
                                       left: 20),
                                   errorBorder: outLineRed,
                                   focusedErrorBorder: outLineRed,
-                                  hintText: "Your Profession",
-
+                                  hintText: "Enter Fullname",
                                   hintStyle: TextStyle(
                                     color: Color(hintGrey),
                                     fontWeight: FontWeight.w500,
-                                  ),),
+
+                                  ),
+                                ),
                                 validator: (value) {
-                                  if (value.length<3) {
-                                    return "Profession must be more than 3 characters";
+                                  if (value.length<1) {
+                                    return "Please Enter your name";
                                   } else {
                                     return null;
-                                  }}):
-                            TypeAheadField(
+                                  }
+                                },
 
-                              textFieldConfiguration: TextFieldConfiguration(
-
-
-                                  controller: clgNameController,
+                              ),
+                              SizedBox(
+                                height: Get.height * 0.03,
+                              ),
+                              TextFormField(
+                                focusNode: emailFn,
+                                controller: emailController,
                                 decoration: InputDecoration(
+                                  focusedBorder: outLineGrey,
+                                  enabledBorder: outLineGrey,
+                                  isDense: true,
+                                  isCollapsed: true,
+                                  contentPadding: EdgeInsets.only(
+                                      top: Get.height * 0.016,
+                                      bottom: Get.height * 0.016,
+                                      left: 20),
+                                  errorBorder: outLineRed,
+                                  focusedErrorBorder: outLineRed,
+                                  hintText: "Enter Email",
+                                  hintStyle: TextStyle(
+                                    color: Color(hintGrey),
+                                    fontWeight: FontWeight.w500,
+
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value.length<3) {
+                                    return "Please Input email in right format";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+
+                              ),
+                              SizedBox(
+                                height: Get.height * 0.03,
+                              ),
+                             TextFormField(
+                               focusNode: phnFn,
+                                 inputFormatters: [
+                                   LengthLimitingTextInputFormatter(10),
+
+                                 ],
+                               controller: phnController,
+                               keyboardType: TextInputType.number,
+                               decoration: InputDecoration(
+                                 focusedBorder: outLineGrey,
+                                 enabledBorder: outLineGrey,
+
+                                 isDense: true,
+                                 isCollapsed: true,
+                                 contentPadding: EdgeInsets.only(
+                                     top: Get.height * 0.016,
+                                     bottom: Get.height * 0.016,
+                                     left: 20),
+                                 errorBorder: outLineRed,
+
+                                 focusedErrorBorder: outLineRed,
+                                 hintText: "Phone",
+                                 hintStyle: TextStyle(
+                                   color: Color(hintGrey),
+                                   fontWeight: FontWeight.w500,
+                                 )),
+      validator: (value) {
+      if (value.length<10) {
+      return "Phone Number can't be smaller then 10 Chracters";
+      } else {
+      return null;
+      }}
+                                 ),
+                              SizedBox(
+                                height: Get.height * 0.03,
+                              ),
+                              Container(
+                                width: SizeConfig.screenWidth,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 8, horizontal: 8),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                              color: Color(colorBlue),
+                                            ),
+                                            borderRadius: BorderRadius.circular(25)),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(width:10),
+                                            Container(
+                                              width: SizeConfig.screenWidth * 0.23,
+                                              child: TextFormField(
+                                                onTap: () {
+                                                  selectDate(context);
+                                                },
+                                                readOnly: true,
+                                                decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding: EdgeInsets.zero,
+                                                    border: InputBorder.none,
+                                                    floatingLabelBehavior:
+                                                        FloatingLabelBehavior.always,
+                                                    hintText: "DOB",
+                                                    hintStyle: TextStyle(
+                                                      fontSize:
+                                                          SizeConfig.blockSizeVertical *
+                                                             2,
+                                                    ),
+                                                    errorStyle: TextStyle(
+                                                      color: Colors.red,
+                                                    )),
+                                                controller: dobController,
+                                                focusNode: dobFn,
+                                              ),
+                                            ),
+                                            ImageIcon(
+                                              AssetImage('assets/icons/calendar.png'),
+                                              color: Color(colorBlue),
+                                              size: SizeConfig.blockSizeVertical * 3,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Expanded(
+                                      child: Container(
+
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 5, horizontal: 15),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(
+                                                color: Color(colorBlue),
+                                              ),
+                                              borderRadius: BorderRadius.circular(25)),
+                                          child: DropdownButtonFormField<String>(
+                                            decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding: EdgeInsets.zero,
+                                                border: InputBorder.none,
+                                                floatingLabelBehavior:
+                                                    FloatingLabelBehavior.always,
+                                                errorStyle: TextStyle(
+                                                  color: Colors.red,
+                                                )),
+                                            hint: Text(
+                                              "Gender",
+                                              style: TextStyle(
+                                                fontSize:
+                                                    SizeConfig.blockSizeVertical * 1.90,
+                                              ),
+                                            ),
+                                            items: <String>['Male', 'Female', 'Other']
+                                                .map((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: new Text(
+                                                    genderController.text==""?value:genderController.text=="Male"?"Male":"Female",
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          SizeConfig.blockSizeVertical *
+                                                            2,
+                                                      color: Color(hintGrey)),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              );
+                                            }).toList(),
+                                            onChanged: (val) {
+                                              genderController.text = val;
+                                              print("gender${genderController.text}");
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: Get.height * 0.03,
+                              ),
+                              // TextFieldSearch(
+                              //   label:cartdate[0]['name'],
+                              // minStringLength: 2,
+                              //
+                              // initialList:cartdate,
+                              //
+                              // // focusNode: clgNameFn,
+                              //  controller: clgNameController,
+                              //  // onTap: () async {
+                              //  //   // should show search screen here
+                              //  //   showSearch(
+                              //  //     context: context,
+                              //  //     // we haven't created AddressSearch class
+                              //  //     // this should be extending SearchDelegate
+                              //  //     delegate: AddressSearch(),
+                              //  //   );
+                              //  // },
+                              //  decoration: InputDecoration(
+                              //    focusedBorder: outLineGrey,
+                              //    enabledBorder: outLineGrey,
+                              //    isDense: true,
+                              //    isCollapsed: true,
+                              //    contentPadding: EdgeInsets.only(
+                              //        top: Get.height * 0.016,
+                              //        bottom: Get.height * 0.016,
+                              //        left: 20),
+                              //    errorBorder: outLineRed,
+                              //    focusedErrorBorder: outLineRed,
+                              //    hintText: "College Name",
+                              //    hintStyle: TextStyle(
+                              //      color: Color(hintGrey),
+                              //      fontWeight: FontWeight.w500,
+                              //
+                              //    ),
+                              // ),
+                              //   future: () {
+                              //     return fetchComplexData();
+                              //   },
+                              //   getSelectedValue: (item) {
+                              //     print(item);
+                              //   },
+                              //  ),
+                              other == true ?  TextFormField(
+
+                                  controller: profession,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(12),
+
+                                  ],
+
+                                  decoration: InputDecoration(
                                     focusedBorder: outLineGrey,
                                     enabledBorder: outLineGrey,
-
                                     isDense: true,
+
                                     isCollapsed: true,
                                     contentPadding: EdgeInsets.only(
                                         top: Get.height * 0.016,
                                         bottom: Get.height * 0.016,
                                         left: 20),
                                     errorBorder: outLineRed,
-
                                     focusedErrorBorder: outLineRed,
-                                    hintText: "College Name/School Name/Inst. Name",
+                                    hintText: "Your Profession",
+
                                     hintStyle: TextStyle(
                                       color: Color(hintGrey),
-                                      fontSize: 12,
                                       fontWeight: FontWeight.w500,
-                                    )),
-                              ),
-                              suggestionsCallback: (pattern) async {
-                                print(pattern+pattern);
-                                return  getSuggestions(pattern);
-                              },
-                              //itemCount: predictions.length,
-                              itemBuilder: (context, suggestion) {
+                                    ),),
+                                  validator: (value) {
+                                    if (value.length<3) {
+                                      return "Profession must be more than 3 characters";
+                                    } else {
+                                      return null;
+                                    }}):
+                              TypeAheadField(
 
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(suggestion,style: TextStyle(fontSize: 14)),
-                                    // Text(suggestion['state-province'],style: TextStyle(fontSize: 14)),
-                                    Divider()
-                                  ],
-                                );
-                              },
-                              onSuggestionSelected: (suggestion) {
+                                textFieldConfiguration: TextFieldConfiguration(
+
+
+                                    controller: clgNameController,
+                                  decoration: InputDecoration(
+                                      focusedBorder: outLineGrey,
+                                      enabledBorder: outLineGrey,
+
+                                      isDense: true,
+                                      isCollapsed: true,
+                                      contentPadding: EdgeInsets.only(
+                                          top: Get.height * 0.016,
+                                          bottom: Get.height * 0.016,
+                                          left: 20),
+                                      errorBorder: outLineRed,
+
+                                      focusedErrorBorder: outLineRed,
+                                      hintText: "College Name/School Name/Inst. Name",
+                                      hintStyle: TextStyle(
+                                        color: Color(hintGrey),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                      )),
+                                ),
+                                suggestionsCallback: (pattern) async {
+                                  print(pattern+pattern);
+                                  return  getSuggestions(pattern);
+                                },
+                                //itemCount: predictions.length,
+                                itemBuilder: (context, suggestion) {
+
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(suggestion,style: TextStyle(fontSize: 14)),
+                                      // Text(suggestion['state-province'],style: TextStyle(fontSize: 14)),
+                                      Divider()
+                                    ],
+                                  );
+                                },
+                                onSuggestionSelected: (suggestion) {
 setState(() {
   print(suggestion);
   clgNameController=TextEditingController(text: suggestion);
 
 });                          },
-                            ),
-                            // TextFieldSearch(
-                            //   label: 'Complex Future List',
-                            // controller: clgNameController,
-                            //   future: () {
-                            //     return autoCompleteSearch("value");
-                            //   },
-                            //   getSelectedValue: (item) {
-                            //     print(item);
-                            //   },
-                            //   minStringLength: 1,
-                            //   textStyle: TextStyle(color: Colors.red),
-                            //   decoration: InputDecoration(hintText: 'Search For Something'),
-                            // ),
-                            // TextField(
-                            //   controller: textEditingController,
-                            //   decoration: InputDecoration(
-                            //       focusedBorder: outLineGrey,
-                            //       enabledBorder: outLineGrey,
-                            //
-                            //       isDense: true,
-                            //       isCollapsed: true,
-                            //       contentPadding: EdgeInsets.only(
-                            //           top: Get.height * 0.016,
-                            //           bottom: Get.height * 0.016,
-                            //           left: 20),
-                            //       errorBorder: outLineRed,
-                            //
-                            //       focusedErrorBorder: outLineRed,
-                            //       hintText: "College Name/School Name/Inst. Name",
-                            //       hintStyle: TextStyle(
-                            //         color: Color(hintGrey),
-                            //         fontWeight: FontWeight.w500,
-                            //       )),
-                            //   onChanged: (value) {
-                            //     if (value.isNotEmpty) {
-                            //       autoCompleteSearch(value);
-                            //       setState(() {
-                            //         show=true;
-                            //       });
-                            //     } else {
-                            //       if (predictions.length > 0 && mounted) {
-                            //         setState(() {
-                            //           predictions = [];
-                            //         });
-                            //       }
-                            //     }
-                            //   },
-                            // ),
-
-                            // other == true ? SizedBox(height: 1,):
-                            // SizedBox(
-                            //   height: Get.height * 0.015,
-                            // ),
-                            Container(
-                              width: SizeConfig.screenWidth,
-
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Checkbox(value: other, onChanged: (value){
-                                    setState(() {
-                                      other = value;
-                                    });
-                                  },
-                                    activeColor: Color(colorBlue),
-                                  ),
-
-                                  Text("Not a Student",
-                                    style: TextStyle(
-                                      color: Color(hintGrey),
-                                      fontWeight: FontWeight.w500,
-                                    ),),
-
-                                ],
                               ),
-                            ),
+                              // TextFieldSearch(
+                              //   label: 'Complex Future List',
+                              // controller: clgNameController,
+                              //   future: () {
+                              //     return autoCompleteSearch("value");
+                              //   },
+                              //   getSelectedValue: (item) {
+                              //     print(item);
+                              //   },
+                              //   minStringLength: 1,
+                              //   textStyle: TextStyle(color: Colors.red),
+                              //   decoration: InputDecoration(hintText: 'Search For Something'),
+                              // ),
+                              // TextField(
+                              //   controller: textEditingController,
+                              //   decoration: InputDecoration(
+                              //       focusedBorder: outLineGrey,
+                              //       enabledBorder: outLineGrey,
+                              //
+                              //       isDense: true,
+                              //       isCollapsed: true,
+                              //       contentPadding: EdgeInsets.only(
+                              //           top: Get.height * 0.016,
+                              //           bottom: Get.height * 0.016,
+                              //           left: 20),
+                              //       errorBorder: outLineRed,
+                              //
+                              //       focusedErrorBorder: outLineRed,
+                              //       hintText: "College Name/School Name/Inst. Name",
+                              //       hintStyle: TextStyle(
+                              //         color: Color(hintGrey),
+                              //         fontWeight: FontWeight.w500,
+                              //       )),
+                              //   onChanged: (value) {
+                              //     if (value.isNotEmpty) {
+                              //       autoCompleteSearch(value);
+                              //       setState(() {
+                              //         show=true;
+                              //       });
+                              //     } else {
+                              //       if (predictions.length > 0 && mounted) {
+                              //         setState(() {
+                              //           predictions = [];
+                              //         });
+                              //       }
+                              //     }
+                              //   },
+                              // ),
 
+                              // other == true ? SizedBox(height: 1,):
+                              // SizedBox(
+                              //   height: Get.height * 0.015,
+                              // ),
+                              Container(
+                                width: SizeConfig.screenWidth,
 
-
-                            SizedBox(
-                              height: Get.height * 0.03,
-                            ),
-                          TextFormField(
-                            focusNode: pwdFn,
-                            controller: pwdController,
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(12),
-
-                              ],
-                            obscureText:showpwd ,
-                            decoration: InputDecoration(
-                              focusedBorder: outLineGrey,
-                              enabledBorder: outLineGrey,
-                              isDense: true,
-                              suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye_rounded,color: !showpwd?Colors.blue:Colors.grey,),onPressed: (){
-                                setState(() {
-                                 if( showpwd==false){
-                                   showpwd=true;
-                                 }
-                                 else{
-                                   showpwd=false;
-                                 }
-                                });
-                              },),
-                              isCollapsed: true,
-                              contentPadding: EdgeInsets.only(
-                                  top: Get.height * 0.016,
-                                  bottom: Get.height * 0.016,
-                                  left: 20),
-                              errorBorder: outLineRed,
-                              focusedErrorBorder: outLineRed,
-                              hintText: "Enter Password",
-
-                              hintStyle: TextStyle(
-                                color: Color(hintGrey),
-                                fontWeight: FontWeight.w500,
-                            ),),
-                              validator: (value) {
-                                if (value.length<5) {
-                                  return "Password must be more than 5 characters";
-                                } else {
-                                  return null;
-                                }}),
-                            SizedBox(
-                              height: Get.height * 0.03,
-                            ),
-                          TextFormField(
-                            focusNode: cPwdFn,
-                            onFieldSubmitted: (val){
-                              cPwdFn.unfocus();
-                            },
-                            controller: cPwdController,
-                              obscureText: showcnfrmpwd,
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(12),
-
-                              ],
-                            decoration: InputDecoration(
-                              focusedBorder: outLineGrey,
-                              enabledBorder: outLineGrey,
-
-                              isDense: true,
-                              suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye,color: !showcnfrmpwd?Colors.blue:Colors.grey,),onPressed: (){
-                                setState(() {
-                                  if( showcnfrmpwd==false){
-                                    showcnfrmpwd=true;
-                                  }
-                                  else{
-                                    showcnfrmpwd=false;
-                                  }
-                                });
-                              },),
-
-                              isCollapsed: true,
-                              contentPadding: EdgeInsets.only(
-                                  top: Get.height * 0.016,
-                                  bottom: Get.height * 0.016,
-                                  left: 20),
-                              errorBorder: outLineRed,
-                              focusedErrorBorder: outLineRed,
-                              hintText: "Re-enter Password",
-                              hintStyle: TextStyle(
-                                color: Color(hintGrey),
-                                fontWeight: FontWeight.w500,)),
-                              validator: (value) {
-                                if (value.length<5) {
-                                  return "Confirm Password must be more than 5 characters";
-                                } else {
-                                  return null;
-                                }}
-                            ),
-
-                            Container(
-                              width: SizeConfig.screenWidth,
-
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Checkbox(value: gstCheck, onChanged: (value){
-                                    setState(() {
-                                      gstCheck = value;
-                                    });
-                                  },
-                                    activeColor: Color(colorBlue),
-                                  ),
-
-                                  Text("GST",
-                                    style: TextStyle(
-                                      color: Color(hintGrey),
-                                      fontWeight: FontWeight.w500,
-                                    ),),
-                                  Text(" (If You have Gst Number please enter)",
-                                    style: TextStyle(
-                                      color: Color(hintGrey),
-                                      fontSize: 10
-
-                                    ),),
-                                ],
-                              ),
-                            ),
-                            gstCheck == true ?
-                            Container(
-                              width: SizeConfig.screenWidth,
-
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey[200],
-                                        spreadRadius: 2.0,
-                                        blurRadius: 4.0
-                                    ),
-                                  ]
-                              ),
-                              child: TextFormField(
-                                controller: gstcontroller,
-                                //focusNode: gstFn,
-                                textInputAction: TextInputAction.done,
-                                keyboardType: TextInputType.text,
-                                onFieldSubmitted: (value) {
-                                  //gstFn.unfocus();
-                                },
-                                decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: SizeConfig.blockSizeVertical * 1.5,
-                                        horizontal: SizeConfig.blockSizeHorizontal * 5),
-                                    hintText: "Enter GST No.",
-                                    hintStyle: TextStyle(
-                                      color: Color(hintGrey),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    border: InputBorder.none),
-                              ),
-                            ) : Container(),
-                            Center(
-                              child: Container(
-                                width: SizeConfig.screenWidth * 0.5,
-                                height: SizeConfig.blockSizeVertical * 5,
-                                margin: EdgeInsets.only(
-                                    left: SizeConfig.screenWidth * 0.1,
-                                    right: SizeConfig.screenWidth * 0.1,
-                                    top: SizeConfig.blockSizeVertical * 3,
-                                    bottom: SizeConfig.blockSizeVertical),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Color(gradientColor1),
-                                      Color(gradientColor2).withOpacity(0.95),
-                                    ],
-                                    begin: Alignment(1.0, -3.0),
-                                    end: Alignment.bottomRight,
-                                  ),
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: MaterialButton(
-                                  onPressed: () async {
-                                    if (signUpFormKey.currentState.validate()) {
-                                      // if(validateStructure()!=true){
-                                      //   CommonSnackBar.snackBar(
-                                      //       message:
-                                      //       "Email Is not in right Format");
-                                      //   return;
-                                      // }
-                                      if (pwdController.text !=
-                                          cPwdController.text) {
-                                        showAlert(context,
-                                            "Password and Re-enter password does not match!");
-                                        return;
-                                      }
-
-                                      if (dobController.text.isEmpty ||
-                                          dobController.text == null) {
-                                        showAlert(context, "Please Select Date of Birth");
-                                        return;
-                                      }
-                                      if (genderController.text.isEmpty ||
-                                          genderController.text == null) {
-                                        showAlert(context, "Please Select Gender");
-                                        return;
-                                      }
-                                      ImageUploadViewModel imaUploadViewModel =
-                                      Get.find();
-                                      print(
-                                          "image selected${imaUploadViewModel.profilephoto}");
-
-                                      if(imaUploadViewModel.profilephoto==null){
-                                        showAlert(context, "Please Upload Profile Picture ");
-                                        return;
-                                      }
-verifyPhone();
-                                    }},
-
-                                  child: Text(
-                                    "Signup",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25)),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: SizeConfig.screenWidth,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: SizeConfig.screenWidth * 0.05,
-                                  vertical: SizeConfig.blockSizeVertical),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Already have an account !",
-                                    style: TextStyle(
-                                        color: Color(matteBlack),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize:
-                                            SizeConfig.blockSizeVertical * 1.75),
-                                  ),
-                                  SizedBox(
-                                    width: SizeConfig.blockSizeHorizontal * 1,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return LoginScreen();
-                                      }));
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(value: other, onChanged: (value){
+                                      setState(() {
+                                        other = value;
+                                      });
                                     },
-                                    child: Text(
-                                      "Signin Now",
+                                      activeColor: Color(colorBlue),
+                                    ),
+
+                                    Text("Not a Student",
                                       style: TextStyle(
-                                          color: Color(colorBlue),
+                                        color: Color(hintGrey),
+                                        fontWeight: FontWeight.w500,
+                                      ),),
+
+                                  ],
+                                ),
+                              ),
+
+
+
+                              SizedBox(
+                                height: Get.height * 0.03,
+                              ),
+                            TextFormField(
+                              focusNode: pwdFn,
+                              controller: pwdController,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(12),
+
+                                ],
+                              obscureText:showpwd ,
+                              decoration: InputDecoration(
+                                focusedBorder: outLineGrey,
+                                enabledBorder: outLineGrey,
+                                isDense: true,
+                                suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye_rounded,color: !showpwd?Colors.blue:Colors.grey,),onPressed: (){
+                                  setState(() {
+                                   if( showpwd==false){
+                                     showpwd=true;
+                                   }
+                                   else{
+                                     showpwd=false;
+                                   }
+                                  });
+                                },),
+                                isCollapsed: true,
+                                contentPadding: EdgeInsets.only(
+                                    top: Get.height * 0.016,
+                                    bottom: Get.height * 0.016,
+                                    left: 20),
+                                errorBorder: outLineRed,
+                                focusedErrorBorder: outLineRed,
+                                hintText: "Enter Password",
+
+                                hintStyle: TextStyle(
+                                  color: Color(hintGrey),
+                                  fontWeight: FontWeight.w500,
+                              ),),
+                                validator: (value) {
+                                  if (value.length<5) {
+                                    return "Password must be more than 5 characters";
+                                  } else {
+                                    return null;
+                                  }}),
+                              SizedBox(
+                                height: Get.height * 0.03,
+                              ),
+                            TextFormField(
+                              focusNode: cPwdFn,
+                              onFieldSubmitted: (val){
+                                cPwdFn.unfocus();
+                              },
+                              controller: cPwdController,
+                                obscureText: showcnfrmpwd,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(12),
+
+                                ],
+                              decoration: InputDecoration(
+                                focusedBorder: outLineGrey,
+                                enabledBorder: outLineGrey,
+
+                                isDense: true,
+                                suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye,color: !showcnfrmpwd?Colors.blue:Colors.grey,),onPressed: (){
+                                  setState(() {
+                                    if( showcnfrmpwd==false){
+                                      showcnfrmpwd=true;
+                                    }
+                                    else{
+                                      showcnfrmpwd=false;
+                                    }
+                                  });
+                                },),
+
+                                isCollapsed: true,
+                                contentPadding: EdgeInsets.only(
+                                    top: Get.height * 0.016,
+                                    bottom: Get.height * 0.016,
+                                    left: 20),
+                                errorBorder: outLineRed,
+                                focusedErrorBorder: outLineRed,
+                                hintText: "Re-enter Password",
+                                hintStyle: TextStyle(
+                                  color: Color(hintGrey),
+                                  fontWeight: FontWeight.w500,)),
+                                validator: (value) {
+                                  if (value.length<5) {
+                                    return "Confirm Password must be more than 5 characters";
+                                  } else {
+                                    return null;
+                                  }}
+                              ),
+
+                              Container(
+                                width: SizeConfig.screenWidth,
+
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(value: gstCheck, onChanged: (value){
+                                      setState(() {
+                                        gstCheck = value;
+                                      });
+                                    },
+                                      activeColor: Color(colorBlue),
+                                    ),
+
+                                    Text("GST",
+                                      style: TextStyle(
+                                        color: Color(hintGrey),
+                                        fontWeight: FontWeight.w500,
+                                      ),),
+                                    Text(" (If You have Gst Number please enter)",
+                                      style: TextStyle(
+                                        color: Color(hintGrey),
+                                        fontSize: 10
+
+                                      ),),
+                                  ],
+                                ),
+                              ),
+                              gstCheck == true ?
+                              Container(
+                                width: SizeConfig.screenWidth,
+
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey[200],
+                                          spreadRadius: 2.0,
+                                          blurRadius: 4.0
+                                      ),
+                                    ]
+                                ),
+                                child: TextFormField(
+                                  controller: gstcontroller,
+                                  //focusNode: gstFn,
+                                  textInputAction: TextInputAction.done,
+                                  keyboardType: TextInputType.text,
+                                  onFieldSubmitted: (value) {
+                                    //gstFn.unfocus();
+                                  },
+                                  decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: SizeConfig.blockSizeVertical * 1.5,
+                                          horizontal: SizeConfig.blockSizeHorizontal * 5),
+                                      hintText: "Enter GST No.",
+                                      hintStyle: TextStyle(
+                                        color: Color(hintGrey),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      border: InputBorder.none),
+                                ),
+                              ) : Container(
+                                height: 1,
+                              ),
+                              Center(
+                                child: Container(
+                                  width: SizeConfig.screenWidth * 0.5,
+                                  height: SizeConfig.blockSizeVertical * 5,
+                                  margin: EdgeInsets.only(
+                                      left: SizeConfig.screenWidth * 0.1,
+                                      right: SizeConfig.screenWidth * 0.1,
+                                      top: SizeConfig.blockSizeVertical * 3,
+                                      bottom: SizeConfig.blockSizeVertical),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(gradientColor1),
+                                        Color(gradientColor2).withOpacity(0.95),
+                                      ],
+                                      begin: Alignment(1.0, -3.0),
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: MaterialButton(
+                                    onPressed: () async {
+                                      if (signUpFormKey.currentState.validate()) {
+
+                                        // if(validateStructure()!=true){
+                                        //   CommonSnackBar.snackBar(
+                                        //       message:
+                                        //       "Email Is not in right Format");
+                                        //   return;
+                                        // }
+                                        if (pwdController.text !=
+                                            cPwdController.text) {
+                                          showAlert(context,
+                                              "Password and Re-enter password does not match!");
+                                          return;
+                                        }
+
+                                        if (dobController.text.isEmpty ||
+                                            dobController.text == null) {
+                                          showAlert(context, "Please Select Date of Birth");
+                                          return;
+                                        }
+                                        if (genderController.text.isEmpty ||
+                                            genderController.text == null) {
+                                          showAlert(context, "Please Select Gender");
+                                          return;
+                                        }
+                                        ImageUploadViewModel imaUploadViewModel =
+                                        Get.find();
+                                        print(
+                                            "image selected${imaUploadViewModel.profilephoto}");
+
+                                        // if(imaUploadViewModel.profilephoto==null){
+                                        //   showAlert(context, "Please Upload Profile Picture ");
+                                        //   return;
+                                        // }
+                                      setState(() {
+
+                                      });
+//verifyPhone();
+Navigator.push(context, MaterialPageRoute(builder: (context)=>Otp(
+  email:emailController.text,
+  pass:pwdController.text,
+  college:clgNameController.text,
+  name:fullNameController.text,
+  dob:dobController.text,
+  gender:genderController.text,
+  phone:phnController.text
+
+
+)));
+                                      }},
+
+                                    child: Text(
+                                      "Signup",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25)),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: SizeConfig.screenWidth,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.screenWidth * 0.05,
+                                    vertical: SizeConfig.blockSizeVertical),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Already have an account !",
+                                      style: TextStyle(
+                                          color: Color(matteBlack),
                                           fontWeight: FontWeight.w500,
                                           fontSize:
                                               SizeConfig.blockSizeVertical * 1.75),
                                     ),
-                                  )
-                                ],
+                                    SizedBox(
+                                      width: SizeConfig.blockSizeHorizontal * 1,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) {
+                                          return LoginScreen();
+                                        }));
+                                      },
+                                      child: Text(
+                                        "Signin Now",
+                                        style: TextStyle(
+                                            color: Color(colorBlue),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize:
+                                                SizeConfig.blockSizeVertical * 1.75),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  isLoading?Container()
-                  :Container(),
-                  GetBuilder<RegisterViewModel>(
-                    builder: (controller) {
-                      if (controller.apiResponse.status == Status.LOADING) {
-                        return Container();
-                      } else {
-                        return SizedBox();
-                      }
-                    },
-                  )
+                    isLoading?Container(
+                      width: 1,
+                      height: 1,
+                    )
+                    :Container(),
+                    GetBuilder<RegisterViewModel>(
+                      builder: (controller) {
+                        if (controller.apiResponse.status == Status.LOADING) {
+                          return Container();
+                        } else {
+                          return SizedBox();
+                        }
+                      },
+                    )
 
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    ));
+      )),
+    );
   }
   singUp(message) async {
-    context.loaderOverlay.show();
+
     if(signUpFormKey.currentState.validate()){
       setState(() {
 
         isLoading = true;
       });
+      Dialogs.showLoadingDialog(
+          context, loginLoader);
 
       await authService.signUpWithEmailAndPassword(emailController.text,
           pwdController.text).then((result){
@@ -987,7 +1055,8 @@ verifyPhone();
           HelperFunctions.saveUserLoggedInSharedPreference(true);
           HelperFunctions.saveUserNameSharedPreference(fullNameController.text);
           HelperFunctions.saveUserEmailSharedPreference(emailController.text);
-          context.loaderOverlay.hide();
+          Navigator.of(loginLoader.currentContext,
+              rootNavigator: true);
         //  CommonSnackBar.snackBar(message:"OTP Verified");
           Future.delayed(Duration(milliseconds: 20), () {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
@@ -1019,7 +1088,8 @@ verifyPhone();
       ));
 
   Future<void> verifyPhone() async {
-    context.loaderOverlay.show();
+    Dialogs.showLoadingDialog(
+        context, loginLoader);
 
     // setState(() {
     //   isLoading=true;
@@ -1057,6 +1127,7 @@ verifyPhone();
   }
   signupapi() async {
 
+    context.loaderOverlay.show();
     context.loaderOverlay.show();
     ImageUploadViewModel imaUploadViewModel =
     Get.find();
@@ -1111,73 +1182,163 @@ verifyPhone();
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return new AlertDialog(
-            title: Text('Enter OTP'),
-            content: Container(
-              height: 85,
-              child: Column(children: [
-                TextField(
-                  decoration: InputDecoration(
-                      focusedBorder: outLineGrey,
-                      enabledBorder: outLineGrey,
-                      isDense: true,
-                      isCollapsed: true,
-                      contentPadding: EdgeInsets.only(
-                          top: Get.height * 0.016,
-                          bottom: Get.height * 0.016,
-                          left: 20),
-                      errorBorder: outLineRed,
-                      focusedErrorBorder: outLineRed,
-                      hintText: "Enter Otp",
-                      hintStyle: TextStyle(
-                        color: Color(hintGrey),
-                        fontWeight: FontWeight.w500,
-                      )),
-                  onChanged: (value) {
-                    this.smsOTP = value;
-                  },
-                ),
-                (errorMessage != ''
-                    ? Text(
-                  errorMessage,
-                  style: TextStyle(color: Colors.red),
-                )
-                    : Container())
-              ]),
-            ),
-            contentPadding: EdgeInsets.all(10),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Done'),
-                onPressed: () {
-                  if(smsOTP.length!=6){
-                   CommonSnackBar.snackBar(message:"Please Enter valid Otp First");
-                  }
-                else{
-                    Navigator.pop(context);
-                    signIn();
-
-                    if (_auth.currentUser != null) {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
-
-
-                      print("-------------------");
-                      // Navigator.of(context).pop();
-                      // Navigator.of(context).pushReplacementNamed('/homepage');
-                    } else {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
-
-
-                    }
-                  }
-
-                },
-              )
-            ],
+          return new Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              child:
+              contentBox(context),
+            // content: Container(
+            //   height: 85,
+            //   child: Column(children: [
+            //     TextField(
+            //       decoration: InputDecoration(
+            //           focusedBorder: outLineGrey,
+            //           enabledBorder: outLineGrey,
+            //           isDense: true,
+            //           isCollapsed: true,
+            //           contentPadding: EdgeInsets.only(
+            //               top: Get.height * 0.016,
+            //               bottom: Get.height * 0.016,
+            //               left: 20),
+            //           errorBorder: outLineRed,
+            //           focusedErrorBorder: outLineRed,
+            //           hintText: "Enter Otp",
+            //           hintStyle: TextStyle(
+            //             color: Color(hintGrey),
+            //             fontWeight: FontWeight.w500,
+            //           )),
+            //       onChanged: (value) {
+            //         this.smsOTP = value;
+            //       },
+            //     ),
+            //     (errorMessage != ''
+            //         ? Text(
+            //       errorMessage,
+            //       style: TextStyle(color: Colors.red),
+            //     )
+            //         : Container())
+            //   ]),
+            // ),
+            // contentPadding: EdgeInsets.all(10),
+            // actions: <Widget>[
+            //   FlatButton(
+            //     child: Text('Done'),
+            //     onPressed: () {
+            //       if(smsOTP.length!=6){
+            //        CommonSnackBar.snackBar(message:"Please Enter valid Otp First");
+            //       }
+            //     else{
+            //         Navigator.pop(context);
+            //         signIn();
+            //
+            //         if (_auth.currentUser != null) {
+            //           // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+            //
+            //
+            //           print("-------------------");
+            //           // Navigator.of(context).pop();
+            //           // Navigator.of(context).pushReplacementNamed('/homepage');
+            //         } else {
+            //           // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+            //
+            //
+            //         }
+            //       }
+            //
+            //     },
+            //   )
+            // ],
           );
         });
   }
+  contentBox(context){
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: 220,
+          padding: EdgeInsets.symmetric(vertical: 10),
+
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(color: Colors.black,offset: Offset(0,10),
+                    blurRadius: 10
+                ),
+              ]
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  padding:EdgeInsets.only(left:10,top: 20),
+                  child: Text("Enter OTP",style: TextStyle(fontSize: 20),)),
+              OTPTextField(
+                length: 6,
+                width: MediaQuery.of(context).size.width,
+                textFieldAlignment: MainAxisAlignment.spaceAround,
+                fieldWidth: 40,
+
+                fieldStyle: FieldStyle.underline,
+                outlineBorderRadius: 30,
+
+                style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),
+                onChanged: (pin) {
+                  print("Changed: " + pin);
+                },
+                onCompleted: (pin) {
+                  print("Completed: " + pin);
+                  smsOTP=pin;
+                  print(smsOTP);
+                },
+              ),
+              SizedBox(height: 50,),
+              Container(
+                padding: EdgeInsets.only(right: 10),
+                alignment: Alignment.centerRight,
+                child: RaisedButton(
+                  color: Colors.blue,
+
+                  onPressed: (){
+                    if(smsOTP.length!=6){
+                      CommonSnackBar.snackBar(message:"Please Enter valid Otp First");
+                    }
+                    else{
+                      Navigator.pop(context);
+                      signIn();
+
+                      if (_auth.currentUser != null) {
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+
+
+                        print("-------------------");
+                        // Navigator.of(context).pop();
+                        // Navigator.of(context).pushReplacementNamed('/homepage');
+                      } else {
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+
+
+                      }
+                    }
+
+                  },
+                  child: Text("Done",style: TextStyle(color: Colors.white),),),
+              )
+            ],
+          ),
+
+        ),
+
+      ],
+    );
+  }
   signIn() async {
+    context.loaderOverlay.show();
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId,

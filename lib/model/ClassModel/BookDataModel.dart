@@ -15,8 +15,8 @@ class BookDataModel {
 }
 
 class BookDataDetailsModel {
-  String name,college_name,category_name, user_name, auther_name, edition_detail, price, conditions, description,semester,image1,image2,image3,image4;
-  var category_id;
+  String name,college_name,category_name, user_name, auther_name, edition_detail, conditions, description,semester,image1,image2,image3,image4;
+  var category_id,user_id,user_firebase_id,price;
 
   BookDataDetailsModel(
       {this.name,
@@ -27,6 +27,8 @@ class BookDataDetailsModel {
         this.category_name,
       this.conditions,
       this.category_id,
+        this.user_id,
+        this.user_firebase_id,
         this.user_name,
       this.description,this.semester,this.image1,this.image2,this.image3,this.image4});
 
@@ -38,6 +40,7 @@ class BookDataDetailsModel {
       edition_detail: parsedJson['edition_detail'],
       price: parsedJson['price'],
       conditions: parsedJson['conditions'],
+        user_firebase_id:parsedJson['user_firebase_id'],
       category_id: parsedJson['category_id'],
       description: parsedJson['description'],
       semester: parsedJson['semester'],
@@ -47,11 +50,12 @@ class BookDataDetailsModel {
       image3: parsedJson['image3'],
       category_name:parsedJson['category_name'],
       image4: parsedJson['image4'],
+        user_id:parsedJson['user_id']
     );
   }
 
   @override
   String toString() {
-    return 'BookDataDetailsModel{name: $name,college_name:$college_name, category_name: $category_name,auther_name: $auther_name, edition_detail: $edition_detail, price: $price, conditions: $conditions, description: $description, semester: $semester, image1: $image1, image2: $image2, image3: $image3, image4: $image4, category_id: $category_id, user_name:$user_name}';
+    return 'BookDataDetailsModel{name: $name,college_name:$college_name, category_name: $category_name,auther_name: $auther_name, edition_detail: $edition_detail, price: $price, conditions: $conditions, description: $description, semester: $semester, image1: $image1, image2: $image2, image3: $image3, image4: $image4, category_id: $category_id, user_name:$user_name,user_id:$user_id,user_firebase_id:$user_firebase_id}';
   }
 }

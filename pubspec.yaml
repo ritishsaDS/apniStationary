@@ -34,14 +34,22 @@ dependencies:
   http: ^0.13.3
   google_place: ^0.4.3
   flutter_dotenv: ^5.0.2
+  avatar_glow:
   geocoding: ^2.0.1
+  keyboard_visibility:
   dio: ^4.0.0
   speech_recognition: "^0.3.0"
+
   otp_text_field: ^1.1.1
   flutter_easyloading: ^3.0.3
+  flutter_local_notifications: ^5.0.0+3
+  firebase_messaging: ^10.0.2
+  overlay_support: ^1.2.1
   vibration: ^1.7.3
   get: 3.26.0
+  flutter_otp_text_field: ^1.0.0
   sms_autofill: ^2.2.0
+  permission_handler:
   textfield_search: ^0.8.0
   flutter_typeahead: ^3.2.1
   flutter_overlay_loader: ^1.0.3
@@ -61,9 +69,13 @@ dependencies:
   google_sign_in:
   firebase_auth:
   shared_preferences: ^0.5.6+3
+  syncfusion_flutter_pdf: ^19.3.47-beta
+  universal_html: ^1.2.4
+  open_file:
   random_string: ^2.0.1
   cloud_firestore:
   flutter_launcher_icons: "^0.9.1"
+  flutter_text_to_speech: ^3.0.7
 dev_dependencies:
   flutter_test:
     sdk: flutter
