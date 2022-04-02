@@ -253,7 +253,7 @@ class _buylistState extends State<Sellerlist> {
     try {
       final response = await post(
 
-          Uri.parse("http://admin.apnistationary.com/api/seller-invoice"),
+          Uri.parse("https://admin.apnistationary.com/api/seller-invoice"),
           body: data
 
       );

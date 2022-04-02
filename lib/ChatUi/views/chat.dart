@@ -276,7 +276,7 @@ onTap: (){
     try {
       final response = await post(
 
-          Uri.parse("http://admin.apnistationary.com/api/accept"),
+          Uri.parse("https://admin.apnistationary.com/api/accept"),
           body: (
               {
                 "user_id" : "${PreferenceManager.getUserId()}",
@@ -325,7 +325,7 @@ onTap: (){
     try {
       final response = await post(
 
-          Uri.parse("http://admin.apnistationary.com/api/reject"),
+          Uri.parse("https://admin.apnistationary.com/api/reject"),
           body: (
               {
                 "user_id" : "${PreferenceManager.getUserId()}",

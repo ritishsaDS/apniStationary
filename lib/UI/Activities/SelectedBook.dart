@@ -678,7 +678,7 @@ class _SelectedBookState extends State<SelectedBook> {
     isLoading = true;
     try {
       final response = await post(
-          Uri.parse("http://admin.apnistationary.com/api/category"),
+          Uri.parse("https://admin.apnistationary.com/api/category"),
           body: {
             "user_id": PreferenceManager.getUserId().toString(),
             "session_key": PreferenceManager.getSessionKey().toString(),

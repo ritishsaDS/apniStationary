@@ -29,7 +29,8 @@ class CheckoutScreen extends StatefulWidget {
   String type;
   var price;
   String firebaseid;
-   CheckoutScreen({this.firebaseid,this.id,this.orderid,this.type,this.price}) ;
+  CheckoutScreen(
+      {this.firebaseid, this.id, this.orderid, this.type, this.price});
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
@@ -38,15 +39,20 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
   final GlobalKey<State> loginLoader = new GlobalKey<State>();
-  TextEditingController firstNameController = TextEditingController(text: PreferenceManager.getName().toString());
-  TextEditingController lastNameController = TextEditingController(text: PreferenceManager.getName().toString().contains(" ")?PreferenceManager.getName().toString().split(" ")[1]:" " );
+  TextEditingController firstNameController =
+      TextEditingController(text: PreferenceManager.getName().toString());
+  TextEditingController lastNameController = TextEditingController(
+      text: PreferenceManager.getName().toString().contains(" ")
+          ? PreferenceManager.getName().toString().split(" ")[1]
+          : " ");
   TextEditingController addressController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController pinController = TextEditingController();
   TextEditingController phnController = TextEditingController();
-  TextEditingController clgController = TextEditingController(text:PreferenceManager.getcollge().toString() );
-bool isLoading=false;
+  TextEditingController clgController =
+      TextEditingController(text: PreferenceManager.getcollge().toString());
+  bool isLoading = false;
   bool gstCheck = false;
 
   FocusNode fullNameFn;
@@ -58,21 +64,29 @@ bool isLoading=false;
   FocusNode cityFn;
   FocusNode gstFn;
   Razorpay _razorpay;
-  double totalprice=0.0;
+  double totalprice = 0.0;
   @override
   void initState() {
     getbookdetail();
-print(widget.firebaseid.toString().split(',')[0]);
+    if (widget.firebaseid.isNotEmpty)
+      print(widget.firebaseid.toString().split(',')[0]);
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    addressController=TextEditingController(text:Constants.userlocation+","+Constants.usercity+","+Constants.userstate+""+Constants.userpostal);
-    cityController=TextEditingController(text:Constants.usercity);
-    pinController=TextEditingController(text: Constants.userpostal);
-    stateController=TextEditingController(text: Constants.userstate);
-    phnController=TextEditingController(text:PreferenceManager.getPhoneNo());
-   // clgController=TextEditingController(text:PreferenceManager.g());
+    addressController = TextEditingController(
+        text: Constants.userlocation +
+            "," +
+            Constants.usercity +
+            "," +
+            Constants.userstate +
+            "" +
+            Constants.userpostal);
+    cityController = TextEditingController(text: Constants.usercity);
+    pinController = TextEditingController(text: Constants.userpostal);
+    stateController = TextEditingController(text: Constants.userstate);
+    phnController = TextEditingController(text: PreferenceManager.getPhoneNo());
+    // clgController=TextEditingController(text:PreferenceManager.g());
     // TODO: implement initState
     super.initState();
   }
@@ -97,109 +111,118 @@ print(widget.firebaseid.toString().split(',')[0]);
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(backgroundColor),
-
       body: SingleChildScrollView(
-        child:isLoading?Column(mainAxisAlignment:MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [SizedBox(height: 250,),Center(child: CircularProgressIndicator())],): Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.screenWidth * 0.02,
-                  vertical: SizeConfig.blockSizeVertical * 2),
-              child: Row(
+        child: isLoading
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: ImageIcon(
-                      AssetImage('assets/icons/back.png'),
-                      color: Color(colorBlue),
-                      size: SizeConfig.blockSizeVertical * 4,
-                    ),
+                  SizedBox(
+                    height: 250,
                   ),
+                  Center(child: CircularProgressIndicator())
                 ],
-              ),
-            ),
-            Form(
-              key: signUpFormKey,
-              child: Column(
+              )
+            : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  _generalTextField("First Name", firstNameController,1),
-                  //_generalTextField("Last Name", lastNameController,1),
-                  _generalTextField("Phone Number", phnController,1),
-                  _generalTextField("Address", addressController,4),
-                  _generalTextField("College Name", clgController,1),
-                  // _generalTextField("City", cityController),
-                  // _generalTextField("State", stateController),
-                  // _generalTextField("Pincode", pinController),
-                  Center(
-                    child: Container(
-                      width: SizeConfig.screenWidth * 0.5,
-                      height: SizeConfig.blockSizeVertical * 5,
-                      margin: EdgeInsets.only(
-                          left: SizeConfig.screenWidth * 0.05,
-                          right: SizeConfig.screenWidth * 0.05,
-                          top: SizeConfig.blockSizeVertical * 3,
-                          bottom: SizeConfig.blockSizeVertical),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(gradientColor1),
-                            Color(gradientColor2).withOpacity(0.95),
-                          ],
-                          begin: Alignment(1.0, -3.0),
-                          end: Alignment.bottomRight,
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.screenWidth * 0.02,
+                        vertical: SizeConfig.blockSizeVertical * 2),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: ImageIcon(
+                            AssetImage('assets/icons/back.png'),
+                            color: Color(colorBlue),
+                            size: SizeConfig.blockSizeVertical * 4,
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: MaterialButton(
-                        onPressed: () {
-                          if(widget.type=="Buy"){
-                            //callCheckoutAPI();
-                            openCheckout();
-                          }
-                          else{
-                            showordersummary(context);
-                          }
-                          //checkValidation();
-                        },
-                        child: Text(
-                          "Checkout",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                      ],
+                    ),
+                  ),
+                  Form(
+                    key: signUpFormKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _generalTextField("First Name", firstNameController, 1),
+                        //_generalTextField("Last Name", lastNameController,1),
+                        _generalTextField("Phone Number", phnController, 1),
+                        _generalTextField("Address", addressController, 4),
+                        _generalTextField("College Name", clgController, 1),
+                        // _generalTextField("City", cityController),
+                        // _generalTextField("State", stateController),
+                        // _generalTextField("Pincode", pinController),
+                        Center(
+                          child: Container(
+                            width: SizeConfig.screenWidth * 0.5,
+                            height: SizeConfig.blockSizeVertical * 5,
+                            margin: EdgeInsets.only(
+                                left: SizeConfig.screenWidth * 0.05,
+                                right: SizeConfig.screenWidth * 0.05,
+                                top: SizeConfig.blockSizeVertical * 3,
+                                bottom: SizeConfig.blockSizeVertical),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color(gradientColor1),
+                                  Color(gradientColor2).withOpacity(0.95),
+                                ],
+                                begin: Alignment(1.0, -3.0),
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: MaterialButton(
+                              onPressed: () {
+                                if (widget.type == "Buy") {
+                                  //callCheckoutAPI();
+                                  openCheckout();
+                                } else {
+                                  showordersummary(context);
+                                }
+                                //checkValidation();
+                              },
+                              child: Text(
+                                "Checkout",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25)),
+                            ),
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25)),
-                      ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
       ),
     ));
   }
 
-  Widget _generalTextField(String hint, TextEditingController controller,maxlines) {
+  Widget _generalTextField(
+      String hint, TextEditingController controller, maxlines) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(margin: EdgeInsets.only(
-          left: SizeConfig.screenWidth * 0.07,
-          right: SizeConfig.screenWidth * 0.05,
-          top: SizeConfig.blockSizeVertical * 2,
-
-        ),child: Text(hint)),
+        Container(
+            margin: EdgeInsets.only(
+              left: SizeConfig.screenWidth * 0.07,
+              right: SizeConfig.screenWidth * 0.05,
+              top: SizeConfig.blockSizeVertical * 2,
+            ),
+            child: Text(hint)),
         Container(
           width: SizeConfig.screenWidth,
           margin: EdgeInsets.only(
@@ -213,7 +236,9 @@ print(widget.firebaseid.toString().split(',')[0]);
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey[200], spreadRadius: 2.0, blurRadius: 4.0),
+                    color: Colors.grey[200],
+                    spreadRadius: 2.0,
+                    blurRadius: 4.0),
               ]),
           child: TextFormField(
             controller: controller,
@@ -240,7 +265,6 @@ print(widget.firebaseid.toString().split(',')[0]);
   checkValidation() {
     if (firstNameController.text.length < 2) {
       showAlert(context, "Please enter a valid First Name.");
-
     } else if (addressController.text.length < 10) {
       showAlert(context, "Please enter a valid Address.");
     } else if (cityController.text.length < 2) {
@@ -261,31 +285,42 @@ print(widget.firebaseid.toString().split(',')[0]);
       "session_key": PreferenceManager.getSessionKey(),
       "first_name": firstNameController.text,
       "last_name": "",
-      "type":widget.type=="Buy"?widget.type:"Cart",
+      "type": widget.type == "Buy" ? widget.type : "Cart",
       "address": addressController.text,
       "city": cityController.text,
       "state": stateController.text,
       "zip": pinController.text,
-      'book_id':widget.type=='Buy'?widget.id.toString():widget.orderid.toString().replaceAll('[', "").replaceAll(']', "")
+      'book_id': widget.type == 'Buy'
+          ? widget.id.toString()
+          : widget.orderid.toString().replaceAll('[', "").replaceAll(']', "")
     };
-print("----------------"+PreferenceManager.getfirebasenotif().toString());
+    print("----------------" + PreferenceManager.getfirebasenotif().toString());
     var res = await ApiCall.post(checkoutURL, body);
-print("------------"+res.toString());
+    print("------------" + res.toString());
     if (res["status"] == "200") {
-      if(widget.type=='Buy'){
-
-        Map<String, dynamic>   body = {
+      if (widget.type == 'Buy') {
+        Map<String, dynamic> body = {
           'senderId': PreferenceManager.getfirebaseid(),
           'receiverId': widget.firebaseid.toString().split(",")[0],
           'img': "widget.img",
           'userName': PreferenceManager.getName(),
         };
+        final split = widget.firebaseid.split(',');
+        List<String> splitdata = [];
+        for (int i = 0; i < split.length; i++) {
+          splitdata.add(split[i]);
+        }
         AppNotificationHandler.sendMessage(
-            msg: PreferenceManager.getName()+" Requested to buy your book", data: body, token:widget.firebaseid.toString().split(",")[1]);
+            msg: PreferenceManager.getName() + " Requested to buy your book",
+            data: body,
+            token:
+                splitdata.isEmpty && splitdata.length == 2 ? splitdata[1] : "");
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation(text:"Order Place")));
-      }
-     else{
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckAnimation(text: "Order Place")));
+      } else {
         // Map<String, dynamic>   body = {
         //   'senderId': PreferenceManager.getfirebaseid(),
         //   'receiverId': widget.firebaseid.toString().split(",")[0],
@@ -295,15 +330,18 @@ print("------------"+res.toString());
         // AppNotificationHandler.sendMessage(
         //     msg: PreferenceManager.getName()+" Requested to buy your book", data: body, token:widget.firebaseid.toString().split(",")[1]);
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation(text:"Order Place")));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckAnimation(text: "Order Place")));
       }
-
 
       //showPopUp(context, res["message"]);
     } else {
       showAlert(context, res["message"]);
     }
   }
+
   getNotification() async {
     print(widget.type);
     Map<String, dynamic> body = {
@@ -311,31 +349,36 @@ print("------------"+res.toString());
       "session_key": PreferenceManager.getSessionKey(),
       "first_name": firstNameController.text,
       "last_name": "",
-      "type":widget.type,
+      "type": widget.type,
       "address": addressController.text,
       "city": cityController.text,
       "state": stateController.text,
       "zip": pinController.text,
-      'book_id':widget.type=='Buy'?widget.id.toString():widget.orderid.toString().replaceAll('[', "").replaceAll(']', "")
+      'book_id': widget.type == 'Buy'
+          ? widget.id.toString()
+          : widget.orderid.toString().replaceAll('[', "").replaceAll(']', "")
     };
-    print("----------------"+PreferenceManager.getfirebasenotif().toString());
+    print("----------------" + PreferenceManager.getfirebasenotif().toString());
     var res = await ApiCall.post(checkoutURL, body);
-    print("------------"+res.toString());
+    print("------------" + res.toString());
     if (res["status"] == "200") {
-      if(widget.type=='Buy'){
-
-        Map<String, dynamic>   body = {
+      if (widget.type == 'Buy') {
+        Map<String, dynamic> body = {
           'senderId': PreferenceManager.getfirebaseid(),
           'receiverId': widget.firebaseid.toString().split(",")[0],
           'img': "widget.img",
           'userName': PreferenceManager.getName(),
         };
         AppNotificationHandler.sendMessage(
-            msg: PreferenceManager.getName()+" Requested to buy your book", data: body, token:widget.firebaseid.toString().split(",")[1]);
+            msg: PreferenceManager.getName() + " Requested to buy your book",
+            data: body,
+            token: widget.firebaseid.toString().split(",")[1]);
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation(text:"Order Place ")));
-      }
-      else{
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckAnimation(text: "Order Place ")));
+      } else {
         // Map<String, dynamic>   body = {
         //   'senderId': PreferenceManager.getfirebaseid(),
         //   'receiverId': widget.firebaseid.toString().split(",")[0],
@@ -345,9 +388,11 @@ print("------------"+res.toString());
         // AppNotificationHandler.sendMessage(
         //     msg: PreferenceManager.getName()+" Requested to buy your book", data: body, token:widget.firebaseid.toString().split(",")[1]);
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation(text:"Order Place ")));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckAnimation(text: "Order Place ")));
       }
-
 
       //showPopUp(context, res["message"]);
     } else {
@@ -383,10 +428,14 @@ print("------------"+res.toString());
   void openCheckout() {
     print(totalprice);
     var options = {
-      'key': 'rzp_live_b5Jmla6DpICdpO',
-      'amount':widget.type=='Buy'?"${(widget.price)*100}":'${totalprice*100}',
+      // 'key': 'rzp_live_b5Jmla6DpICdpO',  actual
+      'key': 'rzp_test_23633fjMEgS0IE', // testing
+      'amount': widget.type == 'Buy'
+          ? "${(widget.price) * 100}"
+          : '${totalprice * 100}',
       'name': 'Apni Stationary',
-      'description': 'Buy  used or unused stationary,books,notes and study materials',
+      'description':
+          'Buy  used or unused stationary,books,notes and study materials',
 
       'external': {
         'wallets': ['paytm']
@@ -399,189 +448,220 @@ print("------------"+res.toString());
       debugPrint('Error: e');
     }
   }
+
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     callCheckoutAPI();
 
-  //  showPopUp(context, "Order Place Successfully");
+    //  showPopUp(context, "Order Place Successfully");
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    showPopUp(context,
-       "Your Last Payment Failed !!! ",
-        );
+    showPopUp(
+      context,
+      "Your Last Payment Failed !!! ",
+    );
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    showPopUp(context, "EXTERNAL_WALLET: " + response.walletName, );
+    showPopUp(
+      context,
+      "EXTERNAL_WALLET: " + response.walletName,
+    );
   }
 
   showordersummary(BuildContext context) {
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return  AlertDialog(
+        return AlertDialog(
           title: Center(child: Text("Your Order Summary ")),
           contentPadding: EdgeInsets.all(0),
-
           content: Container(
-
-
-            width: MediaQuery.of(context).size.width,
-            child:Column(
-              children: [
-                Container( height: MediaQuery.of(context).size.height*0.7,child: ListView(children:orderdetail() ,)),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(width: 5,),
-
-                    RaisedButton(onPressed: (){
-                      //openCheckout();
-                    //  widget.firebaseid=
-                      print(widget.orderid);
-                   //  callCheckoutAPI();
-                     openCheckout();
-
-                    },color: Colors.lightBlue,child: Text("Confirm Order",style: TextStyle(color: Colors.white),),),
-                    SizedBox(width: 10,),
-
-                    RaisedButton(onPressed: (){
-                      Navigator.pop(context);
-                    },child: Text("Cancel Order"),),
-
-                  ],
-                )
-              ],
-            )),
-
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  Container(
+                      height: MediaQuery.of(context).size.height * 0.7,
+                      child: ListView(
+                        children: orderdetail(),
+                      )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 5,
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          //openCheckout();
+                          //  widget.firebaseid=
+                          print(widget.orderid);
+                          //  callCheckoutAPI();
+                          openCheckout();
+                        },
+                        color: Colors.lightBlue,
+                        child: Text(
+                          "Confirm Order",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Cancel Order"),
+                      ),
+                    ],
+                  )
+                ],
+              )),
         );
       },
-    );}
-    dynamic bookdetail=new List();
-  void getbookdetail() async {
+    );
+  }
 
-  setState(() {
-    isLoading=true;
-    //Dialogs.showLoadingDialog(context, loginLoader);
-  });
+  dynamic bookdetail = new List();
+  void getbookdetail() async {
+    setState(() {
+      isLoading = true;
+      //Dialogs.showLoadingDialog(context, loginLoader);
+    });
     Map<String, dynamic> data = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
-
     };
-
 
     try {
       final response = await post(
-
-              Uri.parse(ApiCall.baseURL+"order_details_check"),
-          body: data
-
-          );
+          Uri.parse(ApiCall.baseURL + "order_details_check"),
+          body: data);
       print(response.statusCode.toString());
 
       if (response.statusCode == 256) {
-
-
         final responseJson = json.decode(response.body);
 
         print(responseJson);
         setState(() {
-          isLoading=false;
-          bookdetail=responseJson['date'];
+          isLoading = false;
+          bookdetail = responseJson['date'];
         });
-for(int i=0;i<bookdetail.length;i++){
-  totalprice+=(bookdetail[i]['price']);
-}
-print(totalprice.toString()+"pricrrrrrr");
-print(totalprice.toString()+"0"+"pricrrrrrr");
-
-      } else {
-
-
-      }
+        for (int i = 0; i < bookdetail.length; i++) {
+          totalprice += (bookdetail[i]['price']);
+        }
+        print(totalprice.toString() + "pricrrrrrr");
+        print(totalprice.toString() + "0" + "pricrrrrrr");
+      } else {}
     } catch (e) {
       print(e);
       setState(() {
-        Navigator.of(loginLoader.currentContext,
-            rootNavigator: true) .pop();
-
+        Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
       });
     }
   }
 
-  List<Widget>orderdetail(){
-    List<Widget>  orders=new List();
-    for(int i=0;i<bookdetail.length;i++){
-     orders.add(Container(
-
-       margin: EdgeInsets.only(top:10),
-       width: MediaQuery.of(context).size.width,
-       child: Column(
-         crossAxisAlignment: CrossAxisAlignment.start,
-         mainAxisAlignment: MainAxisAlignment.start,
-         children: [
-           Row(
-             mainAxisAlignment: MainAxisAlignment.start,
-             children: [
-               SizedBox(width: MediaQuery.of(context).size.width*0.15,),
-               Container(
-                   width: 120,
-                   child: Text("Book Name: ")),
-               Text(bookdetail[i]['name']),
-             ],
-           ),
-           SizedBox(height: 10,),
-           Row(mainAxisAlignment: MainAxisAlignment.start,
-             children: [
-               SizedBox(width: MediaQuery.of(context).size.width*0.15,),
-               Container(
-                 width: 120,
-                 child:Text("Author Name : "),),
-               Text(bookdetail[i]['auther_name']),
-             ],
-           ),
-           SizedBox(height: 10,),
-           Row(mainAxisAlignment: MainAxisAlignment.start,
-             children: [
-               SizedBox(width: MediaQuery.of(context).size.width*0.15,),
-               Container(
-                 width: 120,
-                 child:Text("Category : "),),
-               Text(bookdetail[i]['category_name']),
-             ],
-           ),
-           SizedBox(height: 10,),
-           Row(mainAxisAlignment: MainAxisAlignment.start,
-             children: [
-               SizedBox(width: MediaQuery.of(context).size.width*0.15,),
-               Container(
-                 width: 120,
-                 child: Text("College : "),),
-               Container(
-                   width: 120,
-                   child: Text(bookdetail[i]['college_name'],maxLines: 2,)),
-             ],
-           ),
-           SizedBox(height: 10,),
-           Row(mainAxisAlignment: MainAxisAlignment.start,
-             children: [
-               SizedBox(width: MediaQuery.of(context).size.width*0.15,),
-               Container(
-                 width: 120,
-                 child: Text("Price : "),),
-               Text(bookdetail[i]['price'].toString()),
-             ],
-           ),
-           SizedBox(height: 10,),
-           Divider(thickness: 1.5,
-           height: 10,)
-
-
-         ],),)) ;
+  List<Widget> orderdetail() {
+    List<Widget> orders = new List();
+    for (int i = 0; i < bookdetail.length; i++) {
+      orders.add(Container(
+        margin: EdgeInsets.only(top: 10),
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.15,
+                ),
+                Container(width: 120, child: Text("Book Name: ")),
+                Text(bookdetail[i]['name']),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.15,
+                ),
+                Container(
+                  width: 120,
+                  child: Text("Author Name : "),
+                ),
+                Text(bookdetail[i]['auther_name']),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.15,
+                ),
+                Container(
+                  width: 120,
+                  child: Text("Category : "),
+                ),
+                Text(bookdetail[i]['category_name']),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.15,
+                ),
+                Container(
+                  width: 120,
+                  child: Text("College : "),
+                ),
+                Container(
+                    width: 120,
+                    child: Text(
+                      bookdetail[i]['college_name'],
+                      maxLines: 2,
+                    )),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.15,
+                ),
+                Container(
+                  width: 120,
+                  child: Text("Price : "),
+                ),
+                Text(bookdetail[i]['price'].toString()),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Divider(
+              thickness: 1.5,
+              height: 10,
+            )
+          ],
+        ),
+      ));
     }
     return orders;
   }
-  }
+}

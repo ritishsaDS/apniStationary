@@ -127,58 +127,66 @@ class _MainScreenState extends State<MainScreen> {
               });
             },
             items: [
-              BottomNavigationBarItem(
+                            BottomNavigationBarItem(
                 icon: ImageIcon(
                   Image.asset('assets/icons/home.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                title: Text(
-                  "Home",
-                  style: TextStyle(
-                      color: Color(matteBlack),
-                      fontWeight: FontWeight.w500,
-                      fontSize: SizeConfig.blockSizeVertical * 1.4),
-                ),
+                label: "Home",
+                
+                // title: Text(
+                //   "Home",
+                //   style: TextStyle(
+                //       color: Color(matteBlack),
+                //       fontWeight: FontWeight.w500,
+                //       fontSize: SizeConfig.blockSizeVertical * 1.4),
+                // ),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(
                   Image.asset('assets/icons/wallet.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                title: Text(
-                  "Wallet",
-                  style: TextStyle(
-                      color: Color(matteBlack),
-                      fontWeight: FontWeight.w500,
-                      fontSize: SizeConfig.blockSizeVertical * 1.4),
-                ),
+                                label: "Wallet",
+
+                // title: Text(
+                //   "Wallet",
+                //   style: TextStyle(
+                //       color: Color(matteBlack),
+                //       fontWeight: FontWeight.w500,
+                //       fontSize: SizeConfig.blockSizeVertical * 1.4),
+                // ),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(
                   Image.asset('assets/icons/cart.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                title: Text(
-                  "Cart",
-                  style: TextStyle(
-                      color: Color(matteBlack),
-                      fontWeight: FontWeight.w500,
-                      fontSize: SizeConfig.blockSizeVertical * 1.4),
-                ),
+                       label:           "Cart",
+
+                // title: Text(
+                //   "Cart",
+                //   style: TextStyle(
+                //       color: Color(matteBlack),
+                //       fontWeight: FontWeight.w500,
+                //       fontSize: SizeConfig.blockSizeVertical * 1.4),
+                // ),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(
                   Image.asset('assets/icons/account.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                title: Text(
-                  "Account",
-                  style: TextStyle(
-                      color: Color(matteBlack),
-                      fontWeight: FontWeight.w500,
-                      fontSize: SizeConfig.blockSizeVertical * 1.4),
-                ),
+                label: "Account",
+                // title: Text(
+                //   "Account",
+                //   style: TextStyle(
+                //       color: Color(matteBlack),
+                //       fontWeight: FontWeight.w500,
+                //       fontSize: SizeConfig.blockSizeVertical * 1.4),
+                // ),
               ),
+
             ],
           ),
         ),

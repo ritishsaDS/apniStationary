@@ -614,7 +614,7 @@ fillColor: Colors.white,
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/add-amount"),
+              "https://admin.apnistationary.com/api/add-amount"),
           body: (
           {
             "user_id" : "${PreferenceManager.getUserId()}",

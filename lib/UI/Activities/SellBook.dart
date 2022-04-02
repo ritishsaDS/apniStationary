@@ -1517,7 +1517,7 @@ Future<void> editbook() async {
   final map = {
     };
 print(bookName.text);
-    var url = "http://admin.apnistationary.com/api/book-edit";
+    var url = "https://admin.apnistationary.com/api/book-edit";
 
     var request =http.MultipartRequest('POST', Uri.parse(url));
 

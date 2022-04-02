@@ -814,7 +814,7 @@ else if(iamge!=null){
   Future<void> getprofile() async {
     isLoading=true;
     try {
-      final response = await http.post(Uri.parse("http://admin.apnistationary.com/api/user-data"),
+      final response = await http.post(Uri.parse("https://admin.apnistationary.com/api/user-data"),
          body: {"user_id":PreferenceManager.getUserId().toString(),
           "session_key":PreferenceManager.getSessionKey().toString()});
 
@@ -848,7 +848,7 @@ setState(() {
       isbtnLoading=true;
     });
 if(file==null){
-  var url = "http://admin.apnistationary.com/api/edit-profile";
+  var url = "https://admin.apnistationary.com/api/edit-profile";
 
   var request = http.MultipartRequest('POST', Uri.parse(url));
 
@@ -900,7 +900,7 @@ if(file==null){
 
 }
     else{
-  var url = "http://admin.apnistationary.com/api/edit-profile";
+  var url = "https://admin.apnistationary.com/api/edit-profile";
 
   var request = http.MultipartRequest('POST', Uri.parse(url));
 
@@ -970,7 +970,7 @@ CommonSnackBar.snackBar(
 
 }
 //     try {
-//       final response = await http.post(Uri.parse("http://admin.apnistationary.com/api/edit-profile"),
+//       final response = await http.post(Uri.parse("https://admin.apnistationary.com/api/edit-profile"),
 //           body: {
 //         "user_id":PreferenceManager.getUserId().toString(),
 //             "session_key":PreferenceManager.getSessionKey().toString(),

@@ -215,7 +215,7 @@ resizeToAvoidBottomInset: false,
                 ),
                 Container(
                   width: SizeConfig.screenWidth,
-                  height: SizeConfig.blockSizeVertical*10,
+                  // height: SizeConfig.blockSizeVertical*10,
                   margin: EdgeInsets.symmetric(
                       horizontal: SizeConfig.screenWidth * 0.08,
                       vertical: SizeConfig.blockSizeVertical * 2),
@@ -1306,7 +1306,7 @@ dynamic categorylist=new List();
     print("jh dhic ibcdofn");
     isLoading=true;
     try {
-      final response = await post(Uri.parse("http://admin.apnistationary.com/api/category"),
+      final response = await post(Uri.parse("https://admin.apnistationary.com/api/category"),
           body: {
         "user_id":PreferenceManager.getUserId().toString(),
             "session_key":PreferenceManager.getSessionKey().toString(),
@@ -1342,7 +1342,7 @@ print("responsestauus codee"+response.statusCode.toString());
   Future<void> getprofile() async {
     isLoading=true;
     try {
-      final response = await post(Uri.parse("http://admin.apnistationary.com/api/user-data"),
+      final response = await post(Uri.parse("https://admin.apnistationary.com/api/user-data"),
           body: {"user_id":PreferenceManager.getUserId().toString(),
             "session_key":PreferenceManager.getSessionKey().toString()});
 
@@ -1446,7 +1446,7 @@ print("responsestauus codee"+response.statusCode.toString());
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/myOrderList"),body: (
+              "https://admin.apnistationary.com/api/myOrderList"),body: (
           {
             "user_id" : "${PreferenceManager.getUserId()}",
             "session_key": PreferenceManager.getSessionKey(),
@@ -1491,7 +1491,7 @@ print("responsestauus codee"+response.statusCode.toString());
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/book-list"),body: (
+              "https://admin.apnistationary.com/api/book-list"),body: (
           {
             "user_id" : "${PreferenceManager.getUserId()}",
             "session_key": PreferenceManager.getSessionKey(),
@@ -1540,7 +1540,7 @@ for(int i=0;i<bookdata.length;i++){
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/updateBookStatus"),body: (
+              "https://admin.apnistationary.com/api/updateBookStatus"),body: (
           {
             "user_id" : "${PreferenceManager.getUserId()}",
             "session_key": PreferenceManager.getSessionKey(),
@@ -1586,7 +1586,7 @@ for(int i=0;i<bookdata.length;i++){
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/show_order_notifications"),body: (
+              "https://admin.apnistationary.com/api/show_order_notifications"),body: (
           {
             "user_id" : "${PreferenceManager.getUserId()}",
             "session_key": PreferenceManager.getSessionKey(),

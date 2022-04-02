@@ -131,7 +131,7 @@ radius:20,
     try {
       final response = await post(
           Uri.parse(
-            "http://admin.apnistationary.com/api/show_order_notifications"),body: (
+            "https://admin.apnistationary.com/api/show_order_notifications"),body: (
           {
             "user_id" : "${PreferenceManager.getUserId()}",
             "session_key": PreferenceManager.getSessionKey(),

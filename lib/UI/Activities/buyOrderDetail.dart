@@ -64,7 +64,7 @@ appBar: AppBar(
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/myOrderList"),
+              "https://admin.apnistationary.com/api/myOrderList"),
           body: (
               {
                 "user_id" : "${PreferenceManager.getUserId()}",
@@ -345,7 +345,7 @@ isLoading=false;
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/update-order-status"),
+              "https://admin.apnistationary.com/api/update-order-status"),
           body: (
               {
                 "user_id" : "${PreferenceManager.getUserId()}",

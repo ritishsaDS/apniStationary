@@ -48,7 +48,7 @@ class _PendingRequestState extends State<OrdersRequest> {
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/list-order-requests"),
+              "https://admin.apnistationary.com/api/list-order-requests"),
           body: (
               {
                 "user_id" : "${PreferenceManager.getUserId()}",
@@ -391,7 +391,7 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>RequestDetail(catI
     try {
       final response = await post(
           Uri.parse(
-              "http://admin.apnistationary.com/api/update-order-status"),
+              "https://admin.apnistationary.com/api/update-order-status"),
           body: (
               {
                 "user_id" : PreferenceManager.getUserId().toString(),
@@ -463,7 +463,7 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>RequestDetail(catI
   try {
   final response = await post(
   Uri.parse(
-  "http://admin.apnistationary.com/api/update-order-status"),
+  "https://admin.apnistationary.com/api/update-order-status"),
   body: (
   {
   "user_id" : "${PreferenceManager.getUserId()}",

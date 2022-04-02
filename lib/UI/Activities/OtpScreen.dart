@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:http/http.dart' as http;
 import 'package:book_buy_and_sell/UI/Activities/SignUp.dart';
 import 'package:book_buy_and_sell/Utils/Dialog.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
@@ -33,15 +36,19 @@ class Otp extends StatefulWidget {
   var gender;
   var dob;
   var pass;
+  var profession;
+  File image;
 
   Otp(
       {this.name,
       this.phone,
+      this.profession,
       this.college,
       this.gender,
       this.dob,
       this.pass,
-      this.email});
+      this.email,
+      this.image});
   @override
   _OtpState createState() => _OtpState();
 }
@@ -59,7 +66,6 @@ class _OtpState extends State<Otp> {
           setState(() {
             timer.cancel();
             verifyPhone();
-
           });
         } else {
           setState(() {
@@ -95,28 +101,28 @@ class _OtpState extends State<Otp> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      body:
-      SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-      child:Container(
-        height: SizeConfig.screenHeight*1,
-
+        body: SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        height: SizeConfig.screenHeight * 1,
         child: SafeArea(
           child: Container(
-
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: SizeConfig.screenHeight*0.3,
+                  height: SizeConfig.screenHeight * 0.3,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage('assets/bg/clouds.png'),fit: BoxFit.fitWidth)
-                  ),
+                      image: DecorationImage(
+                          image: AssetImage('assets/bg/clouds.png'),
+                          fit: BoxFit.fitWidth)),
                   child: Column(
                     children: [
-                      SizedBox(height: SizeConfig.screenHeight*0.08,),
+                      SizedBox(
+                        height: SizeConfig.screenHeight * 0.08,
+                      ),
                       Text(
                         "Enter Verification Code",
                         style: TextStyle(
@@ -128,29 +134,29 @@ class _OtpState extends State<Otp> {
                   ),
                 ),
                 SizedBox(
-                  height: SizeConfig.blockSizeVertical*4,
+                  height: SizeConfig.blockSizeVertical * 4,
                 ),
                 Center(
                     child: Text(
-                      "Enter OTP ",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue),
-                    )),
+                  "Enter OTP ",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue),
+                )),
                 SizedBox(
-                  height: SizeConfig.blockSizeVertical*2,
+                  height: SizeConfig.blockSizeVertical * 2,
                 ),
                 Center(
                     child: Text(
-                      "We have  sent an OTP on +91 ${widget.phone}",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
-                    )),
+                  "We have  sent an OTP on +91 ${widget.phone}",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
+                )),
                 SizedBox(
-                  height: SizeConfig.blockSizeVertical*4,
+                  height: SizeConfig.blockSizeVertical * 4,
                 ),
 //                 OtpTextField(
 //                   numberOfFields: 6,
@@ -200,9 +206,12 @@ class _OtpState extends State<Otp> {
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldWidth: 50,
                   fieldStyle: FieldStyle.box,
-
                   outlineBorderRadius: 10,
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold,color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.white
+                      ),
                   onChanged: (pin) {
                     print("Changed: " + pin);
                   },
@@ -231,12 +240,12 @@ class _OtpState extends State<Otp> {
                   },
                 ),
                 SizedBox(
-                  height: SizeConfig.blockSizeVertical*5,
+                  height: SizeConfig.blockSizeVertical * 5,
                 ),
                 Container(
                     alignment: Alignment.center,
-                    child: Text("OTP auto resend  ${_start.toString()=="0"?"":"in"} ${_start.toString()=="0"?"":_start.toString()} ${_start.toString()=="0"?"":"sec"}"
-                        ,
+                    child: Text(
+                        "OTP auto resend  ${_start.toString() == "0" ? "" : "in"} ${_start.toString() == "0" ? "" : _start.toString()} ${_start.toString() == "0" ? "" : "sec"}",
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.blue,
@@ -244,7 +253,8 @@ class _OtpState extends State<Otp> {
                 SizedBox(
                   height: 50,
                 ),
-                Expanded(child:  GestureDetector(
+                Expanded(
+                    child: GestureDetector(
                   onTap: () {
                     if (smsOTP.length != 6) {
                       CommonSnackBar.snackBar(
@@ -274,9 +284,9 @@ class _OtpState extends State<Otp> {
                       padding: EdgeInsets.only(right: 10),
                       child: Center(
                           child: Text(
-                            "Verify",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          )),
+                        "Verify",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      )),
                     ),
                   ),
                 ))
@@ -284,8 +294,8 @@ class _OtpState extends State<Otp> {
             ),
           ),
         ),
-      ),)
-    );
+      ),
+    ));
   }
 
   Future<void> verifyPhone() async {
@@ -322,7 +332,76 @@ class _OtpState extends State<Otp> {
     }
   }
 
-  signupapi(uid,fmc) async {
+  callSignupApi(result, fcmToken) async {
+    // context.loaderOverlay.show();
+    setState(() {
+      // isLoading = true;
+    });
+
+    // ImageUploadViewModel imaUploadViewModel = Get.find();
+
+    final String baseURL = 'https://admin.apnistationary.com/api/';
+    final String registerURL = 'sign-up';
+
+    //create multipart request for POST or PATCH method
+    var request =
+        http.MultipartRequest("POST", Uri.parse(baseURL + registerURL));
+    //add text fields
+    request.fields['email'] = widget.email;
+    request.fields['password'] = widget.pass;
+    request.fields['name'] = widget.name;
+    request.fields["profession"] = widget.profession;
+    request.fields['number'] = widget.phone;
+    request.fields['dob'] = widget.dob;
+    request.fields['gender'] = widget.gender;
+    request.fields['college_name'] = widget.college;
+    request.fields['user_firebase_id'] = result + "," + fcmToken;
+
+    try {
+      //create multipart using filepath, string or bytes
+      var pic = await http.MultipartFile.fromPath("image", widget.image.path);
+
+      //add multipart to request
+      request.files.add(pic);
+      var response = await request.send();
+
+      //Get the response from the server
+      var responseData = await response.stream.toBytes();
+      Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
+
+      setState(() {
+        // isLoading = false;
+      });
+
+      var responseString = String.fromCharCodes(responseData);
+
+      Map<String, dynamic> mapResponse = json.decode(responseString);
+      RegisterResponseModel model = RegisterResponseModel.fromJson(mapResponse);
+
+      if (model.status == '200') {
+        print("jhbwefjhbeli");
+        Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
+        CommonSnackBar.snackBar(message: "SignUp Successfully");
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        });
+      } else {
+        showOtpAlert(context, model.message);
+      }
+
+      print(responseString);
+    } catch (e) {
+      Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
+
+      print(e);
+      setState(() {
+        // isLoading = false;
+      });
+    }
+  }
+
+  signupapi(uid, fmc) async {
     ImageUploadViewModel imaUploadViewModel = Get.find();
     print("image selected${imaUploadViewModel.profilephoto}");
 
@@ -336,11 +415,11 @@ class _OtpState extends State<Otp> {
     registerReq.email = widget.email;
     registerReq.password = widget.pass;
     registerReq.name = widget.name;
-   // registerReq.image = imaUploadViewModel.profilephoto==null?Uint8List.fromList('https://gnws.org/wp-content/uploads/2019/07/placeholder-1400x775.jpg'.codeUnits):imaUploadViewModel.profilephoto;
+    // registerReq.image = imaUploadViewModel.profilephoto==null?Uint8List.fromList('https://gnws.org/wp-content/uploads/2019/07/placeholder-1400x775.jpg'.codeUnits):imaUploadViewModel.profilephoto;
     registerReq.number = widget.phone;
     registerReq.dob = widget.dob;
     registerReq.profession = "profession.text";
-    registerReq.user_firebase_id=uid+","+fmc;
+    registerReq.user_firebase_id = uid + "," + fmc;
     registerReq.gender = widget.gender;
     registerReq.college_name = widget.college;
     await registerViewModel.register(registerReq);
@@ -349,7 +428,7 @@ class _OtpState extends State<Otp> {
       if (response.status == '200') {
         print("jhbwefjhbeli");
         Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
-         CommonSnackBar.snackBar(message:"SignUp Successfully");
+        CommonSnackBar.snackBar(message: "SignUp Successfully");
         Future.delayed(Duration(seconds: 2), () {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -534,7 +613,7 @@ class _OtpState extends State<Otp> {
       final currentUser = await _auth.currentUser;
       assert(FirebaseAuth.instance.currentUser.uid == currentUser.uid);
       print("jkfnoonnjonn" + currentUser.toString());
-    // _timer.stop();
+      // _timer.stop();
       singUp();
 
       // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
@@ -543,7 +622,6 @@ class _OtpState extends State<Otp> {
       Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
 
       CommonSnackBar.snackBar(message: "Please Enter Correct OTP");
-
 
       print(e);
     }
@@ -555,9 +633,8 @@ class _OtpState extends State<Otp> {
     await authService
         .signUpWithEmailAndPassword(widget.email, widget.pass)
         .then((result) async {
-
       if (result != null) {
-       print("+++++++++++"+result);
+        print("+++++++++++" + result);
 
         Map<String, String> userDataMap = {
           "userName": widget.name,
@@ -568,19 +645,18 @@ class _OtpState extends State<Otp> {
         HelperFunctions.saveUserLoggedInSharedPreference(true);
         HelperFunctions.saveUserNameSharedPreference(widget.name);
         HelperFunctions.saveUserEmailSharedPreference(widget.email);
-       String fmcToken =
-           await AppNotificationHandler.getFcmToken();
-        signupapi(result,fmcToken);
+        String fmcToken = await AppNotificationHandler.getFcmToken();
+        callSignupApi(result, fmcToken);
+        // signupapi(result,fmcToken);
 
         // Navigator.pushReplacement(context, MaterialPageRoute(
         //     builder: (context) => ChatRoom()
         // ));
-      }
-      else{
-
+      } else {
         Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
         Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
-        showOtpAlert(context, "The email address is already in use by another account");
+        showOtpAlert(
+            context, "The email address is already in use by another account");
       }
     });
   }
@@ -596,16 +672,19 @@ class _OtpState extends State<Otp> {
             FlatButton(
               child: Text('Ok'),
               onPressed: () {
+                Navigator.pop(context);
+                return;
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => SignUp(
-                    email:widget.email,
-                    pass:widget.pass,
-                    college:widget.college,
-                    name:widget.name,
-                    dob:widget.dob,
-                    gender:widget.gender,
-                    phone:widget.phone
-                )));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SignUp(
+                            email: widget.email,
+                            pass: widget.pass,
+                            college: widget.college,
+                            name: widget.name,
+                            dob: widget.dob,
+                            gender: widget.gender,
+                            phone: widget.phone)));
               },
             ),
           ],

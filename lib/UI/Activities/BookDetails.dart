@@ -34,7 +34,7 @@ class _BookDetailState extends State<BookDetail> {
   DatabaseMethods databaseMethods = new DatabaseMethods();
   final GlobalKey<State> loginLoader = new GlobalKey<State>();
   Stream chatRooms;
-  bool isLoading=false;
+  bool isLoading = false;
   @override
   void initState() {
     getUserInfogetChats();
@@ -48,36 +48,36 @@ class _BookDetailState extends State<BookDetail> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(backgroundColor),
-      body:isLoading?
-          CircularProgressIndicator()
+      body: isLoading
+          ? CircularProgressIndicator()
           : SingleChildScrollView(
-        child: FutureBuilder<BookDataModel>(
-          future: _callBookDataAPI(),
-          builder: (context, AsyncSnapshot<BookDataModel> snapshot) {
-            if (snapshot.hasData) {
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.02,
-                          vertical: SizeConfig.blockSizeVertical * 2),
-                      child: Row(
+              child: FutureBuilder<BookDataModel>(
+                future: _callBookDataAPI(),
+                builder: (context, AsyncSnapshot<BookDataModel> snapshot) {
+                  if (snapshot.hasData) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: ImageIcon(
-                              AssetImage('assets/icons/back.png'),
-                              color: Color(colorBlue),
-                              size: SizeConfig.blockSizeVertical * 4,
-                            ),
-                          ),
-                          /* Container(
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.screenWidth * 0.02,
+                                vertical: SizeConfig.blockSizeVertical * 2),
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: ImageIcon(
+                                    AssetImage('assets/icons/back.png'),
+                                    color: Color(colorBlue),
+                                    size: SizeConfig.blockSizeVertical * 4,
+                                  ),
+                                ),
+                                /* Container(
                             margin: EdgeInsets.only(
                                 left: SizeConfig.blockSizeHorizontal * 5,
                                 right: SizeConfig.screenWidth * 0.35),
@@ -99,490 +99,581 @@ class _BookDetailState extends State<BookDetail> {
                             ),
                           ),
                            */
-                        ],
-                      ),
-                    ),
-                    Container(
-                        height: SizeConfig.screenHeight * 0.3,
-                        width: SizeConfig.screenWidth,
-                        child: Carousel(
-                          images: [
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(image:snapshot.data.image_url +
-                                    "/" +
-                                    snapshot.data.date.image1)));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Image.network(snapshot.data.image_url +
-                                      "/" +
-                                      snapshot.data.date.image1),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(image:snapshot.data.image_url +
-                                    "/" +
-                                    snapshot.data.date.image2)));
-                              },
-                              child:
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Image.network(snapshot.data.image_url +
-                                      "/" +
-                                      snapshot.data.date.image2),
-                                ),
-                              ),),  GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(image:snapshot.data.image_url +
-                                    "/" +
-                                    snapshot.data.date.image3)));
-                              },
-                              child:
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Image.network(snapshot.data.image_url +
-                                      "/" +
-                                      snapshot.data.date.image3),
-                                ),
-                              ),),
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(image:snapshot.data.image_url +
-                                    "/" +
-                                    snapshot.data.date.image4)));
-                              },
-                              child:
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Image.network(snapshot.data.image_url +
-                                      "/" +
-                                      snapshot.data.date.image4),
-                                ),
-                              ),),
-                          ],
-                          dotColor: Colors.grey,
-                          dotIncreasedColor: Color(colorBlue),
-                          dotBgColor: Colors.transparent,
-                          dotSize: SizeConfig.blockSizeVertical,
-                          dotPosition: DotPosition.bottomCenter,
-                        )),
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.05,
-                          vertical: SizeConfig.blockSizeVertical),
-                      height: SizeConfig.blockSizeVertical * 5,
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Color.fromRGBO(212, 247, 255, 0.45)),
-                      child: MaterialButton(
-                        onPressed: () {},
-                        child: Text(
-                          snapshot.data.date.name,
-                          style: TextStyle(
-                              color: Color(black),
-                              fontWeight: FontWeight.w500,
-                              fontSize: SizeConfig.blockSizeVertical * 1.65),
-                        ),
-                      ),
-                    ),
-                    // Container(
-                    //   width: SizeConfig.screenWidth,
-                    //   margin: EdgeInsets.symmetric(
-                    //       horizontal: SizeConfig.screenWidth * 0.08,
-                    //       vertical: SizeConfig.blockSizeVertical),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Container(
-                    //         width: SizeConfig.screenWidth * 0.3,
-                    //         child: Column(
-                    //           mainAxisAlignment: MainAxisAlignment.start,
-                    //           crossAxisAlignment: CrossAxisAlignment.start,
-                    //           children: [
-                    //             Text(
-                    //               "Author :",
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w500,
-                    //                   color: Color(0XFF656565)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical,
-                    //             ),
-                    //             Text(
-                    //               "Edition :",
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w500,
-                    //                   color: Color(0XFF656565)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical,
-                    //             ),
-                    //
-                    //             Text(
-                    //               "Condition :",
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w500,
-                    //                   color: Color(0XFF656565)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical,
-                    //             ),
-                    //             Text(
-                    //               "College :",
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w500,
-                    //                   color: Color(0XFF656565)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical*3,
-                    //             ),
-                    //             Text(
-                    //               "Category :",
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w500,
-                    //                   color: Color(0XFF656565)),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //       Container(
-                    //         width: SizeConfig.screenWidth * 0.5,
-                    //         child: Column(
-                    //           mainAxisAlignment: MainAxisAlignment.start,
-                    //           crossAxisAlignment: CrossAxisAlignment.start,
-                    //           children: [
-                    //             Text(
-                    //               snapshot.data.date.auther_name,
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w600,
-                    //                   color: Color(black)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical,
-                    //             ),
-                    //             Text(
-                    //               snapshot.data.date.edition_detail,
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w600,
-                    //                   color: Color(black)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical,
-                    //             ),
-                    //             Text(
-                    //               snapshot.data.date.semester,
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w600,
-                    //                   color: Color(black)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical,
-                    //             ),
-                    //             Text(
-                    //               snapshot.data.date.conditions,
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w600,
-                    //                   color: Color(black)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical,
-                    //             ),
-                    //             Text(
-                    //               snapshot.data.date.college_name,maxLines: 2,
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w600,
-                    //                   color: Color(black)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: SizeConfig.blockSizeVertical,
-                    //             ),
-                    //             Text(
-                    //               snapshot.data.date.category_name,
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.w600,
-                    //                   color: Color(black)),
-                    //             )
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Container(
-                    //   width: SizeConfig.screenWidth,
-                    //   margin: EdgeInsets.symmetric(
-                    //       horizontal: SizeConfig.screenWidth * 0.08),
-                    //   child: Column(
-                    //     mainAxisAlignment: MainAxisAlignment.start,
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text(
-                    //         "Description :",
-                    //         style: TextStyle(
-                    //             fontWeight: FontWeight.w500,
-                    //             color: Color(0XFF656565)),
-                    //       ),
-                    //       SizedBox(
-                    //         height: SizeConfig.blockSizeVertical,
-                    //       ),
-                    //       Text(
-                    //         snapshot.data.date.description,
-                    //         style: TextStyle(
-                    //             fontWeight: FontWeight.w500, color: Color(black)),
-                    //       ),
-                    //
-                    //     ],
-                    //   ),
-                    // ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-
-                        children: [
-                          Container(
-                              width:SizeConfig.screenWidth*0.24,
-                              child: Text("Author:")),
-                          SizedBox(width: SizeConfig.screenWidth*0.10,),
-                          Text(snapshot.data.date.auther_name,style: TextStyle(
-                              color: Color(black),
-                              fontWeight: FontWeight.bold,
-                              fontSize: SizeConfig.blockSizeVertical * 1.65),),
-                        ],
-                      ),),
-                    SizedBox(
-                      height: SizeConfig.screenHeight * 0.02,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-
-                        children: [
-                          Container(
-                              width:SizeConfig.screenWidth*0.24,
-                              child:Text("Edition:")),
-                          SizedBox(width: SizeConfig.screenWidth*0.10,),
-                          Text(snapshot.data.date.edition_detail,style: TextStyle(
-                              color: Color(black),
-                              fontWeight: FontWeight.bold,
-                              fontSize: SizeConfig.blockSizeVertical * 1.65),),
-                        ],
-                      ),),
-                    SizedBox(
-                      height: SizeConfig.screenHeight * 0.02,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-
-                        children: [
-                          Container(
-                              width:SizeConfig.screenWidth*0.24,
-                              child:Text("Condition:")),
-                          SizedBox(width: SizeConfig.screenWidth*0.10,),
-                          Text(snapshot.data.date.conditions,style: TextStyle(
-                              color: Color(black),
-                              fontWeight: FontWeight.bold,
-                              fontSize: SizeConfig.blockSizeVertical * 1.65),),
-                        ],
-                      ),),
-                    SizedBox(
-                      height: SizeConfig.screenHeight * 0.02,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-
-                        children: [
-                          Container(
-                              width:SizeConfig.screenWidth*0.24,
-                              child: Text("College:")),
-                          SizedBox(width: SizeConfig.screenWidth*0.10,),
-                          Container(
-                            width:SizeConfig.screenWidth*0.50,
-                            child: Text(snapshot.data.date.college_name,maxLines:2,overflow: TextOverflow.ellipsis,style: TextStyle(
-                                color: Color(black),
-                                fontWeight: FontWeight.bold,
-                                fontSize: SizeConfig.blockSizeVertical * 1.65),),
-                          ),
-                        ],
-                      ),),
-                    SizedBox(
-                      height: SizeConfig.screenHeight * 0.02,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-
-                        children: [
-                          Container(
-                              width:SizeConfig.screenWidth*0.24,
-                              child:Text("Category :")),
-                          SizedBox(width: SizeConfig.screenWidth*0.10,),
-                          Text(snapshot.data.date.category_name,style: TextStyle(
-                              color: Color(black),
-                              fontWeight: FontWeight.bold,
-                              fontSize: SizeConfig.blockSizeVertical * 1.65),),
-                        ],
-                      ),),
-                    SizedBox(
-                      height: SizeConfig.screenHeight * 0.02,
-                    ),
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.08),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width:SizeConfig.screenWidth*0.24,
-                            child:Text(
-                                "Description :",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0XFF656565))),
-                          ),
-                          SizedBox(width: SizeConfig.screenWidth*0.10,),
-                          Container(
-                            width:SizeConfig.screenWidth*0.50,
-                            child: Text(
-                              snapshot.data.date.description,maxLines: 2,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,color: Color(black)),
+                              ],
                             ),
                           ),
-
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: SizeConfig.screenHeight * 0.02,
-                    ),
-
-                    Container(
-                      width: SizeConfig.screenWidth,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.screenWidth * 0.03,
-                          vertical: SizeConfig.blockSizeVertical),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
                           Container(
-width: SizeConfig.screenWidth*0.30,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(gradientColor1),
-                                  Color(gradientColor2),
+                              height: SizeConfig.screenHeight * 0.3,
+                              width: SizeConfig.screenWidth,
+                              child: Carousel(
+                                images: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailScreen(
+                                                      image: snapshot
+                                                              .data.image_url +
+                                                          "/" +
+                                                          snapshot.data.date
+                                                              .image1)));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(25),
+                                        child: Image.network(
+                                            snapshot.data.image_url +
+                                                "/" +
+                                                snapshot.data.date.image1),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailScreen(
+                                                      image: snapshot
+                                                              .data.image_url +
+                                                          "/" +
+                                                          snapshot.data.date
+                                                              .image2)));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(25),
+                                        child: Image.network(
+                                            snapshot.data.image_url +
+                                                "/" +
+                                                snapshot.data.date.image2),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailScreen(
+                                                      image: snapshot
+                                                              .data.image_url +
+                                                          "/" +
+                                                          snapshot.data.date
+                                                              .image3)));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(25),
+                                        child: Image.network(
+                                            snapshot.data.image_url +
+                                                "/" +
+                                                snapshot.data.date.image3),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailScreen(
+                                                      image: snapshot
+                                                              .data.image_url +
+                                                          "/" +
+                                                          snapshot.data.date
+                                                              .image4)));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(25),
+                                        child: Image.network(
+                                            snapshot.data.image_url +
+                                                "/" +
+                                                snapshot.data.date.image4),
+                                      ),
+                                    ),
+                                  ),
                                 ],
-                              ),
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: MaterialButton(
-                              onPressed: () {
-                                print(snapshot.data.date.user_id);
-
-                                if(
-                                snapshot.data.date.user_id==PreferenceManager.getUserId()
-                                ){
-                                  showAlert(context, "You Are a book owner");
-                                }
-                                else{
-                                  print(snapshot.data.date.user_firebase_id);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => CheckoutScreen(id:widget.catId,type:'Buy',price:snapshot.data.date.price,firebaseid:snapshot.data.date.user_firebase_id)));
-
-                                }
-                              // _callAddToCartAPI("buy");
-                                },
-                              child: Text(
-                                "Buy Now: $rs${snapshot.data.date.price}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10,),
-
+                                dotColor: Colors.grey,
+                                dotIncreasedColor: Color(colorBlue),
+                                dotBgColor: Colors.transparent,
+                                dotSize: SizeConfig.blockSizeVertical,
+                                dotPosition: DotPosition.bottomCenter,
+                              )),
                           Container(
-                            width: SizeConfig.screenWidth*0.30,
+                            width: SizeConfig.screenWidth,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.screenWidth * 0.05,
+                                vertical: SizeConfig.blockSizeVertical),
+                            height: SizeConfig.blockSizeVertical * 5,
+                            alignment: Alignment.centerLeft,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(gradientColor1),
-                                  Color(gradientColor2),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: MaterialButton(
-                              onPressed: () {
-                                _callAddToCartAPI("cart");
-                              },
-                              child: Text(
-                                "Add to cart",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 10,),
-
-                          GestureDetector(
-                            onTap: (){
-                              _callAddToCartAPI("cart");
-                            },
-                            child: Container(
-                              width: SizeConfig.screenWidth * 0.25,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(gradientColor1),
-                                    Color(gradientColor2),
-                                  ],
-                                ),
                                 borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  print(snapshot.data.date.user_name);
-                                  //sendMessage(snapshot.data.date.user_name);
-                                  Chatstart(snapshot.data.date.user_name,snapshot.data.date.user_firebase_id);
-                                 // showAlert(context,"Lorem Ipsum Dolor sir amet");
-
-                                },
-                                child: Text(
-                                  "Chat",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                                ),
+                                color: Color.fromRGBO(212, 247, 255, 0.45)),
+                            child: MaterialButton(
+                              onPressed: () {},
+                              child: Text(
+                                snapshot.data.date.name,
+                                style: TextStyle(
+                                    color: Color(black),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize:
+                                        SizeConfig.blockSizeVertical * 1.65),
                               ),
                             ),
                           ),
-                          /*Container(
+                          // Container(
+                          //   width: SizeConfig.screenWidth,
+                          //   margin: EdgeInsets.symmetric(
+                          //       horizontal: SizeConfig.screenWidth * 0.08,
+                          //       vertical: SizeConfig.blockSizeVertical),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       Container(
+                          //         width: SizeConfig.screenWidth * 0.3,
+                          //         child: Column(
+                          //           mainAxisAlignment: MainAxisAlignment.start,
+                          //           crossAxisAlignment: CrossAxisAlignment.start,
+                          //           children: [
+                          //             Text(
+                          //               "Author :",
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w500,
+                          //                   color: Color(0XFF656565)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical,
+                          //             ),
+                          //             Text(
+                          //               "Edition :",
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w500,
+                          //                   color: Color(0XFF656565)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical,
+                          //             ),
+                          //
+                          //             Text(
+                          //               "Condition :",
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w500,
+                          //                   color: Color(0XFF656565)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical,
+                          //             ),
+                          //             Text(
+                          //               "College :",
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w500,
+                          //                   color: Color(0XFF656565)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical*3,
+                          //             ),
+                          //             Text(
+                          //               "Category :",
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w500,
+                          //                   color: Color(0XFF656565)),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ),
+                          //       Container(
+                          //         width: SizeConfig.screenWidth * 0.5,
+                          //         child: Column(
+                          //           mainAxisAlignment: MainAxisAlignment.start,
+                          //           crossAxisAlignment: CrossAxisAlignment.start,
+                          //           children: [
+                          //             Text(
+                          //               snapshot.data.date.auther_name,
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w600,
+                          //                   color: Color(black)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical,
+                          //             ),
+                          //             Text(
+                          //               snapshot.data.date.edition_detail,
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w600,
+                          //                   color: Color(black)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical,
+                          //             ),
+                          //             Text(
+                          //               snapshot.data.date.semester,
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w600,
+                          //                   color: Color(black)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical,
+                          //             ),
+                          //             Text(
+                          //               snapshot.data.date.conditions,
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w600,
+                          //                   color: Color(black)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical,
+                          //             ),
+                          //             Text(
+                          //               snapshot.data.date.college_name,maxLines: 2,
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w600,
+                          //                   color: Color(black)),
+                          //             ),
+                          //             SizedBox(
+                          //               height: SizeConfig.blockSizeVertical,
+                          //             ),
+                          //             Text(
+                          //               snapshot.data.date.category_name,
+                          //               style: TextStyle(
+                          //                   fontWeight: FontWeight.w600,
+                          //                   color: Color(black)),
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          // Container(
+                          //   width: SizeConfig.screenWidth,
+                          //   margin: EdgeInsets.symmetric(
+                          //       horizontal: SizeConfig.screenWidth * 0.08),
+                          //   child: Column(
+                          //     mainAxisAlignment: MainAxisAlignment.start,
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       Text(
+                          //         "Description :",
+                          //         style: TextStyle(
+                          //             fontWeight: FontWeight.w500,
+                          //             color: Color(0XFF656565)),
+                          //       ),
+                          //       SizedBox(
+                          //         height: SizeConfig.blockSizeVertical,
+                          //       ),
+                          //       Text(
+                          //         snapshot.data.date.description,
+                          //         style: TextStyle(
+                          //             fontWeight: FontWeight.w500, color: Color(black)),
+                          //       ),
+                          //
+                          //     ],
+                          //   ),
+                          // ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              children: [
+                                Container(
+                                    width: SizeConfig.screenWidth * 0.24,
+                                    child: Text("Author:")),
+                                SizedBox(
+                                  width: SizeConfig.screenWidth * 0.10,
+                                ),
+                                Text(
+                                  snapshot.data.date.auther_name,
+                                  style: TextStyle(
+                                      color: Color(black),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 1.65),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig.screenHeight * 0.02,
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              children: [
+                                Container(
+                                    width: SizeConfig.screenWidth * 0.24,
+                                    child: Text("Edition:")),
+                                SizedBox(
+                                  width: SizeConfig.screenWidth * 0.10,
+                                ),
+                                Text(
+                                  snapshot.data.date.edition_detail,
+                                  style: TextStyle(
+                                      color: Color(black),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 1.65),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig.screenHeight * 0.02,
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              children: [
+                                Container(
+                                    width: SizeConfig.screenWidth * 0.24,
+                                    child: Text("Condition:")),
+                                SizedBox(
+                                  width: SizeConfig.screenWidth * 0.10,
+                                ),
+                                Text(
+                                  snapshot.data.date.conditions,
+                                  style: TextStyle(
+                                      color: Color(black),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 1.65),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig.screenHeight * 0.02,
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              children: [
+                                Container(
+                                    width: SizeConfig.screenWidth * 0.24,
+                                    child: Text("College:")),
+                                SizedBox(
+                                  width: SizeConfig.screenWidth * 0.10,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    width: SizeConfig.screenWidth * 0.50,
+                                    child: Text(
+                                      snapshot.data.date.college_name,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Color(black),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              SizeConfig.blockSizeVertical *
+                                                  1.65),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig.screenHeight * 0.02,
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              children: [
+                                Container(
+                                    width: SizeConfig.screenWidth * 0.24,
+                                    child: Text("Category :")),
+                                SizedBox(
+                                  width: SizeConfig.screenWidth * 0.10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    snapshot.data.date.category_name,
+                                    style: TextStyle(
+                                        color: Color(black),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: SizeConfig.blockSizeVertical *
+                                            1.65),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig.screenHeight * 0.02,
+                          ),
+                          Container(
+                            width: SizeConfig.screenWidth,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.screenWidth * 0.08),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: SizeConfig.screenWidth * 0.24,
+                                  child: Text("Description :",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0XFF656565))),
+                                ),
+                                SizedBox(
+                                  width: SizeConfig.screenWidth * 0.10,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    width: SizeConfig.screenWidth * 0.50,
+                                    child: Text(
+                                      snapshot.data.date.description,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(black)),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig.screenHeight * 0.02,
+                          ),
+
+                          Container(
+                            width: SizeConfig.screenWidth,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.screenWidth * 0.03,
+                                vertical: SizeConfig.blockSizeVertical),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: SizeConfig.screenWidth * 0.30,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(gradientColor1),
+                                        Color(gradientColor2),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      print(snapshot.data.date.user_id);
+
+                                      if (snapshot.data.date.user_id ==
+                                          PreferenceManager.getUserId()) {
+                                        showAlert(
+                                            context, "You Are a book owner");
+                                      } else {
+                                        print("user_firebase_id "+snapshot
+                                            .data.date.user_firebase_id);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CheckoutScreen(
+                                                        id: widget.catId,
+                                                        type: 'Buy',
+                                                        price: snapshot
+                                                            .data.date.price,
+                                                        firebaseid: snapshot
+                                                            .data
+                                                            .date
+                                                            .user_firebase_id)));
+                                      }
+                                      // _callAddToCartAPI("buy");
+                                    },
+                                    child: Text(
+                                      "Buy Now: $rs${snapshot.data.date.price}",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  width: SizeConfig.screenWidth * 0.30,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color(gradientColor1),
+                                        Color(gradientColor2),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      _callAddToCartAPI("cart");
+                                    },
+                                    child: Text(
+                                      "Add to cart",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _callAddToCartAPI("cart");
+                                  },
+                                  child: Container(
+                                    width: SizeConfig.screenWidth * 0.25,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(gradientColor1),
+                                          Color(gradientColor2),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: MaterialButton(
+                                      onPressed: () {
+                                        print(snapshot.data.date.user_name);
+                                        //sendMessage(snapshot.data.date.user_name);
+                                        Chatstart(
+                                            snapshot.data.date.user_name,
+                                            snapshot
+                                                .data.date.user_firebase_id);
+                                        // showAlert(context,"Lorem Ipsum Dolor sir amet");
+                                      },
+                                      child: Text(
+                                        "Chat",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                /*Container(
                             width: SizeConfig.screenWidth * 0.4,
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -734,22 +825,20 @@ width: SizeConfig.screenWidth*0.30,
                               ),
                             ),
                           ), */
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return Container();
-            }
-          },
-        ),
-      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+            ),
     ));
   }
-
-
 
   Future<BookDataModel> _callBookDataAPI() async {
     Map<String, dynamic> body = {
@@ -764,37 +853,37 @@ width: SizeConfig.screenWidth*0.30,
 
     return data;
   }
-  sendMessage(String userName,firebase){
-    print(Constants.myName);
-    List<String> users = [Constants.myName,userName];
 
-    String chatRoomId = getChatRoomId(Constants.myName,userName);
-print("chatRoomid"+chatRoomId);
+  sendMessage(String userName, firebase) {
+    print(Constants.myName);
+    List<String> users = [Constants.myName, userName];
+
+    String chatRoomId = getChatRoomId(Constants.myName, userName);
+    print("chatRoomid" + chatRoomId);
     Map<String, dynamic> chatRoom = {
       "users": users,
-      "chatRoomId" : chatRoomId,
-      "firebasetoken":firebase
-
+      "chatRoomId": chatRoomId,
+      "firebasetoken": firebase
     };
 
     databaseMethods.addChatRoom(chatRoom, chatRoomId);
 
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => Chat(
-          chatRoomId: chatRoomId,
-            catId:widget.catId,
-            firebaseid:firebase
-        )
-    ));
-
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Chat(
+                chatRoomId: chatRoomId,
+                catId: widget.catId,
+                firebaseid: firebase)));
   }
+
   getUserInfogetChats() async {
     setState(() {
-      isLoading=true;
+      isLoading = true;
     });
     Constants.myName = await HelperFunctions.getUserNameSharedPreference();
     DatabaseMethods().getUserChats(Constants.myName).then((snapshots) {
-      setState(()  {
+      setState(() {
         chatRooms = snapshots;
 
         print(
@@ -803,9 +892,10 @@ print("chatRoomid"+chatRoomId);
       //print("snapshots"+snapshots);
     });
     setState(() {
-      isLoading=false;
+      isLoading = false;
     });
   }
+
   getChatRoomId(String a, String b) {
     if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
       return "$b\_$a";
@@ -814,7 +904,7 @@ print("chatRoomid"+chatRoomId);
     }
   }
 
-  _callAddToCartAPI( text)async{
+  _callAddToCartAPI(text) async {
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
@@ -823,77 +913,62 @@ print("chatRoomid"+chatRoomId);
 
     var res = await ApiCall.post(addToCartURL, body);
     print(res["status"]);
-    if(res["status"]=="400"){
-      showAlert(context,res["message"]);
-    }
-    else if (res["status"]=="200"){
-      if(text=="Buy"){
+    if (res["status"] == "400") {
+      showAlert(context, res["message"]);
+    } else if (res["status"] == "200") {
+      if (text == "Buy") {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => CheckoutScreen(id:widget.catId,type:text)));
-      }
-      else{
-        showAlert(context,res["message"]);
-
+                builder: (context) =>
+                    CheckoutScreen(id: widget.catId, type: text)));
+      } else {
+        showAlert(context, res["message"]);
       }
     }
-
-
   }
-  void Chatstart(datauser,firebase) async {
 
-    Dialogs.showLoadingDialog(
-        context, loginLoader);
+  void Chatstart(datauser, firebase) async {
+    Dialogs.showLoadingDialog(context, loginLoader);
 
     try {
       final response = await post(
-          Uri.parse("http://admin.apnistationary.com/api/chat_start"),
-          body: (
-              {
-                "user_id" : "${PreferenceManager.getUserId()}",
-                "session_key": PreferenceManager.getSessionKey(),
-                "book_id":widget.catId,
-
-              }
-          ));
-      print("ffvvvf"+response.statusCode.toString());
+          Uri.parse("https://admin.apnistationary.com/api/chat_start"),
+          body: ({
+            "user_id": "${PreferenceManager.getUserId()}",
+            "session_key": PreferenceManager.getSessionKey(),
+            "book_id": widget.catId,
+          }));
+      print("ffvvvf" + response.statusCode.toString());
 
       if (json.decode(response.body)['status'] == "200") {
-        print("mn wdkd"+json.decode(response.body)['status']);
-        Navigator.of(loginLoader.currentContext,
-            rootNavigator: true) .pop();
+        print("mn wdkd" + json.decode(response.body)['status']);
+        Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
 
-        sendMessage(datauser,firebase);
+        sendMessage(datauser, firebase);
         final responseJson = json.decode(response.body);
         print(responseJson);
         setState(() {
-
           isLoading = false;
-
         });
-
-
       } else {
-        print("mnmnln; wdkd"+json.decode(response.body)['status']);
-        Navigator.of(loginLoader.currentContext,
-            rootNavigator: true) .pop();
+        print("mnmnln; wdkd" + json.decode(response.body)['status']);
+        Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
         setState(() {
-showAlert(context, json.decode(response.body)['message']);
+          showAlert(context, json.decode(response.body)['message']);
           isLoading = false;
         });
       }
     } catch (e) {
       print(e);
       setState(() {
-
         isLoading = false;
       });
     }
   }
 }
 
-showAlert(BuildContext context,String msg) {
+showAlert(BuildContext context, String msg) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -913,7 +988,6 @@ showAlert(BuildContext context,String msg) {
   );
 }
 
-
 class DetailScreen extends StatefulWidget {
   var image;
   DetailScreen({this.image});
@@ -929,21 +1003,27 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [ GestureDetector(
-          onTap: (){
-            Navigator.pop(context);
-          },
-          child: Container(
-              margin: EdgeInsets.only(right: 10,top: 20),
-              child: CircleAvatar(backgroundColor:Color(colorBlue),child: Icon(Icons.close,color: Colors.white,))),
-        )],),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+                margin: EdgeInsets.only(right: 10, top: 20),
+                child: CircleAvatar(
+                    backgroundColor: Color(colorBlue),
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ))),
+          )
+        ],
+      ),
       body: GestureDetector(
         child: Center(
           child: Hero(
             tag: 'imageHero',
-            child: Image.network(
-              widget.image
-            ),
+            child: Image.network(widget.image),
           ),
         ),
         onTap: () {
@@ -952,5 +1032,4 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
   }
-
 }

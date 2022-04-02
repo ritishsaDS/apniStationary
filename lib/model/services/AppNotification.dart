@@ -17,7 +17,7 @@ class AppNotificationHandler {
   static AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    'This channel is used for important notifications.', // description
+   description: 'This channel is used for important notifications.', // description
     importance: Importance.high,
   );
 
@@ -94,7 +94,7 @@ class AppNotificationHandler {
           android: AndroidNotificationDetails(
             'high_importance_channel', // id
             'High Importance Notifications', // title
-            'This channel is used for important notifications.',
+           channelDescription: 'This channel is used for important notifications.',
             // description
             importance: Importance.high,
             playSound: true,
