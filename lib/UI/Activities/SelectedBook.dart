@@ -627,7 +627,7 @@ class _SelectedBookState extends State<SelectedBook> {
     isLoading = true;
     try {
       final response = await post(
-          Uri.parse("https://buysell.powerdope.com/api/category"),
+          Uri.parse(ApiCall.baseURL+"category"),
           body: {
             "user_id": PreferenceManager.getUserId().toString(),
             "session_key": PreferenceManager.getSessionKey().toString(),

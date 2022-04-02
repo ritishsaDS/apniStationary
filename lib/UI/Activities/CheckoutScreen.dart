@@ -222,13 +222,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     } else if (addressController.text.length < 10) {
       showAlert(context, "Please enter a valid Address.");
-    } else if (cityController.text.length < 2) {
-      showAlert(context, "Please enter a valid City.");
-    } else if (stateController.text.length < 2) {
-      showAlert(context, "Please enter a valid State.");
-    } else if (pinController.text.length < 4) {
-      showAlert(context, "Please enter a valid Pincode.");
-    } else {
+    } 
+    // else if (cityController.text.length < 2) {
+    //   showAlert(context, "Please enter a valid City.");
+    // } else if (stateController.text.length < 2) {
+    //   showAlert(context, "Please enter a valid State.");
+    // } else if (pinController.text.length < 4) {
+    //   showAlert(context, "Please enter a valid Pincode.");
+    // } 
+    else {
       callCheckoutAPI();
     }
   }
@@ -283,8 +285,9 @@ print(body.toString());
 
   void openCheckout() {
     var options = {
-      'key': 'rzp_test_RLmD6p88YpUTkU',
-      'amount':'10000',
+      // 'key': 'rzp_test_RLmD6p88YpUTkU', actual
+      'key':'rzp_test_23633fjMEgS0IE',
+      'amount':'100',
       'name': 'Buy And Sell',
       'description': 'Books for you',
 

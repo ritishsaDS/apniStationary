@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:book_buy_and_sell/UI/Activities/EditProfile.dart';
 import 'package:book_buy_and_sell/model/services/base_service.dart';
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/Constants/StringConstants.dart';
@@ -40,8 +41,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController _searchField = new TextEditingController();
-bool  isLoading=false;
-  final logout=GetStorage();
+  bool isLoading = false;
+  final logout = GetStorage();
   SpeechRecognition _speechRecognition;
   bool _isAvailable = false;
   bool _isListening = false;
@@ -52,47 +53,46 @@ bool  isLoading=false;
     _speechRecognition = SpeechRecognition();
 
     _speechRecognition.setAvailabilityHandler(
-          (bool result) => setState(() => _isAvailable = result),
+      (bool result) => setState(() => _isAvailable = result),
     );
 
     _speechRecognition.setRecognitionStartedHandler(
-          () => setState(() => _isListening = true),
+      () => setState(() => _isListening = true),
     );
 
     _speechRecognition.setRecognitionResultHandler(
-          (String speech) => setState((){
-            resultText = speech;
-                _searchField=TextEditingController(text:resultText);
-                if(resultText==''){}
-                else{
-                  _fieldFocusChange(context);
-                }
-
-          }),
+      (String speech) => setState(() {
+        resultText = speech;
+        _searchField = TextEditingController(text: resultText);
+        if (resultText == '') {
+        } else {
+          _fieldFocusChange(context);
+        }
+      }),
     );
 
     _speechRecognition.setRecognitionCompleteHandler(
-          () => setState(() {
-            print("khatam"+resultText);
-            _isListening = false;
-            if(resultText==''||resultText.isEmpty){}
-            else{
-              //_fieldFocusChange(context);
-            }
-          }),
+      () => setState(() {
+        print("khatam" + resultText);
+        _isListening = false;
+        if (resultText == '' || resultText.isEmpty) {
+        } else {
+          //_fieldFocusChange(context);
+        }
+      }),
     );
 
     _speechRecognition.activate().then(
           (result) => setState(() {
             _isAvailable = result;
-                print("joa"+_isAvailable.toString());
-          }
-          ),
-    );
+            print("joa" + _isAvailable.toString());
+          }),
+        );
     getCategory();
     // TODO: implement initState
     super.initState();
   }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -100,7 +100,7 @@ bool  isLoading=false;
     SizeConfig().init(context);
     return Scaffold(
       key: _scaffoldKey,
-resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       drawer: Drawer(
         elevation: 0.0,
         child: SingleChildScrollView(
@@ -146,8 +146,13 @@ resizeToAvoidBottomInset: false,
                           borderRadius: BorderRadius.circular(15)),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child:PreferenceManager.getImage()!=null?Image.network(PreferenceManager.getImage()): Icon(Icons.person_outline_rounded, color: Color(colorBlue),
-                          size: 60,),
+                        child: PreferenceManager.getImage() != null
+                            ? Image.network(PreferenceManager.getImage())
+                            : Icon(
+                                Icons.person_outline_rounded,
+                                color: Color(colorBlue),
+                                size: 60,
+                              ),
                       ),
                     ),
                     Container(
@@ -163,7 +168,9 @@ resizeToAvoidBottomInset: false,
                                 fontWeight: FontWeight.w600,
                                 fontSize: SizeConfig.blockSizeVertical * 2),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(
                             PreferenceManager.getPhoneNo(),
                             style: TextStyle(
@@ -171,16 +178,25 @@ resizeToAvoidBottomInset: false,
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.blockSizeVertical * 1.75),
                           ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            margin: EdgeInsets.only(
-                                right: SizeConfig.blockSizeHorizontal * 4),
-                            child: Text(
-                              "Edit Profile",
-                              style: TextStyle(
-                                  color: Color(colorBlue),
-                                  fontSize: SizeConfig.blockSizeVertical * 1.25,
-                                  fontWeight: FontWeight.w600),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) => EditProfile())));
+                            },
+                            child: Container(
+                              alignment: Alignment.centerRight,
+                              margin: EdgeInsets.only(
+                                  right: SizeConfig.blockSizeHorizontal * 4),
+                              child: Text(
+                                "Edit Profile",
+                                style: TextStyle(
+                                    color: Color(colorBlue),
+                                    fontSize:
+                                        SizeConfig.blockSizeVertical * 1.25,
+                                    fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ),
                         ],
@@ -216,8 +232,9 @@ resizeToAvoidBottomInset: false,
                         color: Color(matteBlack),
                         size: SizeConfig.blockSizeVertical * 2.5,
                       ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
                           return Cart();
                         }));
                       },
@@ -241,8 +258,9 @@ resizeToAvoidBottomInset: false,
                         color: Color(matteBlack),
                         size: SizeConfig.blockSizeVertical * 2.5,
                       ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
                           return WalletTrans();
                         }));
                       },
@@ -266,8 +284,9 @@ resizeToAvoidBottomInset: false,
                         color: Color(matteBlack),
                         size: SizeConfig.blockSizeVertical * 2.5,
                       ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
                           return Transactions();
                         }));
                       },
@@ -291,8 +310,9 @@ resizeToAvoidBottomInset: false,
                         color: Color(matteBlack),
                         size: SizeConfig.blockSizeVertical * 2.5,
                       ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
                           return Orders();
                         }));
                       },
@@ -316,8 +336,9 @@ resizeToAvoidBottomInset: false,
                         color: Color(matteBlack),
                         size: SizeConfig.blockSizeVertical * 2.5,
                       ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
                           return Offers();
                         }));
                       },
@@ -396,9 +417,8 @@ resizeToAvoidBottomInset: false,
                         Image.asset('assets/icons/logout.png').image,
                         color: Color(colorBlue),
                       ),
-                      onTap: (){
+                      onTap: () {
                         return showDialog(
-
                           context: context,
                           builder: (ctx) => AlertDialog(
                             title: Text("Logout"),
@@ -409,13 +429,14 @@ resizeToAvoidBottomInset: false,
                                   AuthService().signOut();
                                   logout.remove("email_id");
                                   logout.remove("name");
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginScreen()));
                                 },
                                 child: Text("Yes"),
                               ),
                               FlatButton(
-
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
@@ -438,7 +459,6 @@ resizeToAvoidBottomInset: false,
           ),
         ),
       ),
-
       body: Container(
         child: SingleChildScrollView(
           child: Column(
@@ -453,9 +473,7 @@ resizeToAvoidBottomInset: false,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
-                      onTap: () =>_scaffoldKey.currentState.openDrawer()
-
-                      ,
+                      onTap: () => _scaffoldKey.currentState.openDrawer(),
                       child: ImageIcon(
                         AssetImage('assets/icons/drawer.png'),
                         color: Color(colorBlue),
@@ -464,8 +482,8 @@ resizeToAvoidBottomInset: false,
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                          left: SizeConfig.blockSizeHorizontal * 5,
-                         ),
+                        left: SizeConfig.blockSizeHorizontal * 5,
+                      ),
                       child: Row(
                         children: [
                           Text(
@@ -509,7 +527,7 @@ resizeToAvoidBottomInset: false,
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
-                          suffixIcon:  speechButton(),
+                            suffixIcon: speechButton(),
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: SizeConfig.blockSizeVertical * 1.5,
@@ -520,7 +538,7 @@ resizeToAvoidBottomInset: false,
                               fontWeight: FontWeight.w500,
                             ),
                             border: InputBorder.none),
-                        onFieldSubmitted: (val){
+                        onFieldSubmitted: (val) {
                           _fieldFocusChange(context);
                         },
                       ),
@@ -533,7 +551,9 @@ resizeToAvoidBottomInset: false,
                             MaterialPageRoute(
                               builder: (context) {
                                 return SelectedBook(
-                                    searchedWord: _searchField.text,catId: "",);
+                                  searchedWord: _searchField.text,
+                                  catId: "",
+                                );
                               },
                             ),
                           );
@@ -573,7 +593,8 @@ resizeToAvoidBottomInset: false,
                             Container(
                               width: SizeConfig.screenWidth * 0.2,
                               height: SizeConfig.blockSizeVertical * 0.2,
-                              decoration: BoxDecoration(color: Color(colorBlue)),
+                              decoration:
+                                  BoxDecoration(color: Color(colorBlue)),
                             ),
                           ],
                         ),
@@ -591,10 +612,14 @@ resizeToAvoidBottomInset: false,
               Container(
                   width: SizeConfig.screenWidth,
                   height: SizeConfig.screenHeight * 0.16,
-
-                  child:isLoading?Center(child: CircularProgressIndicator(),): ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: getallcategory(),)),
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: getallcategory(),
+                        )),
               Container(
                 width: SizeConfig.screenWidth,
                 margin: EdgeInsets.symmetric(
@@ -643,7 +668,7 @@ resizeToAvoidBottomInset: false,
         builder: (context, AsyncSnapshot<List<SliderDataModel>> snapshot) {
           if (snapshot.hasData) {
             return CarouselSlider(
-              options: CarouselOptions(height: 150,autoPlay: true),
+              options: CarouselOptions(height: 150, autoPlay: true),
               items: snapshot.data.map((slider) {
                 return Builder(
                   builder: (BuildContext context) {
@@ -655,7 +680,10 @@ resizeToAvoidBottomInset: false,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15)),
                       child: ClipRRect(
-                          child: Image.network(slider.image,fit: BoxFit.fill,),
+                          child: Image.network(
+                            slider.image,
+                            fit: BoxFit.fill,
+                          ),
                           borderRadius: BorderRadius.circular(15)),
                     );
                   },
@@ -667,9 +695,6 @@ resizeToAvoidBottomInset: false,
           }
         });
   }
-
-
-
 
   /*
                   child: ListView.builder(
@@ -739,9 +764,19 @@ resizeToAvoidBottomInset: false,
 
   Widget _getBookList() {
     return FutureBuilder<BookListModel>(
-        future: ApiCall.callBookListAPI("",""),
-        builder: (context, AsyncSnapshot<BookListModel> snapshot) {
-          if (snapshot.hasData) {
+      future:
+      ApiCall.callBookListAPI("", ""),
+      builder: (context, AsyncSnapshot<BookListModel> snapshot) {
+      
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (snapshot.hasData) {
+            // var snapshotData = BookListModel.fromJson(snapshot);
+
             return Container(
                 width: SizeConfig.screenWidth,
                 margin: EdgeInsets.symmetric(
@@ -766,124 +801,135 @@ resizeToAvoidBottomInset: false,
                         }));
                       },
                       child: Container(
-                        child:
-                          Card(
-                            child: Align(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            topLeft: Radius.circular(15)),
-                                        ),
-
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          height: SizeConfig.screenHeight*0.170,
-                                          width: SizeConfig.blockSizeVertical * 50,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(15),
-                                                topLeft: Radius.circular(15)),
-                                            child: Image.network(snapshot.data.image_url +
-                                                "/" +
-                                                snapshot.data.date[index].image1,fit: BoxFit.fill,),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: SizeConfig.blockSizeHorizontal * 2),
-                                          child: Text(
-                                            snapshot.data.date[index].name,
-                                            style: TextStyle(
-                                                color: Color(0XFF06070D),
-                                                fontWeight: FontWeight.w600,
-                                                fontSize:
-                                                SizeConfig.blockSizeVertical * 1.5),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: SizeConfig.blockSizeHorizontal * 2,
-                                              right:
-                                              SizeConfig.blockSizeHorizontal * 2),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                snapshot.data.date[index].auther_name,
-                                                style: TextStyle(
-                                                    color: Color(0XFF656565),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize:
-                                                    SizeConfig.blockSizeVertical *
-                                                        1.25),
-                                              ),
-                                              Text(
-                                                snapshot
-                                                    .data.date[index].edition_detail,
-                                                maxLines: 2,
-                                                softWrap: true,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    color: Colors.grey[500],
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize:
-                                                    SizeConfig.blockSizeVertical *
-                                                        1.25),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                        child: Card(
+                          child: Align(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(15),
+                                        topLeft: Radius.circular(15)),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
+                                      Container(
+                                        height: SizeConfig.screenHeight * 0.170,
+                                        width:
+                                            SizeConfig.blockSizeVertical * 50,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15)),
+                                          child: Image.network(
+                                            snapshot.data.image_url +
+                                                "/" +
+                                                snapshot
+                                                    .data.date[index].image1,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ),
                                       Container(
                                         margin: EdgeInsets.only(
                                             left:
-                                                SizeConfig.blockSizeHorizontal * 4,
-                                            bottom: SizeConfig.blockSizeVertical),
+                                                SizeConfig.blockSizeHorizontal *
+                                                    2),
                                         child: Text(
-                                          "$rs ${snapshot.data.date[index].price}",
+                                          snapshot.data.date[index].name,
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
+                                              color: Color(0XFF06070D),
+                                              fontWeight: FontWeight.w600,
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
                                         ),
                                       ),
                                       Container(
                                         margin: EdgeInsets.only(
+                                            left:
+                                                SizeConfig.blockSizeHorizontal *
+                                                    2,
                                             right:
-                                                SizeConfig.blockSizeHorizontal * 4,
-                                            bottom: SizeConfig.blockSizeVertical),
-                                        child: Text(
-                                          "Buy Now",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
+                                                SizeConfig.blockSizeHorizontal *
+                                                    2),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              snapshot
+                                                  .data.date[index].auther_name,
+                                              style: TextStyle(
+                                                  color: Color(0XFF656565),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: SizeConfig
+                                                          .blockSizeVertical *
+                                                      1.25),
+                                            ),
+                                            Text(
+                                              snapshot.data.date[index]
+                                                  .edition_detail,
+                                              maxLines: 2,
+                                              softWrap: true,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.grey[500],
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: SizeConfig
+                                                          .blockSizeVertical *
+                                                      1.25),
+                                            ),
+                                          ],
                                         ),
-                                      ),
+                                      )
                                     ],
                                   ),
-                                ],
-                              ),
-                              alignment: Alignment.bottomCenter,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          left: SizeConfig.blockSizeHorizontal *
+                                              4,
+                                          bottom: SizeConfig.blockSizeVertical),
+                                      child: Text(
+                                        "$rs ${snapshot.data.date[index].price}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                          right:
+                                              SizeConfig.blockSizeHorizontal *
+                                                  4,
+                                          bottom: SizeConfig.blockSizeVertical),
+                                      child: Text(
+                                        "Buy Now",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            color: Color(colorBlue),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                            elevation: 5.0,
+                            alignment: Alignment.bottomCenter,
                           ),
-
+                          color: Color(colorBlue),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          elevation: 5.0,
+                        ),
                       ),
                     );
                   },
@@ -910,6 +956,7 @@ resizeToAvoidBottomInset: false,
     var data = new SliderModel.fromJson(jsonResponse);
     return data.SliderData;
   }
+
   _fieldFocusChange(BuildContext context) {
     if (_searchField.text != "") {
       Navigator.push(
@@ -917,7 +964,9 @@ resizeToAvoidBottomInset: false,
         MaterialPageRoute(
           builder: (context) {
             return SelectedBook(
-              searchedWord: _searchField.text, catId: "",);
+              searchedWord: _searchField.text,
+              catId: "",
+            );
           },
         ),
       );
@@ -925,125 +974,120 @@ resizeToAvoidBottomInset: false,
       showAlert(context, "Search Item cannot be empty");
     }
   }
-dynamic categorylist=[];
+
+  dynamic categorylist = [];
   Future<void> getCategory() async {
     print("jh dhic ibcdofn");
-    isLoading=true;
-    
-    try {
-      final response = await post(Uri.parse(ApiCall.baseURL+"category"),
-          body: {
-        "user_id":PreferenceManager.getUserId().toString(),
-            "session_key":PreferenceManager.getSessionKey().toString(),
+    isLoading = true;
 
-            "parent_id": "0"}
-            );
-print("responsestauus codee"+response.statusCode.toString());
+    try {
+      final response =
+          await post(Uri.parse(ApiCall.baseURL + "category"), body: {
+        "user_id": PreferenceManager.getUserId().toString(),
+        "session_key": PreferenceManager.getSessionKey().toString(),
+        "parent_id": "0"
+      });
+      print("responsestauus codee" + response.statusCode.toString());
       if (response.statusCode == 256) {
         final responseJson = json.decode(response.body);
         setState(() {
-          isLoading=false;
-          categorylist=responseJson['category_data'];
-          print("category"+responseJson.toString());
-
-      });} else {
+          isLoading = false;
+          categorylist = responseJson['category_data'];
+          print("category" + responseJson.toString());
+        });
+      } else {
         print("bjkb" + response.statusCode.toString());
 
         setState(() {
-        // isError = true;
-        // isLoading = false;
+          // isError = true;
+          // isLoading = false;
         });
-        }
-        } catch (e) {
-      print("uhdfuhdfuh"+e.toString());
+      }
+    } catch (e) {
+      print("uhdfuhdfuh" + e.toString());
       setState(() {
         // isError = true;
         // isLoading = false;
       });
     }
-
   }
-  List<Widget>getallcategory() {
+
+  List<Widget> getallcategory() {
     List<Widget> newcatgorylist = new List();
     for (int index = 0; index < categorylist.length; index++) {
-      newcatgorylist.add(
-          InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return categorylist[index]['subcategory'] == "Yes"
-                      ? SubCategory(
+      newcatgorylist.add(InkWell(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return categorylist[index]['subcategory'] == "Yes"
+                  ? SubCategory(
                       id: categorylist[index]['id'],
                       text: categorylist[index]['name'],
                       img: categorylist[index]['image'])
-                      : SelectedBook(searchedWord: "",
+                  : SelectedBook(
+                      searchedWord: "",
                       catId: categorylist[index]['id'].toString());
-                }));
-              },
-              child: Container(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 75,
-                          height: 75,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              image: DecorationImage(image: NetworkImage(
-                                  categorylist[index]['image']),),
-                              borderRadius: BorderRadius.circular(40),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    spreadRadius: 1,
-                                    blurRadius: 3)
-                              ]),
-                          //  padding: EdgeInsets.all(15),
-                          // margin: EdgeInsets.only(
-                          //     bottom: SizeConfig.blockSizeVertical),
-
-
-                        ),
-
-                        SizedBox(height: 10,),
-                        Container(
-                            width: SizeConfig.screenWidth * 0.25,
-                            alignment: Alignment.center,
-                            child: Text(
-                              categorylist[index]['name'],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0XFF06070D),
-                                  fontSize: 10),
-                              textAlign: TextAlign.center,
-                            ))
-                      ])))
-      );
+            }));
+          },
+          child: Container(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                Container(
+                  width: 75,
+                  height: 75,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      image: DecorationImage(
+                        image: NetworkImage(categorylist[index]['image']),
+                      ),
+                      borderRadius: BorderRadius.circular(40),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey, spreadRadius: 1, blurRadius: 3)
+                      ]),
+                  //  padding: EdgeInsets.all(15),
+                  // margin: EdgeInsets.only(
+                  //     bottom: SizeConfig.blockSizeVertical),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                    width: SizeConfig.screenWidth * 0.25,
+                    alignment: Alignment.center,
+                    child: Text(
+                      categorylist[index]['name'],
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Color(0XFF06070D),
+                          fontSize: 10),
+                      textAlign: TextAlign.center,
+                    ))
+              ]))));
     }
     return newcatgorylist;
   }
-  speechButton() =>Container(
-height: 20,
-    margin: EdgeInsets.all(10),
-    child: GestureDetector(
-      onTap: (){
-        if (_isAvailable && !_isListening)
-          _speechRecognition
-              .listen(locale: "en_IN")
-              .then((result) {
-            setState(() {
 
-
-            });
-          });
-      },
-      child: CircleAvatar(
-          radius: 10,
-          backgroundColor:Colors.blue,child: Icon(Icons.mic,color: Colors.white,size: 12,)),
-    ),
-
-
-    )
-  ;
+  speechButton() => Container(
+        height: 20,
+        margin: EdgeInsets.all(10),
+        child: GestureDetector(
+          onTap: () {
+            if (_isAvailable && !_isListening)
+              _speechRecognition.listen(locale: "en_IN").then((result) {
+                setState(() {});
+              });
+          },
+          child: CircleAvatar(
+              radius: 10,
+              backgroundColor: Colors.blue,
+              child: Icon(
+                Icons.mic,
+                color: Colors.white,
+                size: 12,
+              )),
+        ),
+      );
 }

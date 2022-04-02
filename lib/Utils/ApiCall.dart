@@ -59,7 +59,10 @@ class ApiCall {
     var res = await ApiCall.post(bookListURL, body);
     var jsonResponse = json.decode(json.encode(res).toString());
 
-    var data = new BookListModel.fromJson(jsonResponse);
+// print("Book-List jsonResponse $jsonResponse");
+    print("DATA DATA");
+
+    var data =  BookListModel.fromJson(jsonResponse);
 
     return data;
   }

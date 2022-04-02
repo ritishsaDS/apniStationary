@@ -1285,7 +1285,7 @@ class _EditBookState extends State<EditBook> {
     final map = {
     };
 
-    var url = "https://buysell.powerdope.com/api/book-edit";
+    var url = ApiCall.baseURL +"book-edit";
 
     var request =http.MultipartRequest('POST', Uri.parse(url));
 

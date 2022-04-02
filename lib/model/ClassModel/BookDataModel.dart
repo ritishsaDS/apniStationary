@@ -36,7 +36,7 @@ class BookDataDetailsModel {
       college_name:parsedJson['college_name'],
       auther_name: parsedJson['auther_name'],
       edition_detail: parsedJson['edition_detail'],
-      price: parsedJson['price'],
+      price: parsedJson['price'].toString(),
       conditions: parsedJson['conditions'],
       category_id: parsedJson['category_id'],
       description: parsedJson['description'],

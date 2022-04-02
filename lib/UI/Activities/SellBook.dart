@@ -23,7 +23,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 import '../Donescreen.dart';
@@ -34,12 +34,20 @@ class SellBook extends StatefulWidget {
   String catId = "", bookId = "";
   String bookname = "", condition = "";
   String price = "", authorname = "";
-  String edition = "", sem='',desc="";
+  String edition = "", sem = '', desc = "";
   var name;
 
-
-
-  SellBook({this.catId, this.bookId,this.desc,this.condition,this.name,this.sem,this.price,this.edition,this.authorname,this.bookname});
+  SellBook(
+      {this.catId,
+      this.bookId,
+      this.desc,
+      this.condition,
+      this.name,
+      this.sem,
+      this.price,
+      this.edition,
+      this.authorname,
+      this.bookname});
 
   @override
   _SellBookState createState() => _SellBookState();
@@ -53,7 +61,7 @@ class _SellBookState extends State<SellBook> {
   TextEditingController desc = TextEditingController();
   TextEditingController price = TextEditingController();
   TextEditingController collegename = TextEditingController();
-bool isLoading=false;
+  bool isLoading = false;
   TextEditingController conditions = TextEditingController();
   GlobalKey<FormState> profileForm = GlobalKey<FormState>();
   XFile file2;
@@ -66,17 +74,19 @@ bool isLoading=false;
   FocusNode semesterFn;
   FocusNode descFn;
 
-
   @override
   void initState() {
-    bookName=TextEditingController(text: widget.bookname);
-    author=TextEditingController(text: widget.authorname);
-    edition=TextEditingController(text: widget.edition);
-    semester=TextEditingController(text: widget.sem==""?"semester":widget.sem);
-    desc=TextEditingController(text: widget.desc);
-    price=TextEditingController(text: widget.price);
-    collegename=TextEditingController(text: PreferenceManager.getcollge().toString());
-    conditions=TextEditingController(text:widget.condition==""?"Conditions":widget.condition);
+    bookName = TextEditingController(text: widget.bookname);
+    author = TextEditingController(text: widget.authorname);
+    edition = TextEditingController(text: widget.edition);
+    semester =
+        TextEditingController(text: widget.sem == "" ? "semester" : widget.sem);
+    desc = TextEditingController(text: widget.desc);
+    price = TextEditingController(text: widget.price);
+    collegename =
+        TextEditingController(text: PreferenceManager.getcollge().toString());
+    conditions = TextEditingController(
+        text: widget.condition == "" ? "Conditions" : widget.condition);
     // TODO: implement initState
     super.initState();
     bookNameFn = FocusNode();
@@ -84,7 +94,6 @@ bool isLoading=false;
     editionFn = FocusNode();
     semesterFn = FocusNode();
     descFn = FocusNode();
-
   }
 
   @override
@@ -95,12 +104,12 @@ bool isLoading=false;
             backgroundColor: Color(backgroundColor),
             body: SingleChildScrollView(
                 child: Stack(
-                  children: [
-                    Container(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+              children: [
+                Container(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Container(
                             margin: EdgeInsets.symmetric(
                                 horizontal: SizeConfig.screenWidth * 0.02,
@@ -156,9 +165,9 @@ bool isLoading=false;
                       },
               )*/
                       ]),
-                    ),
-                  ],
-                ))));
+                ),
+              ],
+            ))));
   }
 
   Widget _editCheck() {
@@ -207,7 +216,6 @@ bool isLoading=false;
   Widget _commonWidget(String image_url, BookDataDetailsModel data) {
     log("DeepakData ${image_url.toString()}");
 
-
     return Container(
       child: Column(children: [
         Container(
@@ -222,7 +230,9 @@ bool isLoading=false;
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.grey[200], blurRadius: 4.0, spreadRadius: 1.0),
+                    color: Colors.grey[200],
+                    blurRadius: 4.0,
+                    spreadRadius: 1.0),
               ],
             ),
             child: Column(
@@ -232,12 +242,58 @@ bool isLoading=false;
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(onTap: () =>  showAlertDialog(context,1),
-                       child:
-                          GetBuilder<ImageUploadViewModel>(builder: (controller) {
-                        if (file == null) {
-                          if (data.image1 != "") {
-                            return Container(
+                      GestureDetector(
+                          onTap: () => showAlertDialog(context, 1),
+                          child: GetBuilder<ImageUploadViewModel>(
+                              builder: (controller) {
+                            if (file == null) {
+                              if (data.image1 != "") {
+                                return Container(
+                                    width: SizeConfig.screenWidth * 0.4,
+                                    height: SizeConfig.screenHeight * 0.15,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey[200],
+                                              spreadRadius: 1.0,
+                                              blurRadius: 2.0),
+                                        ],
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                image_url + "/" + data.image1),
+                                            fit: BoxFit.cover)));
+                              } else {
+                                return Container(
+                                    width: SizeConfig.screenWidth * 0.4,
+                                    height: SizeConfig.screenHeight * 0.15,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey[200],
+                                              spreadRadius: 1.0,
+                                              blurRadius: 2.0),
+                                        ]),
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.add_circle,
+                                            color: Color(colorBlue),
+                                            size: SizeConfig.blockSizeVertical *
+                                                6,
+                                          ),
+                                          Text("Upload Photo")
+                                        ]));
+                              }
+                            } else {
+                              return Container(
                                 width: SizeConfig.screenWidth * 0.4,
                                 height: SizeConfig.screenHeight * 0.15,
                                 decoration: BoxDecoration(
@@ -250,58 +306,14 @@ bool isLoading=false;
                                           blurRadius: 2.0),
                                     ],
                                     image: DecorationImage(
-                                        image: NetworkImage(
-                                            image_url + "/" + data.image1),
-                                        fit: BoxFit.cover)));
-                          }
-                          else {
-                            return Container(
-                                width: SizeConfig.screenWidth * 0.4,
-                                height: SizeConfig.screenHeight * 0.15,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey[200],
-                                          spreadRadius: 1.0,
-                                          blurRadius: 2.0),
-                                    ]),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.add_circle,
-                                        color: Color(colorBlue),
-                                        size: SizeConfig.blockSizeVertical * 6,
-                                      ),
-                                      Text("Upload Photo")
-                                    ]));
-                          }
-                        }
-
-                       else{
-                          return Container(
-                            width: SizeConfig.screenWidth * 0.4,
-                            height: SizeConfig.screenHeight * 0.15,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey[200],
-                                      spreadRadius: 1.0,
-                                      blurRadius: 2.0),
-                                ],
-                                image: DecorationImage(
-                                    image: MemoryImage(controller.selectedImg),
-                                    fit: BoxFit.cover)),
-                          );
-                        }
-                      })),
+                                        image:
+                                            MemoryImage(controller.selectedImg),
+                                        fit: BoxFit.cover)),
+                              );
+                            }
+                          })),
                       GestureDetector(onTap: () async {
-                        showAlertDialog2(context,2);
+                        showAlertDialog2(context, 2);
                       }, child: GetBuilder<ImageUploadViewModel>(
                         builder: (controller) {
                           if (file2 == null) {
@@ -337,14 +349,16 @@ bool isLoading=false;
                                             blurRadius: 2.0),
                                       ]),
                                   child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.add_circle,
                                           color: Color(colorBlue),
-                                          size: SizeConfig.blockSizeVertical * 6,
+                                          size:
+                                              SizeConfig.blockSizeVertical * 6,
                                         ),
                                         Text("Upload Photo")
                                       ]));
@@ -376,30 +390,63 @@ bool isLoading=false;
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(onTap:()=>showAlertDialog3(context,3),
+                        GestureDetector(
+                            onTap: () => showAlertDialog3(context, 3),
+                            child: GetBuilder<ImageUploadViewModel>(
+                              builder: (controller) {
+                                if (file3 == null) {
+                                  if (data.image3 != "") {
+                                    return Container(
+                                      width: SizeConfig.screenWidth * 0.4,
+                                      height: SizeConfig.screenHeight * 0.15,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey[200],
+                                                spreadRadius: 1.0,
+                                                blurRadius: 2.0),
+                                          ],
+                                          image: DecorationImage(
+                                              image: NetworkImage(image_url +
+                                                  "/" +
+                                                  data.image3),
+                                              fit: BoxFit.cover)),
+                                    );
+                                  } else {
+                                    return Container(
+                                        width: SizeConfig.screenWidth * 0.4,
+                                        height: SizeConfig.screenHeight * 0.15,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey[200],
+                                                  spreadRadius: 1.0,
+                                                  blurRadius: 2.0),
+                                            ]),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.add_circle,
+                                                color: Color(colorBlue),
+                                                size: SizeConfig
+                                                        .blockSizeVertical *
+                                                    6,
+                                              ),
+                                              Text("Upload Photo")
+                                            ]));
+                                  }
+                                }
 
-                          child: GetBuilder<ImageUploadViewModel>(
-                          builder: (controller) {
-                            if (file3 == null) {
-                              if (data.image3 != "") {
-                                return Container(
-                                  width: SizeConfig.screenWidth * 0.4,
-                                  height: SizeConfig.screenHeight * 0.15,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.grey[200],
-                                            spreadRadius: 1.0,
-                                            blurRadius: 2.0),
-                                      ],
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              image_url + "/" + data.image3),
-                                          fit: BoxFit.cover)),
-                                );
-                              } else {
                                 return Container(
                                     width: SizeConfig.screenWidth * 0.4,
                                     height: SizeConfig.screenHeight * 0.15,
@@ -411,65 +458,70 @@ bool isLoading=false;
                                               color: Colors.grey[200],
                                               spreadRadius: 1.0,
                                               blurRadius: 2.0),
-                                        ]),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.add_circle,
-                                            color: Color(colorBlue),
-                                            size:
-                                                SizeConfig.blockSizeVertical * 6,
-                                          ),
-                                          Text("Upload Photo")
-                                        ]));
-                              }
-                            }
+                                        ],
+                                        image: DecorationImage(
+                                            image: MemoryImage(
+                                                controller.selectedImg3),
+                                            fit: BoxFit.cover)));
+                              },
+                            )),
+                        GestureDetector(
+                            onTap: () => showAlertDialog4(context, 4),
+                            child: GetBuilder<ImageUploadViewModel>(
+                              builder: (controller) {
+                                if (file4 == null) {
+                                  if (data.image4 != "") {
+                                    return Container(
+                                      width: SizeConfig.screenWidth * 0.4,
+                                      height: SizeConfig.screenHeight * 0.15,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.grey[200],
+                                                spreadRadius: 1.0,
+                                                blurRadius: 2.0),
+                                          ],
+                                          image: DecorationImage(
+                                              image: NetworkImage(image_url +
+                                                  "/" +
+                                                  data.image4),
+                                              fit: BoxFit.cover)),
+                                    );
+                                  } else {
+                                    return Container(
+                                        width: SizeConfig.screenWidth * 0.4,
+                                        height: SizeConfig.screenHeight * 0.15,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey[200],
+                                                  spreadRadius: 1.0,
+                                                  blurRadius: 2.0),
+                                            ]),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.add_circle,
+                                                color: Color(colorBlue),
+                                                size: SizeConfig
+                                                        .blockSizeVertical *
+                                                    6,
+                                              ),
+                                              Text("Upload Photo")
+                                            ]));
+                                  }
+                                }
 
-                            return Container(
-                                width: SizeConfig.screenWidth * 0.4,
-                                height: SizeConfig.screenHeight * 0.15,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey[200],
-                                          spreadRadius: 1.0,
-                                          blurRadius: 2.0),
-                                    ],
-                                    image: DecorationImage(
-                                        image:
-                                            MemoryImage(controller.selectedImg3),
-                                        fit: BoxFit.cover)));
-                          },
-                        )),
-                        GestureDetector(onTap:()=>showAlertDialog4(context,4)
-                         , child: GetBuilder<ImageUploadViewModel>(
-                          builder: (controller) {
-                            if (file4 == null) {
-                              if (data.image4 != "") {
-                                return Container(
-                                  width: SizeConfig.screenWidth * 0.4,
-                                  height: SizeConfig.screenHeight * 0.15,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.grey[200],
-                                            spreadRadius: 1.0,
-                                            blurRadius: 2.0),
-                                      ],
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              image_url + "/" + data.image4),
-                                          fit: BoxFit.cover)),
-                                );
-                              } else {
                                 return Container(
                                     width: SizeConfig.screenWidth * 0.4,
                                     height: SizeConfig.screenHeight * 0.15,
@@ -480,43 +532,14 @@ bool isLoading=false;
                                           BoxShadow(
                                               color: Colors.grey[200],
                                               spreadRadius: 1.0,
-                                              blurRadius: 2.0),
-                                        ]),
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.add_circle,
-                                            color: Color(colorBlue),
-                                            size:
-                                                SizeConfig.blockSizeVertical * 6,
-                                          ),
-                                          Text("Upload Photo")
-                                        ]));
-                              }
-                            }
-
-                            return Container(
-                                width: SizeConfig.screenWidth * 0.4,
-                                height: SizeConfig.screenHeight * 0.15,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey[200],
-                                          spreadRadius: 1.0,
-                                          blurRadius: 2.0)
-                                    ],
-                                    image: DecorationImage(
-                                        image:
-                                            MemoryImage(controller.selectedImg4),
-                                        fit: BoxFit.cover)));
-                          },
-                        ))
+                                              blurRadius: 2.0)
+                                        ],
+                                        image: DecorationImage(
+                                            image: MemoryImage(
+                                                controller.selectedImg4),
+                                            fit: BoxFit.cover)));
+                              },
+                            ))
                       ])
                 ])),
         Form(
@@ -680,10 +703,12 @@ bool isLoading=false;
                                         color: Colors.red,
                                       )),
                                   hint: Text(
-                                    data.semester==""?"semester":widget.sem,
+                                    data.semester == ""
+                                        ? "semester"
+                                        : widget.sem,
                                     style: TextStyle(
                                       fontSize:
-                                          SizeConfig.blockSizeVertical *2,
+                                          SizeConfig.blockSizeVertical * 2,
                                     ),
                                   ),
                                   items: <String>[
@@ -737,14 +762,16 @@ bool isLoading=false;
                                         color: Colors.red,
                                       )),
                                   hint: Text(
-                                    data.conditions==""?"Condition":widget.condition,
+                                    data.conditions == ""
+                                        ? "Condition"
+                                        : widget.condition,
                                     style: TextStyle(
                                       fontSize:
                                           SizeConfig.blockSizeVertical * 2,
                                     ),
                                   ),
-                                  items:
-                                      <String>['Good', 'Bad'].map((String value) {
+                                  items: <String>['Good', 'Bad']
+                                      .map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
                                       child: new Text(
@@ -864,7 +891,6 @@ bool isLoading=false;
                         ]),
                     child: TextFormField(
                       controller: price,
-
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
                       onFieldSubmitted: (value) {
@@ -908,11 +934,8 @@ bool isLoading=false;
                           ),
                           child: MaterialButton(
                             onPressed: () async {
-
                               if (profileForm.currentState.validate()) {
-
-
-                                if (widget.bookId !=null) {
+                                if (widget.bookId != null) {
                                   editbook();
                                   // print("-----sm in if");
                                   // ImageUploadViewModel imaUploadViewModel =
@@ -1036,19 +1059,20 @@ bool isLoading=false;
                                   //   CommonSnackBar.snackBar(
                                   //       message: response.message);
                                   // }
-                                }
-                                else {
+                                } else {
                                   ImageUploadViewModel imaUploadViewModel =
-                                  Get.put(ImageUploadViewModel());
+                                      Get.put(ImageUploadViewModel());
                                   if (bookName.text.isEmpty ||
                                       bookName.text == null) {
-                                    showAlert(context, "Please enter book name");
+                                    showAlert(
+                                        context, "Please enter book name");
                                     return;
                                   }
 
                                   if (author.text.isEmpty ||
                                       author.text == null) {
-                                    showAlert(context, "Please enter author name");
+                                    showAlert(
+                                        context, "Please enter author name");
                                     return;
                                   }
 
@@ -1057,44 +1081,52 @@ bool isLoading=false;
                                     showAlert(context, "Please enter price");
                                     return;
                                   }
-                                  if (desc.text.isEmpty ||
-                                      desc.text == null) {
-                                    showAlert(context, "Please enter Description");
+                                  if (desc.text.isEmpty || desc.text == null) {
+                                    showAlert(
+                                        context, "Please enter Description");
                                     return;
                                   }
                                   if (edition.text.isEmpty ||
                                       edition.text == null) {
-                                    showAlert(context, "Please enter Edition deatil");
+                                    showAlert(
+                                        context, "Please enter Edition deatil");
                                     return;
                                   }
 
-                                  if( imaUploadViewModel.selectedImg==null||imaUploadViewModel.selectedImg==""){
+                                  if (imaUploadViewModel.selectedImg == null ||
+                                      imaUploadViewModel.selectedImg == "") {
                                     showAlert(context, "Please Upload Images");
                                     return;
                                   }
-                                  if(semester.text.isEmpty||semester.text==null){
+                                  if (semester.text.isEmpty ||
+                                      semester.text == null) {
                                     showAlert(context, "Please enter Semester");
                                     return;
                                   }
-                                  if(conditions.text.isEmpty||conditions.text==null){
-                                    showAlert(context, "Please enter conditions");
+                                  if (conditions.text.isEmpty ||
+                                      conditions.text == null) {
+                                    showAlert(
+                                        context, "Please enter conditions");
                                     return;
                                   }
-                                  if( imaUploadViewModel.selectedImg2==null||imaUploadViewModel.selectedImg2==""){
+                                  if (imaUploadViewModel.selectedImg2 == null ||
+                                      imaUploadViewModel.selectedImg2 == "") {
                                     showAlert(context, "Please Upload Images");
                                     return;
                                   }
-                                  if( imaUploadViewModel.selectedImg3==null||imaUploadViewModel.selectedImg3==""){
+                                  if (imaUploadViewModel.selectedImg3 == null ||
+                                      imaUploadViewModel.selectedImg3 == "") {
                                     showAlert(context, "Please Upload Images");
                                     return;
                                   }
-                                  if( imaUploadViewModel.selectedImg4==null||imaUploadViewModel.selectedImg4==""){
+                                  if (imaUploadViewModel.selectedImg4 == null ||
+                                      imaUploadViewModel.selectedImg4 == "") {
                                     showAlert(context, "Please Upload Images");
                                     return;
                                   }
-setState(() {
-  isLoading=true;
-});
+                                  setState(() {
+                                    isLoading = true;
+                                  });
                                   BookAddViewModel bookAddViewModel =
                                       Get.put(BookAddViewModel());
                                   // ImageUploadViewModel imaUploadViewModel =
@@ -1114,7 +1146,7 @@ setState(() {
                                   bookAddReq.conditions = conditions.text;
                                   bookAddReq.description = desc.text;
                                   bookAddReq.price = price.text;
-                                  bookAddReq.college_name=collegename.text;
+                                  bookAddReq.college_name = collegename.text;
                                   bookAddReq.image1 =
                                       imaUploadViewModel.selectedImg;
                                   bookAddReq.image2 =
@@ -1124,8 +1156,7 @@ setState(() {
                                   bookAddReq.image4 =
                                       imaUploadViewModel.selectedImg4;
 
-                                  await bookAddViewModel
-                                      .bookAdd(bookAddReq);
+                                  await bookAddViewModel.bookAdd(bookAddReq);
                                   // if (bookAddViewModel.apiResponse.status ==
                                   //     Status.COMPLETE) {
                                   print(bookAddViewModel.toString());
@@ -1133,17 +1164,20 @@ setState(() {
 
                                   RegisterResponseModel response =
                                       bookAddViewModel.apiResponse.data;
-                                  Future.delayed(Duration(seconds: 1),
-                                          () {
-                                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation(text:"Posted")));
-                                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
-                                      });
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CheckAnimation(
+                                                    text: "Posted")));
+                                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
+                                  });
                                   //print("jksdajn"+response.status);
                                   if (response.status == '256') {
                                     showAlert(context, response.message);
 
-                                    Future.delayed(Duration(seconds: 2),
-                                        () {
+                                    Future.delayed(Duration(seconds: 2), () {
                                       Get.back();
                                       bookName.clear();
                                       author.clear();
@@ -1158,15 +1192,17 @@ setState(() {
                                 }
                               }
                             },
-                            child:isLoading?
-                                CircularProgressIndicator(color: Colors.white,): Text(widget.name,
-                                style: TextStyle(
+                            child: isLoading
+                                ? CircularProgressIndicator(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
+                                  )
+                                : Text(widget.name,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold)),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25)),
                           ))),
-
                 ]))
       ]),
     );
@@ -1185,138 +1221,81 @@ setState(() {
 
     return data;
   }
-    showAlertDialog(BuildContext context,number)  {
 
-      // set up the button
-      Widget Camera =Column(children: [
-        GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*10,child: CircleAvatar(backgroundColor: Colors.white70,backgroundImage: AssetImage("assets/icons/camera.jpeg",))),
+  showAlertDialog(BuildContext context, number) {
+    // set up the button
+    Widget Camera = Column(
+      children: [
+        GestureDetector(
+            child: Container(
+                // height: SizeConfig.blockSizeVertical*14,
+                width: SizeConfig.blockSizeVertical * 10,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    backgroundImage: AssetImage(
+                      "assets/icons/camera.jpeg",
+                    ))),
             onTap: () async {
               Navigator.pop(context);
               ImageUploadViewModel imageUpload = Get.find();
-               file = await getImageFromCamera();
+              file = await getImageFromCamera();
 
-              Uint8List uint8List =
-              await compressFile(File(file.path));
+              Uint8List uint8List = await compressFile(File(file.path));
 
               imageUpload.addSelectedImg(uint8List);
               print("image selected${uint8List}");
-            }
-
-        ),
+            }),
         Text("Camera")
-      ],);
-      Widget gallery = Column(children: [
-        GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*14,child: CircleAvatar(
-            backgroundColor: Colors.white38,
-            backgroundImage: AssetImage("assets/icons/gallery.jpeg",))),
-            onTap: ()  async {
+      ],
+    );
+    Widget gallery = Column(
+      children: [
+        GestureDetector(
+            child: Container(
+                // height: SizeConfig.blockSizeVertical*14,
+                width: SizeConfig.blockSizeVertical * 14,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white38,
+                    backgroundImage: AssetImage(
+                      "assets/icons/gallery.jpeg",
+                    ))),
+            onTap: () async {
               Navigator.pop(context);
               ImageUploadViewModel imageUpload = Get.find();
-               file = await getImageFromGallery();
+              file = await getImageFromGallery();
 
-              Uint8List uint8List =
-              await compressFile(File(file.path));
+              Uint8List uint8List = await compressFile(File(file.path));
 
               imageUpload.addSelectedImg(uint8List);
               print("image selected${uint8List}");
-            }
-
-        ),
+            }),
         Text("Gallery")
-      ],);
-
-      // set up the AlertDialog
-      AlertDialog alert = AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-                25.0
-            )),
-
-
-        content: Container(
-            height: SizeConfig.screenHeight*0.20,
-            child: Column(
-              children: [
-                Text("Upload Image "),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [ Camera,
-                    SizedBox(width: 30,),
-                    gallery,],)
-              ],
-            )),
-
-      );
-
-      // show the dialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
-    }
-  showAlertDialog2(BuildContext context,number)  {
-
-    // set up the button
-    Widget Camera =Column(children: [
-      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*10,child: CircleAvatar(backgroundColor: Colors.white70,backgroundImage: AssetImage("assets/icons/camera.jpeg",))),
-          onTap: () async {
-            Navigator.pop(context);
-            ImageUploadViewModel imageUpload = Get.find();
-            file2 = await getImageFromCamera();
-
-            Uint8List uint8List =
-            await compressFile(File(file2.path));
-
-            imageUpload.addSelectedImg2(uint8List);
-            print("image selected${uint8List}");
-          }
-
-      ),
-      Text("Camera")
-    ],);
-    Widget gallery = Column(children: [
-      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*14,child: CircleAvatar(
-          backgroundColor: Colors.white38,
-          backgroundImage: AssetImage("assets/icons/gallery.jpeg",))),
-          onTap: ()  async {
-            Navigator.pop(context);
-            ImageUploadViewModel imageUpload = Get.find();
-             file2 = await getImageFromGallery();
-
-            Uint8List uint8List =
-            await compressFile(File(file2.path));
-
-            imageUpload.addSelectedImg2(uint8List);
-            print("image selected${uint8List}");
-          }
-
-      ),
-      Text("Gallery")
-    ],);
+      ],
+    );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-              25.0
-          )),
-
-
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
       content: Container(
-          height: SizeConfig.screenHeight*0.20,
+          height: SizeConfig.screenHeight * 0.20,
           child: Column(
             children: [
               Text("Upload Image "),
+              Spacer(),
+              // SizedBox(
+              //   height: 30,
+              // ),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [ Camera,
-                  SizedBox(width: 30,),
-                  gallery,],)
+                children: [
+                  Expanded(child: Camera),
+                  Expanded(child: gallery),
+                ],
+              ),
+              Spacer(),
             ],
           )),
-
     );
 
     // show the dialog
@@ -1327,67 +1306,80 @@ setState(() {
       },
     );
   }
-  showAlertDialog3(BuildContext context,number) {
 
+  showAlertDialog2(BuildContext context, number) {
     // set up the button
-    Widget Camera =Column(children: [
-      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*10,child: CircleAvatar(backgroundColor: Colors.white70,backgroundImage: AssetImage("assets/icons/camera.jpeg",))),
-          onTap: () async {
-            Navigator.pop(context);
-            ImageUploadViewModel imageUpload = Get.find();
-             file3 = await getImageFromCamera();
+    Widget Camera = Column(
+      children: [
+        GestureDetector(
+            child: Container(
+                // height: SizeConfig.blockSizeVertical * 14,
+                width: SizeConfig.blockSizeVertical * 10,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    backgroundImage: AssetImage(
+                      "assets/icons/camera.jpeg",
+                    ))),
+            onTap: () async {
+              Navigator.pop(context);
+              ImageUploadViewModel imageUpload = Get.find();
+              file2 = await getImageFromCamera();
 
-            Uint8List uint8List =
-            await compressFile(File(file3.path));
+              Uint8List uint8List = await compressFile(File(file2.path));
 
-            imageUpload.addSelectedImg3(uint8List);
-            print("image selected${uint8List}");
-          }
+              imageUpload.addSelectedImg2(uint8List);
+              print("image selected${uint8List}");
+            }),
+        Text("Camera")
+      ],
+    );
+    Widget gallery = Column(
+      children: [
+        GestureDetector(
+            child: Container(
+                // height: SizeConfig.blockSizeVertical * 14,
+                width: SizeConfig.blockSizeVertical * 14,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white38,
+                    backgroundImage: AssetImage(
+                      "assets/icons/gallery.jpeg",
+                    ))),
+            onTap: () async {
+              Navigator.pop(context);
+              ImageUploadViewModel imageUpload = Get.find();
+              file2 = await getImageFromGallery();
 
-      ),
-      Text("Camera")
-    ],);
-    Widget gallery = Column(children: [
-      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*14,child: CircleAvatar(
-          backgroundColor: Colors.white38,
-          backgroundImage: AssetImage("assets/icons/gallery.jpeg",))),
-          onTap: ()  async {
-            Navigator.pop(context);
-            ImageUploadViewModel imageUpload = Get.find();
-             file3 = await getImageFromGallery();
+              Uint8List uint8List = await compressFile(File(file2.path));
 
-            Uint8List uint8List =
-            await compressFile(File(file3.path));
-
-            imageUpload.addSelectedImg3(uint8List);
-            print("image selected${uint8List}");
-          }
-
-      ),
-      Text("Gallery")
-    ],);
+              imageUpload.addSelectedImg2(uint8List);
+              print("image selected${uint8List}");
+            }),
+        Text("Gallery")
+      ],
+    );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-              25.0
-          )),
-
-
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
       content: Container(
-          height: SizeConfig.screenHeight*0.20,
+          height: SizeConfig.screenHeight * 0.20,
           child: Column(
             children: [
               Text("Upload Image "),
+              Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [ Camera,
-                  SizedBox(width: 30,),
-                  gallery,],)
+                children: [
+                  Camera,
+                  SizedBox(
+                    width: 30,
+                  ),
+                  gallery,
+                ],
+              ),
+              Spacer(),
             ],
           )),
-
     );
 
     // show the dialog
@@ -1398,67 +1390,164 @@ setState(() {
       },
     );
   }
-  showAlertDialog4(BuildContext context,number) {
 
+  showAlertDialog3(BuildContext context, number) {
     // set up the button
-    Widget Camera =Column(children: [
-      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*10,child: CircleAvatar(backgroundColor: Colors.white70,backgroundImage: AssetImage("assets/icons/camera.jpeg",))),
-          onTap: () async {
-            Navigator.pop(context);
-            ImageUploadViewModel imageUpload = Get.find();
-             file4 = await getImageFromCamera();
+    Widget Camera = Column(
+      children: [
+        GestureDetector(
+            child: Container(
+                // height: SizeConfig.blockSizeVertical * 14,
+                width: SizeConfig.blockSizeVertical * 10,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    backgroundImage: AssetImage(
+                      "assets/icons/camera.jpeg",
+                    ))),
+            onTap: () async {
+              Navigator.pop(context);
+              ImageUploadViewModel imageUpload = Get.find();
+              file3 = await getImageFromCamera();
 
-            Uint8List uint8List =
-            await compressFile(File(file4.path));
+              Uint8List uint8List = await compressFile(File(file3.path));
 
-            imageUpload.addSelectedImg4(uint8List);
-            print("image selected${uint8List}");
-          }
+              imageUpload.addSelectedImg3(uint8List);
+              print("image selected${uint8List}");
+            }),
+        Text("Camera")
+      ],
+    );
+    Widget gallery = Column(
+      children: [
+        GestureDetector(
+            child: Container(
+                // height: SizeConfig.blockSizeVertical * 14,
+                width: SizeConfig.blockSizeVertical * 14,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white38,
+                    backgroundImage: AssetImage(
+                      "assets/icons/gallery.jpeg",
+                    ))),
+            onTap: () async {
+              Navigator.pop(context);
+              ImageUploadViewModel imageUpload = Get.find();
+              file3 = await getImageFromGallery();
 
-      ),
-      Text("Camera")
-    ],);
-    Widget gallery = Column(children: [
-      GestureDetector(child: Container(height: SizeConfig.blockSizeVertical*14,width: SizeConfig.blockSizeVertical*14,child: CircleAvatar(
-          backgroundColor: Colors.white38,
-          backgroundImage: AssetImage("assets/icons/gallery.jpeg",))),
-          onTap: ()  async {
-            Navigator.pop(context);
-            ImageUploadViewModel imageUpload = Get.find();
-             file4= await getImageFromGallery();
+              Uint8List uint8List = await compressFile(File(file3.path));
 
-            Uint8List uint8List =
-            await compressFile(File(file4.path));
-
-            imageUpload.addSelectedImg4(uint8List);
-            print("image selected${uint8List}");
-          }
-
-      ),
-      Text("Gallery")
-    ],);
+              imageUpload.addSelectedImg3(uint8List);
+              print("image selected${uint8List}");
+            }),
+        Text("Gallery")
+      ],
+    );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                 25.0
-                )),
-
-
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
       content: Container(
-          height: SizeConfig.screenHeight*0.20,
+          height: SizeConfig.screenHeight * 0.20,
           child: Column(
-        children: [
-          Text("Upload Image "),
-         Row(
-           mainAxisAlignment: MainAxisAlignment.center,
-           children: [ Camera,
-           SizedBox(width: 30,),
-           gallery,],)
-        ],
-      )),
+            children: [
+              Text("Upload Image "),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Camera,
+                  SizedBox(
+                    width: 30,
+                  ),
+                  gallery,
+                ],
+              ),
+              Spacer(),
+            ],
+          )),
+    );
 
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showAlertDialog4(BuildContext context, number) {
+    // set up the button
+    Widget Camera = Column(
+      children: [
+        GestureDetector(
+            child: Container(
+                // height: SizeConfig.blockSizeVertical * 14,
+                width: SizeConfig.blockSizeVertical * 10,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white70,
+                    backgroundImage: AssetImage(
+                      "assets/icons/camera.jpeg",
+                    ))),
+            onTap: () async {
+              Navigator.pop(context);
+              ImageUploadViewModel imageUpload = Get.find();
+              file4 = await getImageFromCamera();
+
+              Uint8List uint8List = await compressFile(File(file4.path));
+
+              imageUpload.addSelectedImg4(uint8List);
+              print("image selected${uint8List}");
+            }),
+        Text("Camera")
+      ],
+    );
+    Widget gallery = Column(
+      children: [
+        GestureDetector(
+            child: Container(
+                // height: SizeConfig.blockSizeVertical * 14,
+                width: SizeConfig.blockSizeVertical * 14,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white38,
+                    backgroundImage: AssetImage(
+                      "assets/icons/gallery.jpeg",
+                    ))),
+            onTap: () async {
+              Navigator.pop(context);
+              ImageUploadViewModel imageUpload = Get.find();
+              file4 = await getImageFromGallery();
+
+              Uint8List uint8List = await compressFile(File(file4.path));
+
+              imageUpload.addSelectedImg4(uint8List);
+              print("image selected${uint8List}");
+            }),
+        Text("Gallery")
+      ],
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+      content: Container(
+          height: SizeConfig.screenHeight * 0.20,
+          child: Column(
+            children: [
+              Text("Upload Image "),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Camera,
+                  SizedBox(
+                    width: 30,
+                  ),
+                  gallery,
+                ],
+              ),
+              Spacer(),
+            ],
+          )),
     );
 
     // show the dialog
@@ -1496,73 +1585,79 @@ setState(() {
   //       }
   //   );
   // }
-Future<void> editbook() async {
-  setState(() {
-    isLoading=true;
-  });
-  print("jkrn;o");
-  final map = {
-    };
-print(bookName.text);
-    var url = "https://buysell.powerdope.com/api/book-edit";
+  Future<void> editbook() async {
+    setState(() {
+      isLoading = true;
+    });
+    print("jkrn;o");
+    final map = {};
+    print(bookName.text);
+    var url = ApiCall.baseURL + "book-edit";
 
-    var request =http.MultipartRequest('POST', Uri.parse(url));
+    var request = http.MultipartRequest('POST', Uri.parse(url));
 
-  file==null?request.fields['image1']="":request.files.add(await http.MultipartFile.fromPath(
-    'image1',
-    file.path,
-  )); file2==null?request.fields['image2']="":request.files.add(await http.MultipartFile.fromPath(
-    'image2',
-    file2.path,
-  )); file3==null?request.fields['image3']="":request.files.add(await http.MultipartFile.fromPath(
-    'image3',
-   file3.path,
-  )); file4==null?request.fields['image4']="":request.files.add(await http.MultipartFile.fromPath(
-    'image4',
-   file4.path,
-  ));
+    file == null
+        ? request.fields['image1'] = ""
+        : request.files.add(await http.MultipartFile.fromPath(
+            'image1',
+            file.path,
+          ));
+    file2 == null
+        ? request.fields['image2'] = ""
+        : request.files.add(await http.MultipartFile.fromPath(
+            'image2',
+            file2.path,
+          ));
+    file3 == null
+        ? request.fields['image3'] = ""
+        : request.files.add(await http.MultipartFile.fromPath(
+            'image3',
+            file3.path,
+          ));
+    file4 == null
+        ? request.fields['image4'] = ""
+        : request.files.add(await http.MultipartFile.fromPath(
+            'image4',
+            file4.path,
+          ));
 
     request.fields['user_id'] = PreferenceManager.getUserId().toString();
-    request.fields['session_key'] = PreferenceManager.getSessionKey().toString();
+    request.fields['session_key'] =
+        PreferenceManager.getSessionKey().toString();
     request.fields['id'] = widget.bookId;
     request.fields['name'] = bookName.text;
     request.fields['auther_name'] = author.text;
     request.fields['edition_detail'] = edition.text;
-    request.fields['college_name']=collegename.text;
+    request.fields['college_name'] = collegename.text;
     request.fields['semester'] = semester.text;
     request.fields['conditions'] = conditions.text;
     request.fields['description'] = desc.text;
     request.fields['price'] = price.text;
 
-
     var res = await request.send();
     print(res.statusCode);
     if (res.statusCode == 256) {
-
       setState(() {
-        isLoading= false;
+        isLoading = false;
       });
-      Future.delayed(Duration(seconds: 1),
-              () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckAnimation(text:"Updated")));
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
-          });
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckAnimation(text: "Updated")));
+        // Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckAnimation()));
+      });
 
-      Future.delayed(Duration(seconds: 2),
-              () {
-            Get.offAll(MainScreen());
-
-          });
+      Future.delayed(Duration(seconds: 2), () {
+        Get.offAll(MainScreen());
+      });
 
       // Navigator.pop(context);
     } else {
       setState(() {
-        isLoading= false;
+        isLoading = false;
       });
-
     }
     return res.reasonPhrase;
-
-
   }
 }

@@ -26,6 +26,7 @@ import 'package:http/http.dart'as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../Utils/ApiCall.dart';
 import 'BookDetails.dart';
 import 'MainScreen.dart';
 
@@ -818,7 +819,7 @@ else if(iamge!=null){
   Future<void> getprofile() async {
     isLoading=true;
     try {
-      final response = await http.post(Uri.parse("https://buysell.powerdope.com/api/user-data"),
+      final response = await http.post(Uri.parse( ApiCall.baseURL+"user-data"),
          body: {"user_id":PreferenceManager.getUserId().toString(),
           "session_key":PreferenceManager.getSessionKey().toString()});
 
@@ -852,7 +853,7 @@ setState(() {
       isbtnLoading=true;
     });
 if(file==null){
-  var url = "https://buysell.powerdope.com/api/edit-profile";
+  var url = ApiCall.baseURL+"edit-profile";
 
   var request = http.MultipartRequest('POST', Uri.parse(url));
 
@@ -904,7 +905,7 @@ if(file==null){
 
 }
     else{
-  var url = "https://buysell.powerdope.com/api/edit-profile";
+  var url = ApiCall.baseURL+"edit-profile";
 
   var request = http.MultipartRequest('POST', Uri.parse(url));
 

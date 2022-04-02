@@ -31,7 +31,7 @@ class BookListDataModel {
       name: parsedJson['name'],
       auther_name: parsedJson['auther_name'],
       edition_detail: parsedJson['edition_detail'],
-      price: parsedJson['price'],
+      price: parsedJson['price'].toString(),
       conditions: parsedJson['conditions'],
       category_id: parsedJson['category_id'],
       id: parsedJson['id'],
