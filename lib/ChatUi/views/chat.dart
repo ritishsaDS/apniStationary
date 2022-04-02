@@ -1,20 +1,34 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:book_buy_and_sell/ChatUi/widget/widget.dart';
+import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
+import 'package:book_buy_and_sell/UI/Activities/MainScreen.dart';
+import 'package:book_buy_and_sell/Utils/Dialog.dart';
+import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:book_buy_and_sell/Utils/services/database.dart';
+import 'package:book_buy_and_sell/common/preference_manager.dart';
+import 'package:book_buy_and_sell/model/services/AppNotification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 class Chat extends StatefulWidget {
   final String chatRoomId;
-
-  Chat({this.chatRoomId});
+var catId;
+var firebaseid;
+var data;
+  Chat({this.chatRoomId,this.catId,this.data,this.firebaseid});
 
   @override
   _ChatState createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
-
+  final GlobalKey<State> loginLoader = new GlobalKey<State>();
   Stream<QuerySnapshot> chats;
   TextEditingController messageEditingController = new TextEditingController();
 
@@ -44,11 +58,25 @@ class _ChatState extends State<Chat> {
             .now()
             .millisecondsSinceEpoch,
       };
-
+      setState(() {
+        messageEditingController.clear();
+      });
       DatabaseMethods().addMessage(widget.chatRoomId, chatMessageMap);
+      Map<String, dynamic>   body = {
+        'senderId': PreferenceManager.getfirebaseid(),
+        'receiverId': widget.firebaseid.toString().split(",")[0],
+        'img': "widget.img",
+        'userName': PreferenceManager.getName(),
+      };
+      widget.firebaseid==null?
+      AppNotificationHandler.sendMessage(
+          msg: messageEditingController.text, data: body, token: widget.data.toString().split(",")[1].toString()): AppNotificationHandler.sendMessage(
+          msg: messageEditingController.text, data: body, token: widget.firebaseid.toString().split(",")[1].toString());
+
 
       setState(() {
         messageEditingController.text = "";
+
       });
     }
   }
@@ -61,57 +89,167 @@ class _ChatState extends State<Chat> {
       });
     });
 print("username"+Constants.myName);
+    KeyboardVisibilityNotification().addNewListener(
+      onHide: () {
+       setState(() {
+         height=0.8;
+       });
+      },
+    );
     super.initState();
   }
-
+var height=0.8;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      resizeToAvoidBottomInset: true,
       appBar: appBarMain(context),
       body: Container(
-
-        child: Stack(
+height: MediaQuery.of(context).size.height,
+        child: ListView(
           children: [
-            chatMessages(),
-            Container(alignment: Alignment.bottomCenter,
+           Container(
+             //margin: EdgeInsets.only(top: 70),
+             height: SizeConfig.screenHeight*height,
+             child:  chatMessages(),),
+            // Container(alignment: Alignment.topCenter,
+            //   width: MediaQuery
+            //       .of(context)
+            //       .size
+            //       .width,
+            //   margin: EdgeInsets.only(top:10,left: 10,right: 10),
+            //   child: Container(
+            //     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            //     color: Colors.blue,
+            //     child: Row(
+            //       children: [
+            //         Text("You Want to buy this book",style: TextStyle(color: Colors.white,fontSize: 14),),
+            //         SizedBox(width: 5,),
+            //         GestureDetector(
+            //           onTap: () {
+            //             Acceptbook();
+            //           },
+            //           child: Container(
+            //              padding: EdgeInsets.all(10),
+            //               decoration: BoxDecoration(
+            //                   gradient: LinearGradient(
+            //                       colors: [
+            //                         const Color(0x36FFFFFF),
+            //                         const Color(0x0FFFFFFF)
+            //                       ],
+            //                       begin: FractionalOffset.topLeft,
+            //                       end: FractionalOffset.bottomRight
+            //                   ),
+            //                   borderRadius: BorderRadius.circular(40)
+            //               ),
+            //
+            //               child: Text("Accept",style: TextStyle(color: Colors.white),))
+            //         ),
+            //         SizedBox(width: 20,),
+            //         GestureDetector(
+            //           onTap: () {
+            //             print("mrvm");
+            //             rejectbook();
+            //           },
+            //           child: Container(
+            //               padding: EdgeInsets.all(10),
+            //               decoration: BoxDecoration(
+            //                   gradient: LinearGradient(
+            //                       colors: [
+            //                         const Color(0x36FFFFFF),
+            //                         const Color(0x0FFFFFFF)
+            //                       ],
+            //                       begin: FractionalOffset.topLeft,
+            //                       end: FractionalOffset.bottomRight
+            //                   ),
+            //                   borderRadius: BorderRadius.circular(40)
+            //               ),
+            //
+            //               child: Text("Reject",style: TextStyle(color: Colors.white),)),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            Container(
+              color: Colors.white,
+              alignment: Alignment.bottomCenter,
               width: MediaQuery
                   .of(context)
                   .size
                   .width,
               child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),border: Border.all(color: Colors.blue)),
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                color: Colors.blue,
+
                 child: Row(
                   children: [
                     Expanded(
-                        child: TextField(
-                          controller: messageEditingController,
-                          style: simpleTextStyle(),
+                          child: GestureDetector(
+                              onTap: (){
+                                setState(() {
+                                  height=0.45;
 
-                          textCapitalization: TextCapitalization.words,
-                          decoration: InputDecoration(
-                              hintText: "Message ...",
-                              hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                              border: InputBorder.none
-                          ),
-                        )),
+                                });
+                              },
+                              child: TextField(
+                                autofocus: false,
+
+
+onTap: (){
+  setState(() {
+    height=0.45;
+
+  });
+},
+                                onSubmitted: (val){
+                                  setState(() {
+                                    height=0.8;
+
+                                  });
+                                },
+                            onChanged: (val){
+                              setState(() {
+                                height=0.45;
+
+                              });
+                            },
+                            controller: messageEditingController,
+                            style: simpleTextStyle(),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp('[a-zA-Z ]')),
+                            ],
+                            keyboardType: TextInputType.text,
+
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                                isDense: true,
+                                filled: true,
+                                hintText: "Message......",
+                                hintStyle: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 16,
+                                ),
+                                border: InputBorder.none
+                            ),
+                          )),
+                    ),
                     SizedBox(width: 16,),
                     GestureDetector(
                       onTap: () {
+
                         addMessage();
+
                       },
                       child: Container(
+
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                                   colors: [
-                                    const Color(0x36FFFFFF),
-                                    const Color(0x0FFFFFFF)
+                                     Colors.blue,
+                                    Colors.lightBlue,
                                   ],
                                   begin: FractionalOffset.topLeft,
                                   end: FractionalOffset.bottomRight
@@ -130,7 +268,123 @@ print("username"+Constants.myName);
       ),
     );
   }
+  void Acceptbook() async {
 
+    Dialogs.showLoadingDialog(
+        context, loginLoader);
+    print(widget.catId);
+    try {
+      final response = await post(
+
+          Uri.parse("http://admin.apnistationary.com/api/accept"),
+          body: (
+              {
+                "user_id" : "${PreferenceManager.getUserId()}",
+                "session_key": PreferenceManager.getSessionKey(),
+                "book_id":widget.catId,
+
+              }
+          ));
+      print("ffvvvf"+response.statusCode.toString());
+
+      if ( json.decode(response.body)['status'] == "256") {
+        Navigator.of(loginLoader.currentContext,
+            rootNavigator: true) .pop();
+
+
+        final responseJson = json.decode(response.body);
+        print(responseJson);
+        setState(() {
+          showchatAlert(context, json.decode(response.body)['message']);
+
+
+        });
+
+
+      } else {
+        Navigator.of(loginLoader.currentContext,
+            rootNavigator: true) .pop();
+        setState(() {
+          showchatAlert(context, json.decode(response.body)['message']);
+         // isLoading = false;
+        });
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+
+
+      });
+    }
+  }
+  void rejectbook() async {
+
+    Dialogs.showLoadingDialog(
+        context, loginLoader);
+    print(widget.catId);
+    try {
+      final response = await post(
+
+          Uri.parse("http://admin.apnistationary.com/api/reject"),
+          body: (
+              {
+                "user_id" : "${PreferenceManager.getUserId()}",
+                "session_key": PreferenceManager.getSessionKey(),
+                "book_id":widget.catId,
+
+              }
+          ));
+      print("ffvvvf"+response.statusCode.toString());
+
+      if ( json.decode(response.body)['status'] == "256") {
+        Navigator.of(loginLoader.currentContext,
+            rootNavigator: true) .pop();
+
+
+        final responseJson = json.decode(response.body);
+        print(responseJson);
+        setState(() {
+
+          showchatAlert(context, json.decode(response.body)['message']);
+
+        });
+
+
+      } else {
+        Navigator.of(loginLoader.currentContext,
+            rootNavigator: true) .pop();
+        setState(() {
+          showchatAlert(context, json.decode(response.body)['message']);
+          // isLoading = false;
+        });
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+        showchatAlert(context, e);
+
+      });
+    }
+  }
+  showchatAlert(BuildContext context,String msg) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Text(msg),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MainScreen()));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class MessageTile extends StatelessWidget {
@@ -188,5 +442,7 @@ class MessageTile extends StatelessWidget {
       ),
     );
   }
-}
 
+
+
+}

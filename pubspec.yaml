@@ -37,6 +37,10 @@ dependencies:
   geocoding: ^2.0.1
   dio: ^4.0.0
   speech_recognition: "^0.3.0"
+  flutter_local_notifications: ^5.0.0+3
+  firebase_messaging: ^10.0.2
+  keyboard_visibility:
+
   otp_text_field: ^1.1.1
   flutter_easyloading: ^3.0.3
   vibration: ^1.7.3

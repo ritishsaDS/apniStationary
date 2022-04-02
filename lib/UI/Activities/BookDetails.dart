@@ -17,7 +17,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:http/http.dart';
 
+import '../../Utils/Dialog.dart';
 import 'CheckoutScreen.dart';
 
 class BookDetail extends StatefulWidget {
@@ -30,6 +32,8 @@ class BookDetail extends StatefulWidget {
 }
 
 class _BookDetailState extends State<BookDetail> {
+    final GlobalKey<State> loginLoader = new GlobalKey<State>();
+
   DatabaseMethods databaseMethods = new DatabaseMethods();
   Stream chatRooms;
   bool isLoading = false;
@@ -522,8 +526,13 @@ class _BookDetailState extends State<BookDetail> {
                                     onPressed: () async {
                                       print(snapshot.data.date.user_name);
                                       
-                                        sendMessage(
-                                            snapshot.data.date.user_name);
+                                         print(snapshot.data.date.user_name);
+                                  //sendMessage(snapshot.data.date.user_name);
+                                  Chatstart(snapshot.data.date.user_name,snapshot.data.date.user_firebase_id);
+                                 // showAlert(context,"Lorem Ipsum Dolor sir amet");
+
+                                        // sendMessage(
+                                        //     snapshot.data.date.user_name);
                                     },
                                     child: Text(
                                       "Chat",
@@ -700,6 +709,58 @@ class _BookDetailState extends State<BookDetail> {
     ));
   }
 
+
+ void Chatstart(datauser,firebase) async {
+
+    Dialogs.showLoadingDialog(
+        context, loginLoader);
+
+    try {
+      final response = await post(
+          Uri.parse("http://admin.apnistationary.com/api/chat_start"),
+          body: (
+              {
+                "user_id" : "${PreferenceManager.getUserId()}",
+                "session_key": PreferenceManager.getSessionKey(),
+                "book_id":widget.catId,
+
+              }
+          ));
+      print("ffvvvf"+response.statusCode.toString());
+
+      if (json.decode(response.body)['status'] == "200") {
+        print("mn wdkd"+json.decode(response.body)['status']);
+        Navigator.of(loginLoader.currentContext,
+            rootNavigator: true) .pop();
+
+        sendMessage(datauser,firebase);
+        final responseJson = json.decode(response.body);
+        print(responseJson);
+        setState(() {
+
+          isLoading = false;
+
+        });
+
+
+      } else {
+        print("mnmnln; wdkd"+json.decode(response.body)['status']);
+        Navigator.of(loginLoader.currentContext,
+            rootNavigator: true) .pop();
+        setState(() {
+showAlert(context, json.decode(response.body)['message']);
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print(e);
+      setState(() {
+
+        isLoading = false;
+      });
+    }
+  }
+
   Future<WalletModel> _callWalletAPI() async {
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
@@ -728,27 +789,30 @@ class _BookDetailState extends State<BookDetail> {
     return data;
   }
 
-  sendMessage(String userName) {
+sendMessage(String userName,firebase){
     print(Constants.myName);
-    List<String> users = [Constants.myName, userName];
+    List<String> users = [Constants.myName,userName];
 
-    String chatRoomId = getChatRoomId(Constants.myName, userName);
-    print("chatRoomid" + chatRoomId);
+    String chatRoomId = getChatRoomId(Constants.myName,userName);
+print("chatRoomid"+chatRoomId);
     Map<String, dynamic> chatRoom = {
       "users": users,
-      "chatRoomId": chatRoomId,
+      "chatRoomId" : chatRoomId,
+      "firebasetoken":firebase
+
     };
 
     databaseMethods.addChatRoom(chatRoom, chatRoomId);
 
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Chat(
-                  chatRoomId: chatRoomId,
-                )));
-  }
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => Chat(
+          chatRoomId: chatRoomId,
+            catId:widget.catId,
+            firebaseid:firebase
+        )
+    ));
 
+  }
   getUserInfogetChats() async {
     setState(() {
       isLoading = true;

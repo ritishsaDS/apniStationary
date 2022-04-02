@@ -290,13 +290,13 @@ class _SignUpState extends State<SignUp> {
                               regularExpression:
                                   Utility.alphabetSpaceValidationPattern,
                               validationMessage: Utility.nameEmptyValidation,
-                              // validator: (value) {
-                              //   if (value.length < 3) {
-                              //     return "Please enter Full Name";
-                              //   } else {
-                              //     return null;
-                              //   }
-                              // },
+                              validator: (value) {
+                                if (value.length < 3) {
+                                  return "Please enter Full Name";
+                                } else {
+                                  return null;
+                                }
+                              },
                             ),
                             SizedBox(
                               height: Get.height * 0.03,
@@ -889,6 +889,12 @@ class _SignUpState extends State<SignUp> {
                                       //       "Email Is not in right Format");
                                       //   return;
                                       // }
+                                      if (fullNameController.text.isEmpty ||
+                                          fullNameController.text == null) {
+                                        showAlert(
+                                            context, "Please add full name");
+                                        return;
+                                      }
                                       if (pwdController.text.length < 6) {
                                         showAlert(context,
                                             "Enter minimum 6 digts password");
