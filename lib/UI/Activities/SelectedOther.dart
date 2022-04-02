@@ -61,7 +61,11 @@ class _SelectedOtherState extends State<SelectedOther> {
                     ),
                   ),
                   Expanded(child: SizedBox()),
-
+                  ImageIcon(
+                    AssetImage('assets/icons/notification.png'),
+                    color: Color(colorBlue),
+                    size: SizeConfig.blockSizeVertical * 4,
+                  )
                 ],
               ),
             ),

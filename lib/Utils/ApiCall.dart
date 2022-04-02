@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:book_buy_and_sell/model/ClassModel/Ordersbooksmodel.dart';
 import 'package:book_buy_and_sell/Utils/constantString.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/ClassModel/BookListModel.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class ApiCall {
-  static String baseURL = 'http://admin.apnistationary.com/api/';
+  static String baseURL = 'https://admin.apnistationary.com/api/';
   static Map<String, String> header = {
     'Content-Type': 'application/json; charset=UTF-8'
   };
@@ -60,24 +59,14 @@ class ApiCall {
     var res = await ApiCall.post(bookListURL, body);
     var jsonResponse = json.decode(json.encode(res).toString());
 
-    var data = new BookListModel.fromJson(jsonResponse);
+// print("Book-List jsonResponse $jsonResponse");
+    print("DATA DATA");
+
+    var data =  BookListModel.fromJson(jsonResponse);
 
     return data;
   }
-  static Future<Orderedbooks> Orderedbook() async {
-   var body = {
-      "user_id": "${PreferenceManager.getUserId()}",
-      "session_key": PreferenceManager.getSessionKey(),
 
-    };
-
-    var res = await ApiCall.post("http://admin.apnistationary.com/api/myOrderList", body);
-    var jsonResponse = json.decode(json.encode(res).toString());
-
-    var data = new  Orderedbooks.fromJson(jsonResponse);
-
-    return data;
-  }
   static Future<TransactionModel> callTransactionAPI() async {
 
     Map<String, dynamic> body = {

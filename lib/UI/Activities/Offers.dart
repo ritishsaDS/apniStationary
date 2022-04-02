@@ -58,7 +58,11 @@ class _OffersState extends State<Offers> {
                       ],
                     ),
                   ),
-
+                  ImageIcon(
+                    AssetImage('assets/icons/notification.png'),
+                    color: Color(colorBlue),
+                    size: SizeConfig.blockSizeVertical * 4,
+                  )
                 ],
               ),
             ),
@@ -83,7 +87,6 @@ class _OffersState extends State<Offers> {
                               vertical: SizeConfig.blockSizeVertical * 1.5,
                               horizontal: SizeConfig.blockSizeHorizontal * 5),
                           hintText: "Search an item",
-
                           hintStyle: TextStyle(
                             color: Color(0XFF787878),
                             fontWeight: FontWeight.w500,

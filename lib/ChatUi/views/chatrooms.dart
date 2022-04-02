@@ -23,7 +23,7 @@ class _ChatRoomState extends State<ChatRoom> {
     return StreamBuilder<QuerySnapshot>(
       stream: chatRooms,
       builder: (context, snapshot) {
-
+        print("length------"+snapshot.data.toString());
         return snapshot.hasData
             ? ListView.builder(
                 itemCount: snapshot.data.docs.length,
@@ -35,7 +35,6 @@ class _ChatRoomState extends State<ChatRoom> {
                         .replaceAll("_", "")
                         .replaceAll(Constants.myName, ""),
                     chatRoomId: snapshot.data.docs[index].get("chatRoomId"),
-                     data: snapshot.data.docs[index].data().toString()
                   );
                 })
             : Container();
@@ -131,9 +130,8 @@ class _ChatRoomState extends State<ChatRoom> {
 class ChatRoomsTile extends StatelessWidget {
   final String userName;
   final String chatRoomId;
-  final dynamic data;
 
-  ChatRoomsTile({this.userName,this.data,@required this.chatRoomId});
+  ChatRoomsTile({this.userName,@required this.chatRoomId});
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +141,6 @@ class ChatRoomsTile extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => Chat(
             chatRoomId: chatRoomId,
-            data:data
           )
         ));
       },
@@ -177,11 +174,6 @@ class ChatRoomsTile extends StatelessWidget {
                 GestureDetector(
                   onTap: (){
                     print(userName);
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => Chat(
-                          chatRoomId: chatRoomId,
-                        )
-                    ));
                     //sendMessage(userName);
                   },
                   child: Container(
