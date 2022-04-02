@@ -73,11 +73,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ),
                     ),
                     Spacer(),
-                    ImageIcon(
-                      AssetImage('assets/icons/notification.png'),
-                      color: Color(colorBlue),
-                      size: SizeConfig.blockSizeVertical * 4,
-                    )
+
                   ],
                 ),
               ),
@@ -303,7 +299,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     //Create field for user to input old password
 
     //pass the password here
-    String password = "123456";
+    String password = newPasswordController.text;
     String newPassword = confirmPasswordController.text;
 
     try {

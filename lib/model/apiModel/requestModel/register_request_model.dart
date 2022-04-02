@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart' as dio;
-import 'dart:convert';
+
+import 'package:flutter/material.dart';
 
 class RegisterReq {
   String email;
@@ -14,6 +14,7 @@ class RegisterReq {
   String gender;
   String profession;
   String college_name;
+  String user_firebase_id;
 
   RegisterReq(
       {this.email,
@@ -22,18 +23,11 @@ class RegisterReq {
       this.number,
         this.profession,
       this.image,
+        this.user_firebase_id,
       this.gender,
       this.dob,
       this.college_name});
   Map<String, dynamic> toJson() {
-    File rawimage=File.fromRawPath(image);
-    //       'image': dio.MultipartFile.fromFile(rawimage.path,
-    //       filename: '${DateTime.now().microsecondsSinceEpoch}.jpg'),
-
-var fileContent = rawimage.readAsBytesSync();
-var fileContentBase64 = base64.encode(fileContent);
-var image_ =  dio.MultipartFile.fromBytes(image,
-          filename: '${DateTime.now().microsecondsSinceEpoch}.jpg');
     return {
       'email': email,
       'password': password,
@@ -41,8 +35,10 @@ var image_ =  dio.MultipartFile.fromBytes(image,
       "profession":profession,
       'number': number,
       'dob': dob,
-      'image': image_,
-      // 'image':,
+      'user_firebase_id':user_firebase_id,
+      // 'image': image,
+      image==null?"":'image':image==null?"https://gnws.org/wp-content/uploads/2019/07/placeholder-1400x775.jpg": dio.MultipartFile.fromBytes(image,
+          filename: '${DateTime.now().microsecondsSinceEpoch}.jpg'),
       'gender': gender,
       'college_name': college_name
     };

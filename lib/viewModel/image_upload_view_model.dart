@@ -54,4 +54,12 @@ class ImageUploadViewModel extends GetxController {
     _selectedImg4 = value;
     update();
   }
+  void clearSelectedImg() {
+    _selectedImg = null;
+    _selectedImg2 = null;
+    _selectedImg3 = null;
+    _selectedImg4 = null;
+
+    update();
+  }
 }

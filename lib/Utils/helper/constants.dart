@@ -6,4 +6,5 @@ class Constants{
   static String usercity = "";
   static String userstate = "";
   static String userpostal = "";
+  static String firebaseid = "";
 }

@@ -1,6 +1,5 @@
 abstract class BaseService<T> {
-  // final String baseURL = 'https://buysell.powerdope.com/api/';
-  final String baseURL = 'https://admin.apnistationary.com/api/';
+  final String baseURL = 'http://admin.apnistationary.com/api/';
   final String registerURL = 'sign-up';
   final String loginURL = 'login';
   final String changePasswordURL = 'change-password';
