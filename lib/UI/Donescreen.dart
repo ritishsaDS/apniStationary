@@ -30,7 +30,7 @@ class _CheckAnimationState extends State<CheckAnimation>
     new Future.delayed(
         const Duration(seconds: 2),
             () {
-              Vibration.vibrate(duration: 3000);
+              Vibration.vibrate(duration: 1000);
               HapticFeedback.vibrate();
               Navigator.pushReplacement(
                 context,
@@ -81,15 +81,16 @@ class _CheckAnimationState extends State<CheckAnimation>
               ),
             ),
             Container(
-
-              alignment: Alignment.center,
-              child: Center(
-                child: Text("${widget.text} Successfully", style: TextStyle(
-                    fontSize: SizeConfig.blockSizeVertical * 3.2,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0XFF77849C)
-                ),),
+              margin: EdgeInsets.only(
+                left: SizeConfig.screenWidth * 0.05,
+                right: SizeConfig.screenWidth * 0.05,
               ),
+              alignment: Alignment.center,
+              child: Text("Successfully ${widget.text}", style: TextStyle(
+                  fontSize: SizeConfig.blockSizeVertical * 3.5,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0XFF77849C)
+              ),),
             ),
 
           ],
