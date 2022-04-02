@@ -1,9 +1,7 @@
 import 'dart:core';
-import 'dart:core';
 import 'dart:typed_data';
 import 'package:dio/dio.dart' as dio;
 
-import 'package:flutter/material.dart';
 
 class BookEdit {
   String user_id;

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget appBarMain(BuildContext context) {
   return AppBar(
-    title: Text("Apni Stationary"),
-
+    title: Text("Book Buy And Sell"),
     elevation: 0.0,
     centerTitle: false,
   );
@@ -20,9 +19,9 @@ InputDecoration textFieldInputDecoration(String hintText) {
 }
 
 TextStyle simpleTextStyle() {
-  return TextStyle(color: Colors.blue, fontSize: 16);
+  return TextStyle(color: Colors.white, fontSize: 16);
 }
 
 TextStyle biggerTextStyle() {
-  return TextStyle(color: Colors.blue, fontSize: 17);
+  return TextStyle(color: Colors.white, fontSize: 17);
 }

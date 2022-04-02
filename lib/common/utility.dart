@@ -10,6 +10,7 @@ class Utility {
   static String kUserNameEmptyValidation = 'Please Enter Valid Email';
   static String kPasswordEmptyValidation = 'Please Enter Password';
   static String kPasswordLengthValidation = 'Must be more than 6 Characters';
+  static String mobileNumberTenDigitsInValidValidation = "Enter 10 digits mobile Number";
   static String mobileNumberInValidValidation = "Mobile Number is required";
   static String alphabetSpaceValidationPattern = r"[a-zA-Z0-9 ]";
   static String digitsValidationPattern = r"[0-9]";
