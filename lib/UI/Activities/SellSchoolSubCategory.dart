@@ -75,7 +75,11 @@ class _SellSchoolSubCategoryState extends State<SellSchoolSubCategory> {
                     ),
                   ),
                   Expanded(child: SizedBox()),
-
+                  ImageIcon(
+                    AssetImage('assets/icons/notification.png'),
+                    color: Color(colorBlue),
+                    size: SizeConfig.blockSizeVertical * 4,
+                  )
                 ],
               ),
             ),

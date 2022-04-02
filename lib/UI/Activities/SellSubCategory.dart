@@ -13,9 +13,9 @@ import 'package:flutter/material.dart';
 
 class SellSubCategory extends StatefulWidget {
   int id;
-  String text = "", img = "",name="";
+  String text = "", img = "";
 
-  SellSubCategory({this.id, this.text, this.img,this.name});
+  SellSubCategory({this.id, this.text, this.img});
 
 /*
   if (text[index] == "CBSE Boards" ||
@@ -69,7 +69,6 @@ class _SellSubCategoryState extends State<SellSubCategory> {
                     if (categoriesModel[index].subcategory == "Yes") {
                       return SellSubCategory(
                           id: categoriesModel[index].id,
-
                           text: categoriesModel[index].name,
                           img: categoriesModel[index].image);
                     }
@@ -83,7 +82,7 @@ class _SellSubCategoryState extends State<SellSubCategory> {
                       return SellBook("${categoriesModel[index].id}");
                     }*/
                     else {
-                      return SellBook(catId: "${categoriesModel[index].id}",name:"Sell Now",);
+                      return SellBook(catId: "${categoriesModel[index].id}",name:"Sell Now");
                       // return SellOther();
                     }
                   }));
@@ -185,7 +184,11 @@ class _SellSubCategoryState extends State<SellSubCategory> {
                           ),
                         ),
                         Expanded(child: SizedBox()),
-
+                        ImageIcon(
+                          AssetImage('assets/icons/notification.png'),
+                          color: Color(colorBlue),
+                          size: SizeConfig.blockSizeVertical * 4,
+                        )
                       ])),
                   Container(
                       width: SizeConfig.screenWidth,

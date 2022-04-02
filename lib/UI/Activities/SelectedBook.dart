@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/Constants/StringConstants.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
@@ -17,7 +16,6 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:http/http.dart';
-import 'package:speech_recognition/speech_recognition.dart';
 
 class SelectedBook extends StatefulWidget {
   final String searchedWord, catId;
@@ -31,11 +29,7 @@ class SelectedBook extends StatefulWidget {
 class _SelectedBookState extends State<SelectedBook> {
   final kGoogleApiKey = "AIzaSyDYt1WEbSBM1rji0tN69hz9nM4P833FMco";
   TextEditingController _searchField = TextEditingController();
-  SpeechRecognition _speechRecognition;
-  bool _isAvailable = false;
-  bool _isListening = false;
 
-  String resultText = "";
   Future<String> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -86,55 +80,7 @@ class _SelectedBookState extends State<SelectedBook> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _speechRecognition = SpeechRecognition();
 
-    _speechRecognition.setAvailabilityHandler(
-          (bool result) => setState(() => _isAvailable = result),
-    );
-
-    _speechRecognition.setRecognitionStartedHandler(
-          () => setState(() => _isListening = true),
-    );
-
-    _speechRecognition.setRecognitionResultHandler(
-          (String speech) => setState((){
-        resultText = speech;
-        _searchField=TextEditingController(text:resultText);
-        if(resultText==''){}
-        else{
-          Future.delayed(const Duration(milliseconds: 3000), () {
-            _fieldFocusChange(context);
-// Here you can write your code
-
-            setState(() {
-              // Here you can write your code for open new view
-            });
-
-          });
-
-        }
-
-      }),
-    );
-
-    _speechRecognition.setRecognitionCompleteHandler(
-          () => setState(() {
-        print("khatam"+resultText);
-        _isListening = false;
-        if(resultText==''||resultText.isEmpty){}
-        else{
-          //_fieldFocusChange(context);
-        }
-      }),
-    );
-
-    _speechRecognition.activate().then(
-          (result) => setState(() {
-        _isAvailable = result;
-        print(_isAvailable.toString());
-      }
-      ),
-    );
     _determinePosition().then((value) {});
   }
 
@@ -214,7 +160,11 @@ class _SelectedBookState extends State<SelectedBook> {
                           ],
                         ),
                       ),
-
+                      ImageIcon(
+                        AssetImage('assets/icons/notification.png'),
+                        color: Color(colorBlue),
+                        size: SizeConfig.blockSizeVertical * 4,
+                      )
                     ],
                   ),
                 ),
@@ -351,11 +301,10 @@ class _SelectedBookState extends State<SelectedBook> {
                           decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: SizeConfig.blockSizeVertical * 2,
+                                  vertical: SizeConfig.blockSizeVertical * 1.5,
                                   horizontal: SizeConfig.blockSizeHorizontal *
                                       5),
                               hintText: "Search an item",
-                              suffixIcon:  speechButton(),
                               hintStyle: TextStyle(
                                 color: Color(hintGrey),
                                 fontWeight: FontWeight.w500,
@@ -580,8 +529,8 @@ class _SelectedBookState extends State<SelectedBook> {
                                                 0.5,
                                           ),
                                           Text(
-                                            "${snapshot
-        .data.date[index].college_name}",
+                                            snapshot
+                                                .data.date[index].college_name,
                                             maxLines: 1,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -678,7 +627,7 @@ class _SelectedBookState extends State<SelectedBook> {
     isLoading = true;
     try {
       final response = await post(
-          Uri.parse("http://admin.apnistationary.com/api/category"),
+          Uri.parse(ApiCall.baseURL+"category"),
           body: {
             "user_id": PreferenceManager.getUserId().toString(),
             "session_key": PreferenceManager.getSessionKey().toString(),
@@ -708,87 +657,5 @@ class _SelectedBookState extends State<SelectedBook> {
       });
     }
   }
-  speechButton() => AvatarGlow(
-    animate: _isListening,
-    glowColor: Theme.of(context).primaryColor,
-    endRadius: 30.0,
-    duration: const Duration(milliseconds: 3000),
-    repeatPauseDuration: const Duration(milliseconds: 100),
-    repeat: true,
 
-    child: Container(
-      height: 25,
-     // margin: EdgeInsets.only(left:10,right: 10),
-      child: GestureDetector(
-        onTap: (){
-          _speechRecognition = SpeechRecognition();
-
-          _speechRecognition.setAvailabilityHandler(
-                (bool result) => setState(() => _isAvailable = result),
-          );
-
-          _speechRecognition.setRecognitionStartedHandler(
-                () => setState(() => _isListening = true),
-          );
-
-          _speechRecognition.setRecognitionResultHandler(
-                (String speech) => setState((){
-              resultText = speech;
-              _searchField=TextEditingController(text:resultText);
-              if(resultText==''){}
-              else{
-                Future.delayed(const Duration(milliseconds: 3000), () {
-                  _isAvailable=false;
-                  _fieldFocusChange(context);
-// Here you can write your code
-
-                  setState(() {
-                    // Here you can write your code for open new view
-                  });
-
-                });
-
-              }
-
-            }),
-          );
-
-          _speechRecognition.setRecognitionCompleteHandler(
-                () => setState(() {
-              print("khatam"+resultText);
-              _isListening = false;
-              if(resultText==''||resultText.isEmpty){}
-              else{
-                //_fieldFocusChange(context);
-              }
-            }),
-          );
-
-          _speechRecognition.activate().then(
-                (result) => setState(() {
-              _isAvailable = result;
-              print(_isAvailable.toString());
-            }
-            ),
-          );
-          print(_isAvailable);
-          if (_isAvailable && !_isListening)
-            _speechRecognition
-                .listen(locale: "en_IN")
-                .then((result) {
-              setState(() {
-
-
-              });
-            });
-        },
-        child: CircleAvatar(
-            radius: 15,
-            backgroundColor:Colors.blue,child: Icon(Icons.mic,color: Colors.white,size: 12,)),
-      ),
-
-
-    ),
-  )
-  ;
 }
