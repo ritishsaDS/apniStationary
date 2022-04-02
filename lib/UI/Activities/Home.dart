@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:book_buy_and_sell/model/services/base_service.dart';
 import 'package:book_buy_and_sell/Constants/Colors.dart';
 import 'package:book_buy_and_sell/Constants/StringConstants.dart';
 import 'package:book_buy_and_sell/UI/Activities/BookDetails.dart';
@@ -121,7 +122,7 @@ resizeToAvoidBottomInset: false,
               ),
               Container(
                 width: SizeConfig.screenWidth,
-                height: SizeConfig.blockSizeVertical*10,
+                // height: SizeConfig.blockSizeVertical*10,
                 margin: EdgeInsets.symmetric(
                     horizontal: SizeConfig.screenWidth * 0.08,
                     vertical: SizeConfig.blockSizeVertical * 2),
@@ -924,12 +925,13 @@ resizeToAvoidBottomInset: false,
       showAlert(context, "Search Item cannot be empty");
     }
   }
-dynamic categorylist=new List();
+dynamic categorylist=[];
   Future<void> getCategory() async {
     print("jh dhic ibcdofn");
     isLoading=true;
+    
     try {
-      final response = await post(Uri.parse("https://buysell.powerdope.com/api/category"),
+      final response = await post(Uri.parse(ApiCall.baseURL+"category"),
           body: {
         "user_id":PreferenceManager.getUserId().toString(),
             "session_key":PreferenceManager.getSessionKey().toString(),

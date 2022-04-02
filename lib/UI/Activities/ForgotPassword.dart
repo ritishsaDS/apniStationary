@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key key}) : super(key: key);
@@ -23,7 +24,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   GlobalKey<FormState> forgotFormKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController otp = TextEditingController();
-  String btn="Send OTP";
+  String btn = "Send OTP";
   String smsOTP;
   String verificationId;
   String errorMessage = '';
@@ -54,118 +55,241 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Color(backgroundColor),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
+      body: LoaderOverlay(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight * 0.3,
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/icons/applogo.png', scale: 8),
+                    ],
+                  )),
+              Container(
                 width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight * 0.3,
                 alignment: Alignment.center,
-
-
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                        'assets/icons/applogo.png',
-                        scale: 8
-                    ),
-
-                  ],
-                )),
-            Container(
-              width: SizeConfig.screenWidth,
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(top: SizeConfig.screenHeight * 0.06),
-              child: Text(
-                "Forgot Password",
-                style: TextStyle(
-                    color: Color(colorBlue),
-                    fontWeight: FontWeight.w600,
-                    fontSize: SizeConfig.blockSizeVertical * 2.5),
+                margin: EdgeInsets.only(top: SizeConfig.screenHeight * 0.06),
+                child: Text(
+                  "Forgot Password",
+                  style: TextStyle(
+                      color: Color(colorBlue),
+                      fontWeight: FontWeight.w600,
+                      fontSize: SizeConfig.blockSizeVertical * 2.5),
+                ),
               ),
-            ),
-            Form(
-              key: forgotFormKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: SizeConfig.screenWidth,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.screenWidth * 0.1,
-                      vertical: SizeConfig.blockSizeVertical * 3,
-                    ),
-                    child: TextFormField(
-                      validator: (value) {
-                        Pattern pattern =
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-                        bool regex = new RegExp(pattern).hasMatch(value);
-                        if (value.isEmpty) {
-                          return Utility.kUserNameEmptyValidation;
-                        } else if (regex == false) {
-                          return Utility.kUserNameEmptyValidation;
-                        }
-                        return null;
-                      },
-                      controller: emailController,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      cursorColor: Color(colorBlue),
-                      decoration: InputDecoration(
-                        isDense: true,
-                        suffixIconConstraints: BoxConstraints(
-                            minHeight: SizeConfig.blockSizeVertical * 4,
-                            maxHeight: SizeConfig.blockSizeVertical * 4),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: SizeConfig.blockSizeVertical * 1.5,
-                            horizontal: SizeConfig.blockSizeHorizontal * 5),
-                        hintText: "Enter email",
-                        hintStyle: TextStyle(
-                          color: Color(hintGrey),
-                          fontWeight: FontWeight.w500,
+              Form(
+                key: forgotFormKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.screenWidth * 0.1,
+                        vertical: SizeConfig.blockSizeVertical * 3,
+                      ),
+                      child: TextFormField(
+                        validator: (value) {
+                          // Pattern pattern =
+                          //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                          // bool regex = new RegExp(pattern).hasMatch(value);
+                          if (value.isEmpty) {
+                            return Utility.mobileNumberInValidValidation;
+                          } else if (value.length < 10) {
+                            return Utility
+                                .mobileNumberTenDigitsInValidValidation;
+                          }
+                          return null;
+                        },
+                        controller: emailController,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.phone,
+                        cursorColor: Color(colorBlue),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          suffixIconConstraints: BoxConstraints(
+                              minHeight: SizeConfig.blockSizeVertical * 4,
+                              maxHeight: SizeConfig.blockSizeVertical * 4),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: SizeConfig.blockSizeVertical * 1.5,
+                              horizontal: SizeConfig.blockSizeHorizontal * 5),
+                          hintText: "Enter phone number",
+                          hintStyle: TextStyle(
+                            color: Color(hintGrey),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          errorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
                         ),
-                        border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
                       ),
                     ),
-                  ),
-                  /*    Container(
-                    width: SizeConfig.screenWidth,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.screenWidth * 0.1,
-                      vertical: SizeConfig.blockSizeVertical * 3,
+                    /*    Container(
+                      width: SizeConfig.screenWidth,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.screenWidth * 0.1,
+                        vertical: SizeConfig.blockSizeVertical * 3,
+                      ),
+                      child: TextFormField(
+                        controller: phn,
+                        focusNode: phnFn,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.phone,
+                        cursorColor: Color(colorBlue),
+                        onFieldSubmitted: (value) {
+                          phnFn.unfocus();
+                          FocusScope.of(context).requestFocus(otpFn);
+                        },
+                        decoration: InputDecoration(
+                          isDense: true,
+                          suffixIcon: MaterialButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Send OTP",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            color: Color(colorBlue),
+                          ),
+                          suffixIconConstraints: BoxConstraints(
+                              minHeight: SizeConfig.blockSizeVertical * 4,
+                              maxHeight: SizeConfig.blockSizeVertical * 4),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: SizeConfig.blockSizeVertical * 1.5,
+                              horizontal: SizeConfig.blockSizeHorizontal * 5),
+                          hintText: "Enter Phone No.",
+                          hintStyle: TextStyle(
+                            color: Color(hintGrey),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          errorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                        ),
+                      ),
                     ),
-                    child: TextFormField(
-                      controller: phn,
-                      focusNode: phnFn,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.phone,
-                      cursorColor: Color(colorBlue),
-                      onFieldSubmitted: (value) {
-                        phnFn.unfocus();
-                        FocusScope.of(context).requestFocus(otpFn);
-                      },
-                      decoration: InputDecoration(
-                        isDense: true,
-                        suffixIcon: MaterialButton(
-                          onPressed: () {},
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.screenWidth * 0.1,
+                        vertical: SizeConfig.blockSizeVertical,
+                      ),
+                      child: TextFormField(
+                        controller: otp,
+                        focusNode: otpFn,
+                        textInputAction: TextInputAction.done,
+                        keyboardType: TextInputType.number,
+                        cursorColor: Color(colorBlue),
+                        onFieldSubmitted: (value) {
+                          otpFn.unfocus();
+                        },
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: SizeConfig.blockSizeVertical * 1.5,
+                              horizontal: SizeConfig.blockSizeHorizontal * 5),
+                          hintText: "Enter OTP",
+                          hintStyle: TextStyle(
+                            color: Color(hintGrey),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          errorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                          focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0XFFC4C4C4))),
+                        ),
+                      ),
+                    ),*/
+                    Center(
+                      child: Container(
+                        width: SizeConfig.screenWidth * 0.5,
+                        height: SizeConfig.blockSizeVertical * 5,
+                        margin: EdgeInsets.only(
+                            left: SizeConfig.screenWidth * 0.1,
+                            right: SizeConfig.screenWidth * 0.1,
+                            top: SizeConfig.blockSizeVertical * 3,
+                            bottom: SizeConfig.blockSizeVertical),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: MaterialButton(
+                          onPressed: () async {
+                            print("n kvw");
+                            verifyPhone();
+                            // LoginViewModel loginViewModel = Get.find();
+                            // if (forgotFormKey.currentState.validate()) {
+                            //   ForgotPasswordReq forgotPasswordReq =
+                            //       ForgotPasswordReq();
+                            //   forgotPasswordReq.email = emailController.text;
+                            //   await loginViewModel
+                            //       .forgotPassword(forgotPasswordReq);
+                            //   if (loginViewModel
+                            //           .forgotPasswordApiResponse.status ==
+                            //       Status.COMPLETE) {
+                            //     ForgotPasswordResponseModel response =
+                            //         loginViewModel.forgotPasswordApiResponse.data;
+                            //     if (response.status == '200') {
+                            //       CommonSnackBar.snackBar(
+                            //           message: response.message);
+                            //       Future.delayed(Duration(seconds: 2), () {
+                            //         Get.back();
+                            //         emailController.clear();
+                            //       });
+                            //     } else {
+                            //       CommonSnackBar.snackBar(
+                            //           message: response.message);
+                            //     }
+                            //   } else {
+                            //     CommonSnackBar.snackBar(message: 'Server error');
+                            //   }
+                            // } else {
+                            //   CommonSnackBar.snackBar(
+                            //       message: 'Please enter email');
+                            // }
+                            /* Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ForgotPassword2();
+                            }));*/
+                          },
                           child: Text(
-                            "Send OTP",
+                            "Reset Now",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -174,142 +298,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               borderRadius: BorderRadius.circular(25)),
                           color: Color(colorBlue),
                         ),
-                        suffixIconConstraints: BoxConstraints(
-                            minHeight: SizeConfig.blockSizeVertical * 4,
-                            maxHeight: SizeConfig.blockSizeVertical * 4),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: SizeConfig.blockSizeVertical * 1.5,
-                            horizontal: SizeConfig.blockSizeHorizontal * 5),
-                        hintText: "Enter Phone No.",
-                        hintStyle: TextStyle(
-                          color: Color(hintGrey),
-                          fontWeight: FontWeight.w500,
-                        ),
-                        border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: SizeConfig.screenWidth,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.screenWidth * 0.1,
-                      vertical: SizeConfig.blockSizeVertical,
-                    ),
-                    child: TextFormField(
-                      controller: otp,
-                      focusNode: otpFn,
-                      textInputAction: TextInputAction.done,
-                      keyboardType: TextInputType.number,
-                      cursorColor: Color(colorBlue),
-                      onFieldSubmitted: (value) {
-                        otpFn.unfocus();
-                      },
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: SizeConfig.blockSizeVertical * 1.5,
-                            horizontal: SizeConfig.blockSizeHorizontal * 5),
-                        hintText: "Enter OTP",
-                        hintStyle: TextStyle(
-                          color: Color(hintGrey),
-                          fontWeight: FontWeight.w500,
-                        ),
-                        border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                        focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0XFFC4C4C4))),
-                      ),
-                    ),
-                  ),*/
-                  Center(
-                    child: Container(
-                      width: SizeConfig.screenWidth * 0.5,
-                      height: SizeConfig.blockSizeVertical * 5,
-                      margin: EdgeInsets.only(
-                          left: SizeConfig.screenWidth * 0.1,
-                          right: SizeConfig.screenWidth * 0.1,
-                          top: SizeConfig.blockSizeVertical * 3,
-                          bottom: SizeConfig.blockSizeVertical),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: MaterialButton(
-                        onPressed: () async {
-                          print("n kvw");
-                          verifyPhone();
-                          // LoginViewModel loginViewModel = Get.find();
-                          // if (forgotFormKey.currentState.validate()) {
-                          //   ForgotPasswordReq forgotPasswordReq =
-                          //       ForgotPasswordReq();
-                          //   forgotPasswordReq.email = emailController.text;
-                          //   await loginViewModel
-                          //       .forgotPassword(forgotPasswordReq);
-                          //   if (loginViewModel
-                          //           .forgotPasswordApiResponse.status ==
-                          //       Status.COMPLETE) {
-                          //     ForgotPasswordResponseModel response =
-                          //         loginViewModel.forgotPasswordApiResponse.data;
-                          //     if (response.status == '200') {
-                          //       CommonSnackBar.snackBar(
-                          //           message: response.message);
-                          //       Future.delayed(Duration(seconds: 2), () {
-                          //         Get.back();
-                          //         emailController.clear();
-                          //       });
-                          //     } else {
-                          //       CommonSnackBar.snackBar(
-                          //           message: response.message);
-                          //     }
-                          //   } else {
-                          //     CommonSnackBar.snackBar(message: 'Server error');
-                          //   }
-                          // } else {
-                          //   CommonSnackBar.snackBar(
-                          //       message: 'Please enter email');
-                          // }
-                          /* Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return ForgotPassword2();
-                          }));*/
-                        },
-                        child: Text(
-                          "Reset Now",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25)),
-                        color: Color(colorBlue),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     ));
   }
+
   Future<void> verifyPhone() async {
     setState(() {
       //isLoading=true;
@@ -324,23 +324,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     };
     try {
       await _auth.verifyPhoneNumber(
-          phoneNumber: "+91"+emailController.text, // PHONE NUMBER TO SEND OTP
+          phoneNumber: "+91" + emailController.text, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             //Starts the phone number verification process for the given phone number.
             //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
             this.verificationId = verId;
           },
           codeSent:
-          smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
+              smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
           timeout: const Duration(seconds: 120),
           verificationCompleted: (AuthCredential phoneAuthCredential) {
             print(phoneAuthCredential);
-
           },
-
           verificationFailed: (FirebaseAuthException exceptio) {
             print('${exceptio.message}');
           });
+      context.loaderOverlay.hide();
     } catch (e) {
       //handleError(e);
     }
@@ -363,9 +362,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 (errorMessage != ''
                     ? Text(
-                  errorMessage,
-                  style: TextStyle(color: Colors.red),
-                )
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
+                      )
                     : Container())
               ]),
             ),
@@ -401,13 +400,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         verificationId: verificationId,
         smsCode: smsOTP,
       );
-     final user = (await _auth.signInWithCredential(credential)) ;
-      final  currentUser = await _auth.currentUser;
+      final user = (await _auth.signInWithCredential(credential));
+      final currentUser = _auth.currentUser;
       assert(FirebaseAuth.instance.currentUser.uid == currentUser.uid);
-     // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewPasswordCust(phone:phoneNo)));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ForgotPassword2()));
       //  Navigator.of(context).pushReplacementNamed('/homepage');
     } catch (e) {
-     print(e);
+      print(e);
     }
   }
 

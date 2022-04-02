@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:book_buy_and_sell/ChatUi/widget/widget.dart';
-import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:book_buy_and_sell/Utils/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

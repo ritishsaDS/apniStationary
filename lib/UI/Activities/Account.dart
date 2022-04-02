@@ -7,7 +7,6 @@ import 'package:book_buy_and_sell/UI/Activities/Login.dart';
 import 'package:book_buy_and_sell/UI/Activities/MyBookList.dart';
 import 'package:book_buy_and_sell/UI/Activities/Orders.dart';
 import 'package:book_buy_and_sell/UI/Activities/Transactions.dart';
-import 'package:book_buy_and_sell/UI/Activities/Wallet.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
 import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:book_buy_and_sell/Utils/services/auth.dart';

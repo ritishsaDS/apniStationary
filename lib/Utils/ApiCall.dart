@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class ApiCall {
-  static String baseURL = 'https://buysell.powerdope.com/api/';
+  static String baseURL = 'https://admin.apnistationary.com/api/';
   static Map<String, String> header = {
     'Content-Type': 'application/json; charset=UTF-8'
   };
