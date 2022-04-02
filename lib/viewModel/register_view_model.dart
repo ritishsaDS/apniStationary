@@ -24,4 +24,19 @@ class RegisterViewModel extends GetxController {
     }
     update();
   }
+
+  ///Register...
+  Future<void> registerapi(RegisterReq model) async {
+    apiResponse = ApiResponse.loading('Loading');
+    update();
+    try {
+      RegisterResponseModel response = await RegisterRepo().registerRepo(model);
+      apiResponse = ApiResponse.complete(response);
+      print("Register RES:$response");
+    } catch (e) {
+      print('Register error.....$e');
+      apiResponse = ApiResponse.error('error');
+    }
+    update();
+  }
 }

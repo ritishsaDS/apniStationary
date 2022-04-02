@@ -71,7 +71,7 @@ class _SubCategoryState extends State<SubCategory> {
                     } else if (categoriesModel[index].name == "Others") {
                       return Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                         return SelectedBook(searchedWord: "",catId: categoriesModel[index].id.toString());
+                        return SelectedOther();
                       }));
                     } else {
                       Navigator.push(context,
@@ -184,7 +184,11 @@ class _SubCategoryState extends State<SubCategory> {
                     ),
                   ),
                   Expanded(child: SizedBox()),
-
+                  ImageIcon(
+                    AssetImage('assets/icons/notification.png'),
+                    color: Color(colorBlue),
+                    size: SizeConfig.blockSizeVertical * 4,
+                  )
                 ],
               ),
             ),

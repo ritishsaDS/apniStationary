@@ -1,11 +1,7 @@
 import 'package:book_buy_and_sell/Constants/Colors.dart';
-import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
-import 'package:book_buy_and_sell/common/color_picker.dart';
-import 'package:book_buy_and_sell/common/utility.dart';
 import 'package:book_buy_and_sell/viewModel/validation_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:get/get.dart';
 
@@ -74,6 +70,7 @@ class CommanWidget {
       {TextEditingController textEditingController,
       bool isValidate,
       Function function,
+      Function(String) validator,
       FocusNode focusNode,
       bool isReadOnly = false,
       bool isEnable,
@@ -92,17 +89,16 @@ class CommanWidget {
       bool obscureValue = false,
       Function onTap}) {
     return Container(
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-
             // height: 40,
             // color: Colors.lightGreen,
             child: Stack(
               children: [
                 TextFormField(
+                  validator: (v) {validator != null ? validator(v) : print(v);},
                   obscureText: obscureValue,
                   onFieldSubmitted: function,
                   focusNode: focusNode,
@@ -117,7 +113,6 @@ class CommanWidget {
                     FilteringTextInputFormatter.allow(RegExp(regularExpression))
                   ],
                   enabled: isEnable != null ? isEnable : true,
-
                   style: TextStyle(
                       color: isEnable != null ? Colors.black : Colors.black,
                       fontSize: Get.height * 0.019),
