@@ -106,6 +106,7 @@ class _BookDetailState extends State<BookDetail> {
                               height: SizeConfig.screenHeight * 0.3,
                               width: SizeConfig.screenWidth,
                               child: Carousel(
+                                autoplay: false,
                                 images: [
                                   GestureDetector(
                                     onTap: () {
@@ -114,6 +115,24 @@ class _BookDetailState extends State<BookDetail> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailScreen(
+                                                      listImage: [
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image1,
+                                                        snapshot
+                                                              .data.image_url +
+                                                          "/"+snapshot
+                                                            .data.date.image2,
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image3,
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image4
+                                                      ],
                                                       image: snapshot
                                                               .data.image_url +
                                                           "/" +
@@ -140,6 +159,24 @@ class _BookDetailState extends State<BookDetail> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailScreen(
+                                                      listImage: [
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image1,
+                                                        snapshot
+                                                              .data.image_url +
+                                                          "/"+snapshot
+                                                            .data.date.image2,
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image3,
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image4
+                                                      ],
                                                       image: snapshot
                                                               .data.image_url +
                                                           "/" +
@@ -166,6 +203,24 @@ class _BookDetailState extends State<BookDetail> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailScreen(
+                                                      listImage: [
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image1,
+                                                        snapshot
+                                                              .data.image_url +
+                                                          "/"+snapshot
+                                                            .data.date.image2,
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image3,
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image4
+                                                      ],
                                                       image: snapshot
                                                               .data.image_url +
                                                           "/" +
@@ -192,6 +247,24 @@ class _BookDetailState extends State<BookDetail> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailScreen(
+                                                      listImage: [
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image1,
+                                                        snapshot
+                                                              .data.image_url +
+                                                          "/"+snapshot
+                                                            .data.date.image2,
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image3,
+                                                       snapshot
+                                                              .data.image_url +
+                                                          "/"+ snapshot
+                                                            .data.date.image4
+                                                      ],
                                                       image: snapshot
                                                               .data.image_url +
                                                           "/" +
@@ -584,8 +657,9 @@ class _BookDetailState extends State<BookDetail> {
                                         showAlert(
                                             context, "You Are a book owner");
                                       } else {
-                                        print("user_firebase_id "+snapshot
-                                            .data.date.user_firebase_id);
+                                        print("user_firebase_id " +
+                                            snapshot
+                                                .data.date.user_firebase_id);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -990,12 +1064,39 @@ showAlert(BuildContext context, String msg) {
 
 class DetailScreen extends StatefulWidget {
   var image;
-  DetailScreen({this.image});
+  List<String> listImage;
+
+  DetailScreen({this.image, this.listImage});
   @override
   _DetailScreenState createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  List<Widget> _listWidget = [];
+  int _curr = 0;
+  @override
+  void initState() {
+    _listWidget = [
+      Hero(
+        tag: 'imageHero',
+        child: Image.network(widget.listImage[0]),
+      ),
+      Hero(
+        tag: 'imageHero',
+        child: Image.network(widget.listImage[1]),
+      ),
+      Hero(
+        tag: 'imageHero',
+        child: Image.network(widget.listImage[2]),
+      ),
+      Hero(
+        tag: 'imageHero',
+        child: Image.network(widget.listImage[3]),
+      ),
+    ];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1021,9 +1122,18 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
       body: GestureDetector(
         child: Center(
-          child: Hero(
-            tag: 'imageHero',
-            child: Image.network(widget.image),
+          child: PageView(
+            children: _listWidget,
+            scrollDirection: Axis.horizontal,
+
+            // reverse: true,
+            // physics: BouncingScrollPhysics(),
+            // controller: controller,
+            onPageChanged: (num) {
+              setState(() {
+                _curr = num;
+              });
+            },
           ),
         ),
         onTap: () {

@@ -294,6 +294,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ? widget.id.toString()
           : widget.orderid.toString().replaceAll('[', "").replaceAll(']', "")
     };
+    print("callCheckoutAPI ${body.toString()}");
     print("----------------" + PreferenceManager.getfirebasenotif().toString());
     var res = await ApiCall.post(checkoutURL, body);
     print("------------" + res.toString());
@@ -305,6 +306,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           'img': "widget.img",
           'userName': PreferenceManager.getName(),
         };
+
         final split = widget.firebaseid.split(',');
         List<String> splitdata = [];
         for (int i = 0; i < split.length; i++) {
@@ -428,8 +430,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void openCheckout() {
     print(totalprice);
     var options = {
-      // 'key': 'rzp_live_b5Jmla6DpICdpO',  actual
-      'key': 'rzp_test_23633fjMEgS0IE', // testing
+      'key': 'rzp_live_b5Jmla6DpICdpO',  //actual
+      // 'key': 'rzp_test_23633fjMEgS0IE', // testing
       'amount': widget.type == 'Buy'
           ? "${(widget.price) * 100}"
           : '${totalprice * 100}',

@@ -1438,7 +1438,7 @@ print("responsestauus codee"+response.statusCode.toString());
   void getOrderedbooks() async {
 
     setState(() {
-      Dialogs.showLoadingDialog(context, loginLoader);
+      // Dialogs.showLoadingDialog(context, loginLoader);
       isLoading = true;
     });
 
@@ -1458,8 +1458,8 @@ print("responsestauus codee"+response.statusCode.toString());
         print(responseJson);
         setState(() {
           cartdata=responseJson['date'];
-          Navigator.of(loginLoader.currentContext,
-              rootNavigator: true) .pop();
+          // Navigator.of(loginLoader.currentContext,
+          //     rootNavigator: true) .pop();
 
 
           isLoading = false;

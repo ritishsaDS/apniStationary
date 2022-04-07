@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   FocusNode usernameFn = FocusNode();
   FocusNode pwdFn = FocusNode();
   bool rememberMe = false;
-  FirebaseMessaging _fcm;
+  FirebaseMessaging _fcm = FirebaseMessaging.instance;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   AndroidNotificationChannel channel;
   @override
@@ -66,32 +66,32 @@ class _LoginScreenState extends State<LoginScreen> {
     //   );
     //
     // });
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
-      if (notification != null && android != null && !kIsWeb) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              "33",
-              channel.name,
-              channelDescription: channel.description,
-              icon: 'launch_background',
-              playSound: true,
-              sound: RawResourceAndroidNotificationSound("a_long_cold_sting"),
-              importance: Importance.high,
-            ),
-          ),
-        );
-      }
-    });
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   RemoteNotification notification = message.notification;
+    //   AndroidNotification android = message.notification.android;
+    //   if (notification != null && android != null && !kIsWeb) {
+    //     flutterLocalNotificationsPlugin.show(
+    //       notification.hashCode,
+    //       notification.title,
+    //       notification.body,
+    //       NotificationDetails(
+    //         android: AndroidNotificationDetails(
+    //           "33",
+    //           channel.name,
+    //           channelDescription: channel.description,
+    //           icon: 'launch_background',
+    //           playSound: true,
+    //           sound: RawResourceAndroidNotificationSound("a_long_cold_sting"),
+    //           importance: Importance.high,
+    //         ),
+    //       ),
+    //     );
+    //   }
+    // });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   print('A new onMessageOpenedApp event was published!');
+    // });
 
     usernameFn = FocusNode();
     pwdFn = FocusNode();
@@ -101,345 +101,366 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     // TODO: implement dispose
     validationController.loginPasswordObscure = true.obs;
-    usernameFn.dispose();
-    pwdFn.dispose();
+
+    usernameFn != null ?? usernameFn.dispose();
+    pwdFn != null ?? pwdFn.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return WillPopScope(
-      onWillPop: () {
-        print("jvukj");
+    return
+        //  WillPopScope(
+        //   onWillPop: () {
+        //     print("jvukj");
 
-        // SystemNavigator.pop();
-      },
-      child: SafeArea(
-          child: Scaffold(
-        body: Container(
+        //     // SystemNavigator.pop();
+        //   },
+        //   child:
+        SafeArea(
+            child: Scaffold(
+      body:
+      Container(
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/bg/loginbg.png'),
                   fit: BoxFit.fill)),
-          child: ListView(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight * 0.3,
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/icons/applogo.png', scale: 8),
-                    ],
-                  )),
-              Container(
-                width: SizeConfig.screenWidth,
-                margin: EdgeInsets.symmetric(
-                    vertical: SizeConfig.blockSizeVertical * 2),
-                alignment: Alignment.center,
-                child: Text(
-                  "Sign in",
-                  style: TextStyle(
-                      color: Color(colorBlue),
-                      fontWeight: FontWeight.w600,
-                      fontSize: SizeConfig.blockSizeVertical * 3),
-                ),
-              ),
-              Stack(
-                children: [
-                  Form(
-                    key: loginFormKey,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: SizeConfig.screenWidth * 0.08,
+          child:
+      
+        //  Image.asset(
+        //       'assets/bg/loginbg.png',q
+        //       height: double.infinity,
+        //       width: double.infinity,
+        //     ),
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        width: SizeConfig.screenWidth,
+                        height: SizeConfig.screenHeight * 0.3,
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset('assets/icons/applogo.png', scale: 8),
+                          ],
+                        )),
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      margin: EdgeInsets.symmetric(
+                          vertical: SizeConfig.blockSizeVertical * 2),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Sign in",
+                        style: TextStyle(
+                            color: Color(colorBlue),
+                            fontWeight: FontWeight.w600,
+                            fontSize: SizeConfig.blockSizeVertical * 3),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: SizeConfig.blockSizeVertical * 10,
-                            child: TextFormField(
-                              controller: emailController,
-                              focusNode: usernameFn,
-                              decoration: InputDecoration(
-                                focusedBorder: outLineGrey,
-                                enabledBorder: outLineGrey,
-                                isDense: true,
-                                isCollapsed: true,
-                                contentPadding: EdgeInsets.only(
-                                    top: Get.height * 0.016,
-                                    bottom: Get.height * 0.016,
-                                    left: 20),
-                                errorBorder: outLineRed,
-                                focusedErrorBorder: outLineRed,
-                                hintText: "Enter Email",
-                                hintStyle: TextStyle(
-                                  color: Color(hintGrey),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                    ),
+                    Stack(
+                      children: [
+                        Form(
+                          key: loginFormKey,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: SizeConfig.screenWidth * 0.08,
                             ),
-                          ),
-                          // SizedBox(
-                          //   height: Get.height * 0.03,
-                          // ),
-                          Container(
-                            height: SizeConfig.blockSizeVertical * 10,
-                            child: TextFormField(
-                                focusNode: pwdFn,
-                                controller: passwordController,
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (val) {
-                                  signinapihit();
-                                  //_fieldFocusChange(context);
-                                },
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12),
-                                ],
-                                obscureText: showpwd,
-                                decoration: InputDecoration(
-                                  focusedBorder: outLineGrey,
-                                  enabledBorder: outLineGrey,
-                                  isDense: true,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      Icons.remove_red_eye_rounded,
-                                      color:
-                                          !showpwd ? Colors.blue : Colors.grey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: SizeConfig.blockSizeVertical * 10,
+                                  child: TextFormField(
+                                    controller: emailController,
+                                    focusNode: usernameFn,
+                                    decoration: InputDecoration(
+                                      focusedBorder: outLineGrey,
+                                      enabledBorder: outLineGrey,
+                                      isDense: true,
+                                      isCollapsed: true,
+                                      contentPadding: EdgeInsets.only(
+                                          top: Get.height * 0.016,
+                                          bottom: Get.height * 0.016,
+                                          left: 20),
+                                      errorBorder: outLineRed,
+                                      focusedErrorBorder: outLineRed,
+                                      hintText: "Enter Email",
+                                      hintStyle: TextStyle(
+                                        color: Color(hintGrey),
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        if (showpwd == false) {
-                                          showpwd = true;
-                                        } else {
-                                          showpwd = false;
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  isCollapsed: true,
-                                  contentPadding: EdgeInsets.only(
-                                      top: Get.height * 0.016,
-                                      bottom: Get.height * 0.016,
-                                      left: 20),
-                                  errorBorder: outLineRed,
-                                  focusedErrorBorder: outLineRed,
-                                  hintText: "Enter Password",
-                                  hintStyle: TextStyle(
-                                    color: Color(hintGrey),
-                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                validator: (value) {
-                                  if (value.length < 5) {
-                                    return "Password must be more than 5 characters";
-                                  } else {
-                                    return null;
-                                  }
-                                }),
-                          ),
-
-                          SizedBox(
-                            height: Get.height * 0.03,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    if (rememberMe == true)
-                                      setState(() {
-                                        rememberMe = false;
-                                      });
-                                    else
-                                      setState(() {
-                                        rememberMe = true;
-                                      });
-                                  },
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                  child: Row(
-                                    children: [
-                                      Checkbox(
-                                        value: rememberMe,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            rememberMe = value;
-                                          });
-                                        },
-                                        activeColor: Color(colorBlue),
-                                        checkColor: Colors.white,
-                                        materialTapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
+                                // SizedBox(
+                                //   height: Get.height * 0.03,
+                                // ),
+                                Container(
+                                  height: SizeConfig.blockSizeVertical * 10,
+                                  child: TextFormField(
+                                      focusNode: pwdFn,
+                                      controller: passwordController,
+                                      textInputAction: TextInputAction.done,
+                                      onFieldSubmitted: (val) {
+                                        signinapihit();
+                                        //_fieldFocusChange(context);
+                                      },
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(12),
+                                      ],
+                                      obscureText: showpwd,
+                                      decoration: InputDecoration(
+                                        focusedBorder: outLineGrey,
+                                        enabledBorder: outLineGrey,
+                                        isDense: true,
+                                        suffixIcon: IconButton(
+                                          icon: Icon(
+                                            Icons.remove_red_eye_rounded,
+                                            color: !showpwd
+                                                ? Colors.blue
+                                                : Colors.grey,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              if (showpwd == false) {
+                                                showpwd = true;
+                                              } else {
+                                                showpwd = false;
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        isCollapsed: true,
+                                        contentPadding: EdgeInsets.only(
+                                            top: Get.height * 0.016,
+                                            bottom: Get.height * 0.016,
+                                            left: 20),
+                                        errorBorder: outLineRed,
+                                        focusedErrorBorder: outLineRed,
+                                        hintText: "Enter Password",
+                                        hintStyle: TextStyle(
+                                          color: Color(hintGrey),
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                      Text(
-                                        "Remember Me",
-                                        style: TextStyle(
-                                            color: Color(matteBlack),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize:
-                                                SizeConfig.blockSizeVertical *
-                                                    1.75),
+                                      validator: (value) {
+                                        if (value.length < 5) {
+                                          return "Password must be more than 5 characters";
+                                        } else {
+                                          return null;
+                                        }
+                                      }),
+                                ),
+              
+                                SizedBox(
+                                  height: Get.height * 0.03,
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          if (rememberMe == true)
+                                            setState(() {
+                                              rememberMe = false;
+                                            });
+                                          else
+                                            setState(() {
+                                              rememberMe = true;
+                                            });
+                                        },
+                                        highlightColor: Colors.transparent,
+                                        splashColor: Colors.transparent,
+                                        child: Row(
+                                          children: [
+                                            Checkbox(
+                                              value: rememberMe,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  rememberMe = value;
+                                                });
+                                              },
+                                              activeColor: Color(colorBlue),
+                                              checkColor: Colors.white,
+                                              materialTapTargetSize:
+                                                  MaterialTapTargetSize.shrinkWrap,
+                                            ),
+                                            Text(
+                                              "Remember Me",
+                                              style: TextStyle(
+                                                  color: Color(matteBlack),
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize:
+                                                      SizeConfig.blockSizeVertical *
+                                                          1.75),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) {
+                                            return ForgotPassword();
+                                          }));
+                                        },
+                                        child: Text(
+                                          "Forgot Password?",
+                                          style: TextStyle(
+                                              color: Color(colorBlue),
+                                              fontWeight: FontWeight.w800,
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.75),
+                                        ),
                                       )
                                     ],
                                   ),
                                 ),
-                                Spacer(),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return ForgotPassword();
-                                    }));
-                                  },
-                                  child: Text(
-                                    "Forgot Password?",
-                                    style: TextStyle(
-                                        color: Color(colorBlue),
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: SizeConfig.blockSizeVertical *
-                                            1.75),
+                                Center(
+                                  child: Container(
+                                    width: SizeConfig.screenWidth * 0.5,
+                                    height: SizeConfig.blockSizeVertical * 5,
+                                    margin: EdgeInsets.only(
+                                        left: SizeConfig.screenWidth * 0.1,
+                                        right: SizeConfig.screenWidth * 0.1,
+                                        top: SizeConfig.blockSizeVertical * 3,
+                                        bottom: SizeConfig.blockSizeVertical),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(gradientColor1),
+                                          Color(gradientColor2),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: MaterialButton(
+                                      onPressed: () async {
+                                        _fcm = FirebaseMessaging.instance;
+                                        // _fcm(
+                                        //   onMessage: (Map<String, dynamic> message) async {
+                                        //     print("onMessage: $message");
+                                        //     showOverlayNotification((context) {
+                                        //       return Card(
+                                        //         margin: const EdgeInsets.symmetric(horizontal: 4),
+                                        //         child: SafeArea(
+                                        //           child: ListTile(
+                                        //             leading: SizedBox.fromSize(
+                                        //                 size: const Size(40, 40),
+                                        //                 child: ClipOval(
+                                        //                     child: Container(
+                                        //                       color: Colors.black,
+                                        //                     ))),
+                                        //             title: Text(message['notification']['title']),
+                                        //             subtitle: Text(message['notification']['body']),
+                                        //             trailing: IconButton(
+                                        //                 icon: Icon(Icons.close),
+                                        //                 onPressed: () {
+                                        //                   OverlaySupportEntry.of(context).dismiss();
+                                        //                 }),
+                                        //           ),
+                                        //         ),
+                                        //       );
+                                        //     }, duration: Duration(milliseconds: 4000));
+                                        //
+                                        //     print(message['notification']['title']);
+                                        //   },
+                                        //   onLaunch: (Map<String, dynamic> message) async {
+                                        //     print("onLaunch: $message");
+                                        //   },
+                                        //   onResume: (Map<String, dynamic> message) async {
+                                        //     print("onResume: $message");
+                                        //   },
+                                        // );
+                                        signinapihit();
+                                      },
+                                      child: Text(
+                                        "Signin",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(25)),
+                                    ),
                                   ),
-                                )
+                                ),
+                                Container(
+                                  width: SizeConfig.screenWidth,
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: SizeConfig.screenWidth * 0.05,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Don't have an account?",
+                                        style: TextStyle(
+                                            color: Color(matteBlack),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: SizeConfig.blockSizeVertical *
+                                                1.75),
+                                      ),
+                                      SizedBox(
+                                        width: SizeConfig.blockSizeHorizontal * 1,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) {
+                                            return SignUp();
+                                          }));
+                                        },
+                                        child: Text(
+                                          "Signup Now",
+                                          style: TextStyle(
+                                              color: Color(colorBlue),
+                                              fontWeight: FontWeight.w800,
+                                              fontSize:
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.75),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                          Center(
-                            child: Container(
-                              width: SizeConfig.screenWidth * 0.5,
-                              height: SizeConfig.blockSizeVertical * 5,
-                              margin: EdgeInsets.only(
-                                  left: SizeConfig.screenWidth * 0.1,
-                                  right: SizeConfig.screenWidth * 0.1,
-                                  top: SizeConfig.blockSizeVertical * 3,
-                                  bottom: SizeConfig.blockSizeVertical),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(gradientColor1),
-                                    Color(gradientColor2),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: MaterialButton(
-                                onPressed: () async {
-                                  _fcm = FirebaseMessaging.instance;
-                                  // _fcm(
-                                  //   onMessage: (Map<String, dynamic> message) async {
-                                  //     print("onMessage: $message");
-                                  //     showOverlayNotification((context) {
-                                  //       return Card(
-                                  //         margin: const EdgeInsets.symmetric(horizontal: 4),
-                                  //         child: SafeArea(
-                                  //           child: ListTile(
-                                  //             leading: SizedBox.fromSize(
-                                  //                 size: const Size(40, 40),
-                                  //                 child: ClipOval(
-                                  //                     child: Container(
-                                  //                       color: Colors.black,
-                                  //                     ))),
-                                  //             title: Text(message['notification']['title']),
-                                  //             subtitle: Text(message['notification']['body']),
-                                  //             trailing: IconButton(
-                                  //                 icon: Icon(Icons.close),
-                                  //                 onPressed: () {
-                                  //                   OverlaySupportEntry.of(context).dismiss();
-                                  //                 }),
-                                  //           ),
-                                  //         ),
-                                  //       );
-                                  //     }, duration: Duration(milliseconds: 4000));
-                                  //
-                                  //     print(message['notification']['title']);
-                                  //   },
-                                  //   onLaunch: (Map<String, dynamic> message) async {
-                                  //     print("onLaunch: $message");
-                                  //   },
-                                  //   onResume: (Map<String, dynamic> message) async {
-                                  //     print("onResume: $message");
-                                  //   },
-                                  // );
-                                  signinapihit();
-                                },
-                                child: Text(
-                                  "Signin",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: SizeConfig.screenWidth,
-                            margin: EdgeInsets.symmetric(
-                              horizontal: SizeConfig.screenWidth * 0.05,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Don't have an account?",
-                                  style: TextStyle(
-                                      color: Color(matteBlack),
-                                      fontWeight: FontWeight.w500,
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical * 1.75),
-                                ),
-                                SizedBox(
-                                  width: SizeConfig.blockSizeHorizontal * 1,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) {
-                                      return SignUp();
-                                    }));
-                                  },
-                                  child: Text(
-                                    "Signup Now",
-                                    style: TextStyle(
-                                        color: Color(colorBlue),
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: SizeConfig.blockSizeVertical *
-                                            1.75),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                        GetBuilder<LoginViewModel>(
+                          builder: (controller) {
+                            if (controller.apiResponse.status == Status.LOADING) {
+                              return Container();
+                            } else {
+                              return SizedBox();
+                            }
+                          },
+                        )
+                      ],
                     ),
-                  ),
-                  GetBuilder<LoginViewModel>(
-                    builder: (controller) {
-                      if (controller.apiResponse.status == Status.LOADING) {
-                        return Container();
-                      } else {
-                        return SizedBox();
-                      }
-                    },
-                  )
-                ],
+                    // Expanded(child: SizedBox())
+                  ],
+                ),
               ),
-              Expanded(child: SizedBox())
-            ],
+            ),
+          // ]
           ),
-        ),
-      )),
-    );
+    )
+            // ),
+            );
   }
 
   signinapihit() async {

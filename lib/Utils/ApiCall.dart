@@ -48,14 +48,17 @@ class ApiCall {
     return json.decode(response.body);
   }
 
-  static Future<BookListModel> callBookListAPI(String keyword,
-      String catID) async {
+  static Future<BookListModel> callBookListAPI(
+      String keyword, String catID) async {
+
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
       "keyword": keyword,
-      "category_id":catID,
+      "category_id": catID,
     };
+
+    print("body --> $body");
 
     var res = await ApiCall.post(bookListURL, body);
     var jsonResponse = json.decode(json.encode(res).toString());
@@ -64,22 +67,23 @@ class ApiCall {
 
     return data;
   }
+
   static Future<Orderedbooks> Orderedbook() async {
-   var body = {
+    var body = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
-
     };
 
-    var res = await ApiCall.post("https://admin.apnistationary.com/api/myOrderList", body);
+    var res = await ApiCall.post(
+        "https://admin.apnistationary.com/api/myOrderList", body);
     var jsonResponse = json.decode(json.encode(res).toString());
 
-    var data = new  Orderedbooks.fromJson(jsonResponse);
+    var data = new Orderedbooks.fromJson(jsonResponse);
 
     return data;
   }
-  static Future<TransactionModel> callTransactionAPI() async {
 
+  static Future<TransactionModel> callTransactionAPI() async {
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),

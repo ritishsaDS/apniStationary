@@ -208,10 +208,10 @@ class _OtpState extends State<Otp> {
                   fieldStyle: FieldStyle.box,
                   outlineBorderRadius: 10,
                   style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      // color: Colors.white
-                      ),
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    // color: Colors.white
+                  ),
                   onChanged: (pin) {
                     print("Changed: " + pin);
                   },
@@ -358,11 +358,13 @@ class _OtpState extends State<Otp> {
     request.fields['user_firebase_id'] = result + "," + fcmToken;
 
     try {
-      //create multipart using filepath, string or bytes
-      var pic = await http.MultipartFile.fromPath("image", widget.image.path);
+      if (widget.image != null) {
+        //create multipart using filepath, string or bytes
+        var pic = await http.MultipartFile.fromPath("image", widget.image.path);
 
-      //add multipart to request
-      request.files.add(pic);
+        //add multipart to request
+        request.files.add(pic);
+      }
       var response = await request.send();
 
       //Get the response from the server

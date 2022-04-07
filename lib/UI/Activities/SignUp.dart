@@ -264,7 +264,7 @@ class _SignUpState extends State<SignUp> {
                                     ),
                                     image: DecorationImage(
                                         image: MemoryImage(
-                                            controller.profilephoto??""),
+                                            controller.profilephoto ?? ""),
                                         fit: BoxFit.cover)),
                                 padding: EdgeInsets.all(8),
                                 height: SizeConfig.blockSizeVertical * 14,
@@ -952,11 +952,11 @@ class _SignUpState extends State<SignUp> {
                                               context, "Please Select Gender");
                                           return;
                                         }
-                                        if (file == null) {
-                                          showAlert(
-                                              context, "Select profile image");
-                                          return;
-                                        }
+                                        // if (file == null) {
+                                        //   showAlert(
+                                        //       context, "Select profile image");
+                                        //   return;
+                                        // }
                                         ImageUploadViewModel
                                             imaUploadViewModel = Get.find();
                                         print(
@@ -972,7 +972,7 @@ class _SignUpState extends State<SignUp> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => Otp(
-                                                    image: File(file.path),
+                                                    image: file != null? File(file.path): null,
                                                     profession: profession.text,
                                                     email: emailController.text,
                                                     pass: pwdController.text,
