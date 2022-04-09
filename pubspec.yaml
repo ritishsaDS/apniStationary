@@ -76,6 +76,7 @@ dependencies:
   cloud_firestore:
   flutter_launcher_icons: "^0.9.1"
   flutter_text_to_speech: ^3.0.7
+  webview_flutter: ^3.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -95,6 +96,7 @@ flutter:
   assets:
     - assets/bg/
     - assets/icons/
+    - assets/pdf/
 
 
 

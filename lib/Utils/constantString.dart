@@ -14,3 +14,4 @@ final String transactionURL = 'transaction';
 final String bookEditURL = 'book-edit';
 final String bookDeleteURL = 'book-delete';
 final String checkoutURL = 'checkout';
+final String contactUsURL = 'http://apnistationary.com/index.php/contact-us/';

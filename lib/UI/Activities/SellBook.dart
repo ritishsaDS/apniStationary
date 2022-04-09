@@ -250,7 +250,6 @@ class _SellBookState extends State<SellBook> {
                             if (file == null) {
                               if (data.image1 != "") {
                                 return Container(
-                                    
                                     width: SizeConfig.screenWidth * 0.4,
                                     height: SizeConfig.screenHeight * 0.15,
                                     decoration: BoxDecoration(
@@ -1152,7 +1151,12 @@ class _SellBookState extends State<SellBook> {
                                   bookAddReq.semester = semester.text;
                                   bookAddReq.conditions = conditions.text;
                                   bookAddReq.description = desc.text;
-                                  bookAddReq.price = price.text;
+
+                                  double d = double.parse(price.text);
+                                  String inString =
+                                      d.toStringAsFixed(2); // '2.35'
+                                  bookAddReq.price = inString;
+
                                   bookAddReq.college_name = collegename.text;
                                   bookAddReq.image1 =
                                       imaUploadViewModel.selectedImg;

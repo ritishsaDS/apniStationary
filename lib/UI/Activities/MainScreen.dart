@@ -26,7 +26,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List<Widget> widgetOptions = <Widget>[
     Home(),
-   // Wallet(),
+    // Wallet(),
     WalletTrans(),
     Cart(),
     Account(),
@@ -70,18 +70,18 @@ class _MainScreenState extends State<MainScreen> {
     final location = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     var addresses =
-    await placemarkFromCoordinates(location.latitude, location.longitude);
+        await placemarkFromCoordinates(location.latitude, location.longitude);
     print("-------------------------------------------------");
     print(addresses);
-   setState(() {
-     Constants.userlocation =  addresses[0].subLocality.toString();
-     Constants.userstate =  addresses[0].administrativeArea.toString();
-     Constants.userpostal =  addresses[0].postalCode.toString();
-     Constants.usercity =  addresses[0].subAdministrativeArea.toString();
-
-   });
+    setState(() {
+      Constants.userlocation = addresses[0].subLocality.toString();
+      Constants.userstate = addresses[0].administrativeArea.toString();
+      Constants.userpostal = addresses[0].postalCode.toString();
+      Constants.usercity = addresses[0].subAdministrativeArea.toString();
+    });
     return addresses[0].street.toString();
   }
+
   PermissionStatus _permissionStatus;
   bool isLoading = false;
 
@@ -93,22 +93,21 @@ class _MainScreenState extends State<MainScreen> {
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return SafeArea(
         child: Scaffold(
-
-          resizeToAvoidBottomInset: false,
-          bottomNavigationBar: Container(
+      resizeToAvoidBottomInset: false,
+      bottomNavigationBar: Container(
         margin: EdgeInsets.symmetric(
             horizontal: SizeConfig.screenWidth * 0.05,
             vertical: SizeConfig.blockSizeVertical * 2),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(35), boxShadow: [
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(35), boxShadow: [
           BoxShadow(
-              color: Colors.grey[300],
-              spreadRadius: 2.0,
-              blurRadius: 4.0),
+              color: Colors.grey[300], spreadRadius: 2.0, blurRadius: 4.0),
         ]),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(35),
@@ -127,13 +126,13 @@ class _MainScreenState extends State<MainScreen> {
               });
             },
             items: [
-                            BottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: ImageIcon(
                   Image.asset('assets/icons/home.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
                 label: "Home",
-                
+
                 // title: Text(
                 //   "Home",
                 //   style: TextStyle(
@@ -147,7 +146,7 @@ class _MainScreenState extends State<MainScreen> {
                   Image.asset('assets/icons/wallet.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                                label: "Wallet",
+                label: "Wallet",
 
                 // title: Text(
                 //   "Wallet",
@@ -162,7 +161,7 @@ class _MainScreenState extends State<MainScreen> {
                   Image.asset('assets/icons/cart.png').image,
                   size: SizeConfig.blockSizeVertical * 3,
                 ),
-                       label:           "Cart",
+                label: "Cart",
 
                 // title: Text(
                 //   "Cart",
@@ -186,37 +185,37 @@ class _MainScreenState extends State<MainScreen> {
                 //       fontSize: SizeConfig.blockSizeVertical * 1.4),
                 // ),
               ),
-
             ],
           ),
         ),
       ),
-          floatingActionButton: Container(
-margin: EdgeInsets.only(top: 20),
-            height: SizeConfig.blockSizeVertical * 8,
-            decoration: BoxDecoration(
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(top: 20),
+        height: SizeConfig.blockSizeVertical * 8,
+        decoration: BoxDecoration(
             border: Border.all(color: Color(colorBlue), width: 4),
             shape: BoxShape.circle),
-            child: FloatingActionButton(
-            onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context){
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
               return Sell();
             }));
-            },
-              child: Image.asset(
+          },
+          child: Image.asset(
             'assets/icons/fbtn.png',
             height: SizeConfig.blockSizeVertical * 5,
           ),
           backgroundColor: Colors.white,
         ),
       ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          body: widgetOptions.elementAt(currentIndex),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: widgetOptions.elementAt(currentIndex),
     ));
   }
+
   void _askCameraPermission() async {
     if (await Permission.microphone.request().isGranted) {
-      _permissionStatus =  await Permission.microphone.status;
+      _permissionStatus = await Permission.microphone.status;
       _determinePosition();
       setState(() {});
     }

@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:book_buy_and_sell/Utils/Dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
@@ -15,13 +18,13 @@ import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/ClassModel/BuyerOrderModel.dart';
 import 'package:flutter/material.dart';
 
-class Sellerlist extends StatefulWidget{
+class Sellerlist extends StatefulWidget {
   @override
   _buylistState createState() => _buylistState();
 }
 
 class _buylistState extends State<Sellerlist> {
-  bool  isLoading=false;
+  bool isLoading = false;
   final GlobalKey<State> loginLoader = new GlobalKey<State>();
   var ourcomission;
   @override
@@ -34,6 +37,11 @@ class _buylistState extends State<Sellerlist> {
     return FutureBuilder<BookOrderModel>(
         future: _callSellerAPI(),
         builder: (context, AsyncSnapshot<BookOrderModel> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           if (snapshot.hasData) {
             print("fvvsfrvdcfdg");
 
@@ -52,7 +60,8 @@ class _buylistState extends State<Sellerlist> {
                     },
                     child: Container(
                       width: SizeConfig.screenWidth,
-                      margin: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical),
+                      margin:
+                          EdgeInsets.only(bottom: SizeConfig.blockSizeVertical),
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -91,7 +100,9 @@ class _buylistState extends State<Sellerlist> {
                                       color: Color(0XFF06070D),
                                       fontWeight: FontWeight.w600),
                                 ),
-                                SizedBox(height: 10,),
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Text(
                                   "$rs ${snapshot.data.date[index].price}",
                                   style: TextStyle(
@@ -102,68 +113,67 @@ class _buylistState extends State<Sellerlist> {
                                   height: SizeConfig.blockSizeVertical,
                                 ),
                                 Row(
-
                                   children: [
                                     Container(
                                       width: SizeConfig.screenWidth * 0.15,
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Status :",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 color: Color(0XFF656565),
-                                                fontSize:
-                                                SizeConfig.blockSizeVertical *
+                                                fontSize: SizeConfig
+                                                        .blockSizeVertical *
                                                     1.5),
                                           ),
-
                                         ],
                                       ),
                                     ),
                                     Container(
                                       width: SizeConfig.screenWidth * 0.2,
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            snapshot.data.date[index].order_status,
+                                            snapshot
+                                                .data.date[index].order_status,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 color: Color(0XFF656565),
-                                                fontSize:
-                                                SizeConfig.blockSizeVertical *
+                                                fontSize: SizeConfig
+                                                        .blockSizeVertical *
                                                     1.5),
                                           ),
-
                                         ],
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        getbookdetail(snapshot.data.date[index].order_id);
-
+                                        getbookdetail(
+                                            snapshot.data.date[index].order_id);
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius
-                                                .circular(10),
-                                            color: (Colors.lightBlue)
-                                        ),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: (Colors.lightBlue)),
                                         child: Text(
                                           "View Invoice",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w400,
                                               fontSize:
-                                              SizeConfig.blockSizeVertical *
-                                                  1.5),
+                                                  SizeConfig.blockSizeVertical *
+                                                      1.5),
                                         ),
                                       ),
                                     ),
@@ -197,34 +207,42 @@ class _buylistState extends State<Sellerlist> {
             );
           } else {
             print("fvvsfrvg");
-            return getNotDataWidget(
-
-            );
+            return getNotDataWidget();
           }
         });
   }
+
   Widget getNotDataWidget() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(Icons.info_outline,size: 100,color: Colors.blue.withOpacity(0.6),),
-          SizedBox(height: 10,),
-          Text("No Data Found",style: TextStyle(fontSize: 20),),
+          Icon(
+            Icons.info_outline,
+            size: 100,
+            color: Colors.blue.withOpacity(0.6),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "No Data Found",
+            style: TextStyle(fontSize: 20),
+          ),
         ],
       ),
     );
   }
-  Future<BookOrderModel> _callSellerAPI() async {
 
+  Future<BookOrderModel> _callSellerAPI() async {
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
     };
 
     var res = await ApiCall.post(sellerOrderListURL, body);
-    print("-----resss"+res['date'].toString());
+    print("-----resss" + res['date'].toString());
     var jsonResponse = json.decode(json.encode(res).toString());
 
     try {
@@ -235,96 +253,101 @@ class _buylistState extends State<Sellerlist> {
       return null;
     }
   }
-  dynamic bookdetail=new List();
-  void getbookdetail(orderid) async {
 
+  dynamic bookdetail = new List();
+  void getbookdetail(orderid) async {
     setState(() {
-      isLoading=true;
+      isLoading = true;
       Dialogs.showLoadingDialog(context, loginLoader);
     });
     Map<String, dynamic> data = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
-      "order_id":orderid.toString()
-
+      "order_id": orderid.toString()
     };
-
 
     try {
       final response = await post(
-
           Uri.parse("https://admin.apnistationary.com/api/seller-invoice"),
-          body: data
-
-      );
+          body: data);
       print(response.statusCode.toString());
 
       if (response.statusCode == 256) {
-
-
         final responseJson = json.decode(response.body);
 
         print(responseJson);
         setState(() {
-          isLoading=false;
-          bookdetail=responseJson;
-        //  ourcomission=bookdetail['bookData']['price']-double.parse(bookdetail['data']['pay_amount']);
+          isLoading = false;
+          bookdetail = responseJson;
+          //  ourcomission=bookdetail['bookData']['price']-double.parse(bookdetail['data']['pay_amount']);
         });
 
-        Navigator.of(loginLoader.currentContext,
-            rootNavigator: true) .pop();
-        _createPDF(
-
-        );
-
-      } else {
-
-
-      }
+        Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
+        _createPDF();
+      } else {}
     } catch (e) {
       print(e);
       setState(() {
-        Navigator.of(loginLoader.currentContext,
-            rootNavigator: true) .pop();
-
+        Navigator.of(loginLoader.currentContext, rootNavigator: true).pop();
       });
     }
   }
-  Future<void> _createPDF() async{final PdfDocument document = PdfDocument();
-  //Add page to the PDF
-  final PdfPage page = document.pages.add();
- // final PdfPage page2 = document.pages.add();
-  //Get page client size
-  final Size pageSize = page.getClientSize();
-  //Draw rectangle
-  page.graphics.drawRectangle(
-      bounds: Rect.fromLTWH(0, 0, pageSize.width, pageSize.height),
-      pen: PdfPen(PdfColor(142, 170, 219, 255)));
-  // page2.graphics.drawRectangle(
-  //     bounds: Rect.fromLTWH(0, 0, pageSize.width, pageSize.height),
-  //     pen: PdfPen(PdfColor(142, 170, 219, 255)));
-  //Generate PDF grid.
-  final PdfGrid grid = getGrid();
-  final PdfGrid grid2 = getGrid2();
-  //Draw the header section by creating text element
-  final PdfLayoutResult result = drawHeader(page, pageSize, grid);
-  //final PdfLayoutResult result2 = drawHeader2(page2, pageSize, grid2);
 
-  //Draw grid
-  drawGrid(page, grid, result);
-  //drawGrid2(page2, grid2, result2);
-  //Add invoice footer
-  //drawFooter(page, pageSize);
- // drawLine(page2, pageSize);
-  // drawsLine(page2, pageSize);
-  // drawlogoline(page2, pageSize);
-  // drawdownLine(page2, pageSize);
-  //Save the PDF document
-  final List<int> bytes = document.save();
-  //Dispose the document.
-  document.dispose();
-  //Save and launch the file.
-  await saveAndLaunchFile(bytes, 'Invoice.pdf');
+    Future<List<int>> _readDocumentData() async {
+    final ByteData data = await rootBundle.load('assets/bg/watermark.pdf');
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
+
+  Future<void> _createPDF() async {
+    final PdfDocument document = PdfDocument();
+    //Add page to the PDF
+    final PdfPage page = document.pages.add();
+    //Load image data into PDF bitmap object
+        //Get page client size
+    final Size pageSize = page.getClientSize();
+
+    PdfBitmap image = PdfBitmap(await _readDocumentData());
+//Draw image in page graphics
+    // document.pages
+    //     .add()
+    //     .graphics
+    //     .drawImage(image, const Rect.fromLTWH(0, 0, 500, 200));
+    page.graphics
+        .drawImage(image, Rect.fromLTWH(0, 0, pageSize.width, pageSize.height));
+    // page2.graphics
+    //     .drawImage(image, Rect.fromLTWH(0, 0, pageSize.width, pageSize.height));
+
+    // final PdfPage page2 = document.pages.add();
+    //Draw rectangle
+    page.graphics.drawRectangle(
+        bounds: Rect.fromLTWH(0, 0, pageSize.width, pageSize.height),
+        pen: PdfPen(PdfColor(142, 170, 219, 255)));
+    // page2.graphics.drawRectangle(
+    //     bounds: Rect.fromLTWH(0, 0, pageSize.width, pageSize.height),
+    //     pen: PdfPen(PdfColor(142, 170, 219, 255)));
+    //Generate PDF grid.
+    final PdfGrid grid = getGrid();
+    final PdfGrid grid2 = getGrid2();
+    //Draw the header section by creating text element
+    final PdfLayoutResult result = drawHeader(page, pageSize, grid);
+    //final PdfLayoutResult result2 = drawHeader2(page2, pageSize, grid2);
+
+    //Draw grid
+    drawGrid(page, grid, result);
+    //drawGrid2(page2, grid2, result2);
+    //Add invoice footer
+    //drawFooter(page, pageSize);
+    // drawLine(page2, pageSize);
+    // drawsLine(page2, pageSize);
+    // drawlogoline(page2, pageSize);
+    // drawdownLine(page2, pageSize);
+    //Save the PDF document
+    final List<int> bytes = document.save();
+    //Dispose the document.
+    document.dispose();
+    //Save and launch the file.
+    await saveAndLaunchFile(bytes, 'Invoice.pdf');
   }
 
   //Draws the invoice header
@@ -332,17 +355,17 @@ class _buylistState extends State<Sellerlist> {
     //Draw rectangle
     page.graphics.drawRectangle(
         brush: PdfSolidBrush(PdfColor(91, 126, 215, 255)),
-        bounds: Rect.fromLTWH(0, 0, pageSize.width , 100));
+        bounds: Rect.fromLTWH(0, 0, pageSize.width, 100));
     //Draw string
-    page.graphics.drawString(
-        'Pillers Of Everest Technology', PdfStandardFont(PdfFontFamily.helvetica, 20),
+    page.graphics.drawString('Pillers Of Everest Technology',
+        PdfStandardFont(PdfFontFamily.helvetica, 20),
         brush: PdfBrushes.white,
-        bounds: Rect.fromLTWH(25, 0, pageSize.width , 100),
+        bounds: Rect.fromLTWH(25, 0, pageSize.width, 100),
         format: PdfStringFormat(lineAlignment: PdfVerticalAlignment.middle));
     page.graphics.drawString(
         'Apni Stationary', PdfStandardFont(PdfFontFamily.helvetica, 20),
         brush: PdfBrushes.white,
-        bounds: Rect.fromLTWH(22, 30, pageSize.width , 100),
+        bounds: Rect.fromLTWH(22, 30, pageSize.width, 100),
         format: PdfStringFormat(lineAlignment: PdfVerticalAlignment.middle));
 
     // page.graphics.drawImage(
@@ -373,8 +396,9 @@ class _buylistState extends State<Sellerlist> {
             lineAlignment: PdfVerticalAlignment.bottom));
     //Create data foramt and convert it to text.
     final DateFormat format = DateFormat.yMMMMd('en_US');
-    final String invoiceNumber = 'Invoice Number: ${bookdetail['bookData']['id']}\r\n\r\nDate: ' +
-        "${bookdetail['bookData']['created_at']}\r\n\r\n${bookdetail['bookData']['college_name'].toString().split(",")[0]}\r\n\r\n${bookdetail['bookData']['college_name'].toString().split(",")[1]}\r\n\r\n${PreferenceManager.getName()}";
+    final String invoiceNumber =
+        'Invoice Number: ${bookdetail['bookData']['id']}\r\n\r\nDate: ' +
+            "${bookdetail['bookData']['created_at']}\r\n\r\n${bookdetail['bookData']['college_name'].toString().split(",")[0]}\r\n\r\n${bookdetail['bookData']['college_name'].toString().split(",")[1]}\r\n\r\n${PreferenceManager.getName()}";
     final Size contentSize = contentFont.measureString(invoiceNumber);
     // ignore: leading_newlines_in_multiline_strings
     String address = '''Bill To: \r\n\r\n${PreferenceManager.getName()}, 
@@ -393,31 +417,31 @@ class _buylistState extends State<Sellerlist> {
         bounds: Rect.fromLTWH(30, 120,
             pageSize.width - (contentSize.width + 30), pageSize.height - 120));
   }
+
   PdfLayoutResult drawHeader2(PdfPage page, Size pageSize, PdfGrid grid) {
     //Draw rectangle
     page.graphics.drawRectangle(
         brush: PdfSolidBrush(PdfColor(91, 126, 215, 255)),
         bounds: Rect.fromLTWH(0, 0, pageSize.width, 90));
     //Draw string
-    page.graphics.drawString(
-        'Pillers Of Everest Technology', PdfStandardFont(PdfFontFamily.helvetica, 20),
+    page.graphics.drawString('Pillers Of Everest Technology',
+        PdfStandardFont(PdfFontFamily.helvetica, 20),
         brush: PdfBrushes.white,
-        bounds: Rect.fromLTWH(150, 0, pageSize.width , 90),
+        bounds: Rect.fromLTWH(150, 0, pageSize.width, 90),
         format: PdfStringFormat(lineAlignment: PdfVerticalAlignment.middle));
-
-
-
 
     final PdfFont contentFont = PdfStandardFont(PdfFontFamily.helvetica, 9);
     //Draw string
 
     //Create data foramt and convert it to text.
     final DateFormat format = DateFormat.yMMMMd('en_US');
-    final String invoiceNumber = 'Invoice Number: ${bookdetail['data']['id']}\r\n\r\nSAC Code :48484484 ' +
-        "${bookdetail['data']['created_at']}\r\n\r\nSTATE GSTIN :848494044\r\n\r\n${PreferenceManager.getName()}";
+    final String invoiceNumber =
+        'Invoice Number: ${bookdetail['data']['id']}\r\n\r\nSAC Code :48484484 ' +
+            "${bookdetail['data']['created_at']}\r\n\r\nSTATE GSTIN :848494044\r\n\r\n${PreferenceManager.getName()}";
     final Size contentSize = contentFont.measureString(invoiceNumber);
     // ignore: leading_newlines_in_multiline_strings
-    String address = '''Apni Stationary \r\n\r\n800 Interchange Blvd.\r\n\r\nUttrakhand , Haldwani, 
+    String address =
+        '''Apni Stationary \r\n\r\n800 Interchange Blvd.\r\n\r\nUttrakhand , Haldwani, 
        
         \r\n${"GST Registration No: 27AAQCS4259Q1ZA"}, 
        ''';
@@ -551,8 +575,8 @@ class _buylistState extends State<Sellerlist> {
     //         result.bounds.bottom + 120,
     //         totalPriceCellBounds.width,
     //         totalPriceCellBounds.height));
-
   }
+
   void drawGrid2(PdfPage page, PdfGrid grid, PdfLayoutResult result) {
     Rect totalPriceCellBounds;
     Rect quantityCellBounds;
@@ -670,14 +694,13 @@ class _buylistState extends State<Sellerlist> {
     //         result.bounds.bottom + 120,
     //         totalPriceCellBounds.width,
     //         totalPriceCellBounds.height));
-
   }
 
   //Draw the invoice footer data.
   //
   void drawLine(PdfPage page, Size pageSize) {
     final PdfPen linePen =
-    PdfPen(PdfColor(142, 170, 219, 255), dashStyle: PdfDashStyle.custom);
+        PdfPen(PdfColor(142, 170, 219, 255), dashStyle: PdfDashStyle.custom);
     linePen.dashPattern = <double>[3, 3];
     //Draw line
     page.graphics.drawLine(linePen, Offset(0, pageSize.height - 370),
@@ -694,9 +717,10 @@ class _buylistState extends State<Sellerlist> {
     //     format: PdfStringFormat(alignment: PdfTextAlignment.right),
     //     bounds: Rect.fromLTWH(pageSize.width - 30, pageSize.height - 70, 0, 0));
   }
+
   void drawsLine(PdfPage page, Size pageSize) {
     final PdfPen linePen =
-    PdfPen(PdfColor(142, 170, 219, 255), dashStyle: PdfDashStyle.custom);
+        PdfPen(PdfColor(142, 170, 219, 255), dashStyle: PdfDashStyle.custom);
     linePen.dashPattern = <double>[3, 3];
     //Draw line
     page.graphics.drawLine(linePen, Offset(0, pageSize.height - 360),
@@ -713,9 +737,10 @@ class _buylistState extends State<Sellerlist> {
     //     format: PdfStringFormat(alignment: PdfTextAlignment.right),
     //     bounds: Rect.fromLTWH(pageSize.width - 30, pageSize.height - 70, 0, 0));
   }
+
   void drawlogoline(PdfPage page2, Size pageSize) {
     final PdfPen linePen =
-    PdfPen(PdfColor(255,250,250, 255), dashStyle: PdfDashStyle.custom);
+        PdfPen(PdfColor(255, 250, 250, 255), dashStyle: PdfDashStyle.custom);
     linePen.dashPattern = <double>[3, 3];
     //Draw line
     page2.graphics.drawLine(linePen, Offset(0, pageSize.height - 100),
@@ -732,9 +757,10 @@ class _buylistState extends State<Sellerlist> {
     //     format: PdfStringFormat(alignment: PdfTextAlignment.right),
     //     bounds: Rect.fromLTWH(pageSize.width - 30, pageSize.height - 70, 0, 0));
   }
+
   void drawdownLine(PdfPage page, Size pageSize) {
     final PdfPen linePen =
-    PdfPen(PdfColor(142, 170, 219, 255), dashStyle: PdfDashStyle.custom);
+        PdfPen(PdfColor(142, 170, 219, 255), dashStyle: PdfDashStyle.custom);
     linePen.dashPattern = <double>[3, 3];
     //Draw line
     page.graphics.drawLine(linePen, Offset(0, pageSize.height - 330),
@@ -770,8 +796,14 @@ class _buylistState extends State<Sellerlist> {
     headerRow.cells[3].value = 'Quantity';
     headerRow.cells[4].value = 'Total';
     //Add rows
-    for(int i=0; i<1;i++){
-      addProducts(bookdetail['data']['book_id'].toString(), bookdetail['bookData']['name'].toString(),double.parse(bookdetail['bookData']['price']), 1,double.parse(bookdetail['bookData']['price']), grid);
+    for (int i = 0; i < 1; i++) {
+      addProducts(
+          bookdetail['data']['book_id'].toString(),
+          bookdetail['bookData']['name'].toString(),
+          double.parse(bookdetail['bookData']['price']),
+          1,
+          double.parse(bookdetail['bookData']['price']),
+          grid);
     }
     // addProducts('CA-1098', 'AWC Logo Cap', 8.99, 2, 17.98, grid);
     // addProducts('LJ-0192', 'Long-Sleeve Logo Jersey,M', 49.99, 3, 149.97, grid);
@@ -800,6 +832,7 @@ class _buylistState extends State<Sellerlist> {
     }
     return grid;
   }
+
   PdfGrid getGrid2() {
     //Create a PDF grid
     final PdfGrid grid = PdfGrid();
@@ -815,27 +848,18 @@ class _buylistState extends State<Sellerlist> {
     headerRow.cells[1].value = 'Price (in Rs.)';
 
     //Add rows
-    for(int i=0; i<5;i++){
-      if(i==0){
-        addtax("Access Fee","2.04", grid);
+    for (int i = 0; i < 5; i++) {
+      if (i == 0) {
+        addtax("Access Fee", "2.04", grid);
+      } else if (i == 1) {
+        addtax("Discount", bookdetail['data']['discount'].toString(), grid);
+      } else if (i == 2) {
+        addtax("CGST", bookdetail['data']['cgst_val'].toString(), grid);
+      } else if (i == 3) {
+        addtax("SGST", bookdetail['data']['sgst_val'].toString(), grid);
+      } else if (i == 4) {
+        addtax("Total", bookdetail['data']['price_with_gst'].toString(), grid);
       }
-      else if(i==1){
-        addtax("Discount",bookdetail['data']['discount'].toString(), grid);
-      }
-      else if(i==2){
-        addtax("CGST",bookdetail['data']['cgst_val'].toString(), grid);
-      }
-      else if(i==3){
-        addtax("SGST",bookdetail['data']['sgst_val'].toString(), grid);
-
-
-      }
-      else if(i==4){
-        addtax("Total",bookdetail['data']['price_with_gst'].toString(), grid);
-
-
-      }
-
     }
     // addProducts('CA-1098', 'AWC Logo Cap', 8.99, 2, 17.98, grid);
     // addProducts('LJ-0192', 'Long-Sleeve Logo Jersey,M', 49.99, 3, 149.97, grid);
@@ -867,41 +891,34 @@ class _buylistState extends State<Sellerlist> {
 
   //Create and row for the grid.
 
-
   void addProducts(String productId, String productName, double price,
       int quantity, double total, PdfGrid grid) {
     final PdfGridRow row = grid.rows.add();
-    for(int i=0;i<4;i++){
-
-
+    for (int i = 0; i < 4; i++) {
       row.cells[0].value = productId;
       row.cells[1].value = productName;
-      row.cells[2].value ="${price}";
+      row.cells[2].value = "${price}";
       row.cells[3].value = "1";
       row.cells[4].value = "${total}";
-    }}
-  void addtax(String productId, String productName , PdfGrid grid) {
+    }
+  }
+
+  void addtax(String productId, String productName, PdfGrid grid) {
     final PdfGridRow row = grid.rows.add();
-    for(int i=0;i<4;i++){
-
-
+    for (int i = 0; i < 4; i++) {
       row.cells[0].value = productId;
       row.cells[1].value = productName;
-
-    }}
-
-
+    }
+  }
 
   //Get the total amount.
   double getTotalAmount(PdfGrid grid) {
     double total = 0;
     for (int i = 0; i < grid.rows.count; i++) {
       final String value =
-      grid.rows[i].cells[grid.columns.count - 1].value as String;
+          grid.rows[i].cells[grid.columns.count - 1].value as String;
       total += double.parse(value);
     }
     return total;
   }
-
-
 }

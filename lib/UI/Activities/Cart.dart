@@ -25,47 +25,49 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   MultiSelectController controller = new MultiSelectController();
-bool  isError = false;
- bool isLoading = false;
- bool visibility=false;
- var orderid=[];
- var allorderid=[];
- @override
+  bool isError = false;
+  bool isLoading = false;
+  bool visibility = false;
+  var orderid = [];
+  var allorderid = [];
+  @override
   void initState() {
-   getfeaturedmatches();
+    getfeaturedmatches();
     // TODO: implement initState
     super.initState();
   }
-  String texts="All";
+
+  String texts = "All";
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Color(backgroundColor),
-          body: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.screenWidth * 0.02,
-                    vertical: SizeConfig.blockSizeVertical * 2),
-                child: Row(
-                  children: [
-
-                    Container(
-
-                      margin: EdgeInsets.symmetric(
-
-                          vertical: SizeConfig.blockSizeVertical),
-                      child: Text(
-                        "My Cart",
-                        style: TextStyle(
-                            color: Color(black),
-                            fontWeight: FontWeight.w600,
-                            fontSize: SizeConfig.blockSizeVertical * 2),
-                      ),
-                    ),
-                    /* Container(
+      backgroundColor: Color(backgroundColor),
+      body:  isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: SizeConfig.screenWidth * 0.02,
+                vertical: SizeConfig.blockSizeVertical * 2),
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical: SizeConfig.blockSizeVertical),
+                  child: Text(
+                    "My Cart",
+                    style: TextStyle(
+                        color: Color(black),
+                        fontWeight: FontWeight.w600,
+                        fontSize: SizeConfig.blockSizeVertical * 2),
+                  ),
+                ),
+                /* Container(
                       margin: EdgeInsets.only(
                           left: SizeConfig.blockSizeHorizontal * 5,
                           right: SizeConfig.screenWidth * 0.35),
@@ -86,64 +88,71 @@ bool  isError = false;
                         ],
                       ),
                     ), */
-                    /* */
-                  ],
-                ),
-              ),
-              Expanded(
-
-                  child: cartdata==null?
-                  getNodDataWidget()
-                      :ListView(children: featuredwidegt(),)),
-              cartdata==null?Container():Visibility(
-                visible: visibility,
-                child: Container(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.blockSizeVertical * 7,
-                  margin: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.screenWidth * 0.05,
-                      vertical: SizeConfig.blockSizeVertical * 2),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(gradientColor1),
-                        Color(gradientColor2),
-                      ],
+                /* */
+              ],
+            ),
+          ),
+          Expanded(
+              child: cartdata == null
+                  ? getNodDataWidget()
+                  : ListView(
+                      children: featuredwidegt(),
+                    )),
+          cartdata == null
+              ? Container()
+              : Visibility(
+                  visible: visibility,
+                  child: Container(
+                    width: SizeConfig.screenWidth,
+                    height: SizeConfig.blockSizeVertical * 7,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.screenWidth * 0.05,
+                        vertical: SizeConfig.blockSizeVertical * 2),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(gradientColor1),
+                          Color(gradientColor2),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(25),
                     ),
-                    borderRadius: BorderRadius.circular(25),
+                    child: MaterialButton(
+                      onPressed: () {
+                        if (orderid.isEmpty) {
+                          print(allorderid.toString());
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CheckoutScreen(
+                                        orderid: allorderid,
+                                        type: "",
+                                      )));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CheckoutScreen(
+                                        orderid: orderid,
+                                        type: "",
+                                      )));
+                        }
+                      },
+                      child: Text(
+                        "Buy ${texts}",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: SizeConfig.blockSizeVertical * 2),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
                   ),
-                  child: MaterialButton(
-                    onPressed: () {
-
-if(orderid.isEmpty){
-  print(allorderid.toString());
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => CheckoutScreen(orderid:allorderid,type: "",)));
-}
-                     else{
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => CheckoutScreen(orderid:orderid,type: "",)));
-
-}    },
-                    child: Text(
-                      "Buy ${texts}",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: SizeConfig.blockSizeVertical * 2),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
                 ),
-              ),
 
-              /*  SizedBox(
+          /*  SizedBox(
                 height: SizeConfig.screenHeight * 0.15,
               ),
               Container(
@@ -191,9 +200,9 @@ if(orderid.isEmpty){
                   ),
                 ),
               ),*/
-            ],
-          ),
-        ));
+        ],
+      ),
+    ));
   }
 
   // Widget _getCartData() {
@@ -463,35 +472,28 @@ if(orderid.isEmpty){
       isLoading = true;
     });
 
-
     try {
-      final response = await post(
-          Uri.parse(
-              ApiCall.baseURL+cartListURL),body: (
-          {
-            "user_id" : "${PreferenceManager.getUserId()}",
+      final response = await post(Uri.parse(ApiCall.baseURL + cartListURL),
+          body: ({
+            "user_id": "${PreferenceManager.getUserId()}",
             "session_key": PreferenceManager.getSessionKey(),
-          }
-      ));
-print("ffvvvf");
+          }));
+      print("ffvvvf");
       if (response.statusCode == 256) {
         final responseJson = json.decode(response.body);
-print(responseJson);
+        print(responseJson);
         setState(() {
-          cartdata=responseJson['date'];
-          cartdata==null?visibility=false:visibility=true;
+          cartdata = responseJson['date'];
+          cartdata == null ? visibility = false : visibility = true;
           isError = false;
 
           isLoading = false;
-          print('setstate'+cartdata.toString());
-          for(int i=0;i<=cartdata.length;i++){
+          print('setstate' + cartdata.toString());
+          for (int i = 0; i <= cartdata.length; i++) {
             allorderid.add(cartdata[i]['order_id']);
           }
         });
-
-
       } else {
-
         setState(() {
           isError = true;
           isLoading = false;
@@ -543,254 +545,238 @@ print(responseJson);
 
     setState(() {});
   }
+
   List<Widget> featuredwidegt() {
     List<Widget> featuredlist = new List();
     for (int i = 0; i < cartdata.length; i++) {
-      featuredlist.add(
-          Column(
-            children: [
-
-              Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight*0.18,
-                margin: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.screenWidth * 0.05,
-                    vertical: SizeConfig.blockSizeVertical),
-                child:MultiSelectItem(
-                  isSelecting: controller.isSelecting,
-                  onSelected: () {
-                    setState(() {
-                      controller.toggle(i);
-if(controller.isSelecting==true){
-  texts="Selected";
-}
-else{
-  texts="All";
-}
-                      orderid.add(cartdata[i]['order_id'].toString());
-                    });
-                  },
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          removeCart(
-                              context,
-                              cartdata[i]['order_id'].toString());
-                        },
-                        child: Container(
-                          decoration: controller.isSelected(i)
-                              ? new BoxDecoration(color: Colors.grey[300])
-                              :
-                          BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color(gradientColor1),
-                                  Color(gradientColor2),
-                                ],
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.grey[200],
-                                    spreadRadius: 2.0,
-                                    blurRadius: 5.0),
-                              ]),
-
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight * 0.18,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                right:
-                                SizeConfig.blockSizeHorizontal * 2),
-                            child: RotatedBox(
-                              child: Text(
-                                "Remove",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize:
-                                    SizeConfig.blockSizeVertical * 2),
-                              ),
-                              quarterTurns: 1,
-                            ),
-                          ),
-                          alignment: Alignment.centerRight,
-                        ),
-                      ),
-                      Container(
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenHeight * 0.18,
-                        margin: EdgeInsets.only(
-                            right: SizeConfig.screenWidth * 0.09),
+      featuredlist.add(Column(
+        children: [
+          Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.screenHeight * 0.18,
+              margin: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.screenWidth * 0.05,
+                  vertical: SizeConfig.blockSizeVertical),
+              child: MultiSelectItem(
+                isSelecting: controller.isSelecting,
+                onSelected: () {
+                  setState(() {
+                    controller.toggle(i);
+                    if (controller.isSelecting == true) {
+                      texts = "Selected";
+                    } else {
+                      texts = "All";
+                    }
+                    orderid.add(cartdata[i]['order_id'].toString());
+                  });
+                },
+                child: Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        removeCart(context, cartdata[i]['order_id'].toString());
+                      },
+                      child: Container(
                         decoration: controller.isSelected(i)
                             ? new BoxDecoration(color: Colors.grey[300])
                             : BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: SizeConfig.screenWidth * 0.25,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.circular(25)),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(25),
-                                child: Image.network(
-                                    "http://admin.apnistationary.com/img/books" +
-                                        "/" +
-                                        cartdata[i]['image1']),
-                              ),
+                                borderRadius: BorderRadius.circular(15),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(gradientColor1),
+                                    Color(gradientColor2),
+                                  ],
+                                ),
+                                boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey[200],
+                                        spreadRadius: 2.0,
+                                        blurRadius: 5.0),
+                                  ]),
+                        width: SizeConfig.screenWidth,
+                        height: SizeConfig.screenHeight * 0.18,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              right: SizeConfig.blockSizeHorizontal * 2),
+                          child: RotatedBox(
+                            child: Text(
+                              "Remove",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: SizeConfig.blockSizeVertical * 2),
                             ),
-                            Container(
-                              width: SizeConfig.screenWidth * 0.5,
-                              margin: EdgeInsets.only(
-                                  left: SizeConfig.blockSizeHorizontal*1.5),
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Row(
+                            quarterTurns: 1,
+                          ),
+                        ),
+                        alignment: Alignment.centerRight,
+                      ),
+                    ),
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight * 0.18,
+                      margin:
+                          EdgeInsets.only(right: SizeConfig.screenWidth * 0.09),
+                      decoration: controller.isSelected(i)
+                          ? new BoxDecoration(color: Colors.grey[300])
+                          : BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: SizeConfig.screenWidth * 0.25,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: Image.network(
+                                  "http://admin.apnistationary.com/img/books" +
+                                      "/" +
+                                      cartdata[i]['image1']),
+                            ),
+                          ),
+                          Container(
+                            width: SizeConfig.screenWidth * 0.5,
+                            margin: EdgeInsets.only(
+                                left: SizeConfig.blockSizeHorizontal * 1.5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: SizeConfig.screenWidth * 0.30,
+                                      child: Text(
+                                        cartdata[i]['name'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: Color(black),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize:
+                                                SizeConfig.blockSizeVertical *
+                                                    2),
+                                      ),
+                                    ),
+                                    Text(
+                                      cartdata[i]['created_at']
+                                          .toString()
+                                          .substring(0, 10),
+                                      style: TextStyle(
+                                          color: Color(0XFF656565),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize:
+                                              SizeConfig.blockSizeVertical *
+                                                  1.25),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  cartdata[i]['auther_name'],
+                                  style: TextStyle(
+                                      color: Color(0XFF656565),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 1.75),
+                                ),
+                                Text(
+                                  "Condition: ${cartdata[i]['conditions']}",
+                                  style: TextStyle(
+                                      color: Color(0XFF656565),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 1.75),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  width: SizeConfig.screenWidth * 0.7,
+                                  height: SizeConfig.blockSizeVertical * 4,
+                                  child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        width:SizeConfig.screenWidth*0.30,
-                                        child: Text(
-                                          cartdata[i]['name'],
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: Color(black),
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: SizeConfig
-                                                  .blockSizeVertical *
-                                                  2),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                              color: Color(gradientColor1),
+                                            )),
+                                        child: MaterialButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CheckoutScreen(
+                                                          orderid: cartdata[i]
+                                                                  ['order_id']
+                                                              .toString(),
+                                                          id: cartdata[i]['id'],
+                                                          type: "",
+                                                        )));
+                                          },
+                                          child: Text(
+                                            "Buy Now",
+                                            style: TextStyle(
+                                                color: Color(gradientColor1),
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
                                         ),
                                       ),
-                                      Text(
-                                        cartdata[i]['created_at'].toString().substring(0,10),
-                                        style: TextStyle(
-                                            color: Color(0XFF656565),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: SizeConfig
-                                                .blockSizeVertical *
-                                                1.25),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Color(gradientColor1),
+                                              Color(gradientColor2),
+                                            ],
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: MaterialButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "$rs ${cartdata[i]['price']}",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    cartdata[i]['auther_name'],
-                                    style: TextStyle(
-                                        color: Color(0XFF656565),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize:
-                                        SizeConfig.blockSizeVertical *
-                                            1.75),
-                                  ),
-                                  Text(
-                                    "Condition: ${cartdata[i]['conditions']}",
-                                    style: TextStyle(
-                                        color: Color(0XFF656565),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize:
-                                        SizeConfig.blockSizeVertical *
-                                            1.75),
-                                  ),
-                                  SizedBox(height: 10,),
-                                  Container(
-                                    width: SizeConfig.screenWidth * 0.7,
-                                    height:
-                                    SizeConfig.blockSizeVertical * 4,
-
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-
-
-                                            borderRadius:
-                                            BorderRadius.circular(15),
-                                            border: Border.all(
-                                          color:
-                                                  Color(gradientColor1),
-
-
-                                            )
-                                          ),
-                                          child: MaterialButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => CheckoutScreen(orderid: cartdata[i]['order_id'].toString(),id:cartdata[i]['id'],type: "",)));
-                                            },
-                                            child: Text(
-                                              "Buy Now",
-                                              style: TextStyle(
-                                                  color: Color(gradientColor1),
-                                                  fontWeight:
-                                                  FontWeight.w600),
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(15),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                Color(gradientColor1),
-                                                Color(gradientColor2),
-                                              ],
-                                            ),
-                                            borderRadius:
-                                            BorderRadius.circular(15),
-                                          ),
-                                          child: MaterialButton(
-                                            onPressed: () {},
-                                            child: Text(
-                                              "$rs ${cartdata[i]['price']}",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight:
-                                                  FontWeight.w600),
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(15),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        padding: EdgeInsets.all(8),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-
-
-
-              ),
-
-            ],
-          )
-      );}
-  return featuredlist;
+                      padding: EdgeInsets.all(8),
+                    ),
+                  ],
+                ),
+              )),
+        ],
+      ));
+    }
+    return featuredlist;
   }
 }
 
@@ -799,12 +785,19 @@ Widget getNodDataWidget() {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.remove_shopping_cart_outlined,size: 100,color: Colors.blue.withOpacity(0.6),),
-        SizedBox(height: 10,),
-        Text("Your Cart is Empty",style: TextStyle(fontSize: 20),),
+        Icon(
+          Icons.remove_shopping_cart_outlined,
+          size: 100,
+          color: Colors.blue.withOpacity(0.6),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          "Your Cart is Empty",
+          style: TextStyle(fontSize: 20),
+        ),
       ],
     ),
   );
 }
-
-

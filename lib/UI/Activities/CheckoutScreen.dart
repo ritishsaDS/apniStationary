@@ -398,11 +398,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
       //showPopUp(context, res["message"]);
     } else {
-      showAlert(context, res["message"]);
+      showAlert(context, res["message"],);
     }
   }
 
-  showPopUp(BuildContext context, String msg) {
+  showPopUp(BuildContext context, String msg, bool stayOnSameScreen) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -415,10 +415,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               onPressed: () async {
                 Navigator.of(context).pop();
 
-                await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                  return MainScreen();
-                }));
+                if (!stayOnSameScreen) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return MainScreen();
+                  }));
+                }
               },
             ),
           ],
@@ -428,22 +429,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void openCheckout() {
-    print(totalprice);
+    // print(totalprice);
+    double rawAmount;
+    if (widget.type == 'Buy')
+      rawAmount = ((widget.price) * 100);
+    else
+      rawAmount = (totalprice) * 100;
+
+    // double.parse((12.5668).toStringAsFixed(2));
     var options = {
       'key': 'rzp_live_b5Jmla6DpICdpO',  //actual
       // 'key': 'rzp_test_23633fjMEgS0IE', // testing
-      'amount': widget.type == 'Buy'
-          ? "${(widget.price) * 100}"
-          : '${totalprice * 100}',
+      'amount': rawAmount.round().toString(),
       'name': 'Apni Stationary',
       'description':
           'Buy  used or unused stationary,books,notes and study materials',
-
       'external': {
         'wallets': ['paytm']
       }
     };
 
+    print("options Map ${options}");
     try {
       _razorpay.open(options);
     } catch (e) {
@@ -461,6 +467,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     showPopUp(
       context,
       "Your Last Payment Failed !!! ",
+      true
     );
   }
 
@@ -468,6 +475,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     showPopUp(
       context,
       "EXTERNAL_WALLET: " + response.walletName,
+      true
     );
   }
 

@@ -29,216 +29,237 @@ class _WalletTransState extends State<WalletTrans> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return WillPopScope(
-      onWillPop: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainScreen()));
+      onWillPop: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
       },
       child: SafeArea(
           child: Scaffold(
-            backgroundColor: Color(backgroundColor),
-            body: FutureBuilder<WalletModel>(
-              future: _callWalletAPI(),
-              builder: (context,AsyncSnapshot<WalletModel> snapshot){
-                if (snapshot.hasData){
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: SizeConfig.screenWidth * 0.02,
-                              vertical: SizeConfig.blockSizeVertical * 2),
-                          child: Row(
-                            children: [
+        backgroundColor: Color(backgroundColor),
+        body: FutureBuilder<WalletModel>(
+          future: _callWalletAPI(),
+          builder: (context, AsyncSnapshot<WalletModel> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-                              Container(
-                                margin: EdgeInsets.only(
-                                  left: SizeConfig.blockSizeHorizontal * 5,
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.screenWidth * 0.02,
+                          vertical: SizeConfig.blockSizeVertical * 2),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                              left: SizeConfig.blockSizeHorizontal * 5,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  Constants.userlocation,
+                                  style: TextStyle(color: Color(black)),
                                 ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      Constants.userlocation,
-                                      style: TextStyle(color: Color(black)),
-                                    ),
-                                    // SizedBox(
-                                    //   width: SizeConfig.blockSizeHorizontal * 2,
-                                    // ),
-                                    // ImageIcon(
-                                    //   AssetImage('assets/icons/current.png'),
-                                    //   color: Color(colorBlue),
-                                    //   size: SizeConfig.blockSizeVertical * 3,
-                                    // )
-                                  ],
-                                ),
-                              ),
-                              Expanded(child: SizedBox()),
-
-                            ],
+                                // SizedBox(
+                                //   width: SizeConfig.blockSizeHorizontal * 2,
+                                // ),
+                                // ImageIcon(
+                                //   AssetImage('assets/icons/current.png'),
+                                //   color: Color(colorBlue),
+                                //   size: SizeConfig.blockSizeVertical * 3,
+                                // )
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: SizeConfig.screenWidth,
-                          height: SizeConfig.screenHeight * 0.17,
-                          margin: EdgeInsets.symmetric(
-                              horizontal: SizeConfig.screenWidth * 0.05,
-                              vertical: SizeConfig.blockSizeVertical),
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              gradient: LinearGradient(
-                                  colors: [Color(gradientColor1), Color(gradientColor2)])),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Wallet Money",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500, color: Colors.white),
-                              ),
-                              SizedBox(
-                                height: SizeConfig.blockSizeVertical,
-                              ),
-                              Text(
-                                "$rs ${snapshot.data.date.wallet_amount}",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                    fontSize: SizeConfig.blockSizeVertical * 2.5),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  MaterialButton(
-                                    onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Wallet(amount:snapshot.data.date.wallet_amount)));
-
-                                    },
-                                    height: SizeConfig.blockSizeVertical * 4,
-                                    minWidth: SizeConfig.screenWidth * 0.4,
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(25)),
-                                    child: Text("Top Up"),
-                                  ),
-
-                                  MaterialButton(
-                                    onPressed: () {
-                                      if(snapshot.data.date.wallet_amount.toString()=="0.00"){
-                                        CommonSnackBar.snackBar(
-                                                   message: "You Don't have enough amount ");
-                                      }
-                                     else{
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Withdrawalwallet(amount:snapshot.data.date.wallet_amount)));
-
-                                      }
-                                    },
-                                    height: SizeConfig.blockSizeVertical * 4,
-                                    minWidth: SizeConfig.screenWidth * 0.4,
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(25)),
-                                    child: Text("Withdraw"),
-                                  )
-                                ],
-                              ),
-
-
-                            ],
-                          ),
-                        ),
-
-                        Container(
-                          width: SizeConfig.screenWidth,
-                          margin: EdgeInsets.symmetric(
-                              horizontal: SizeConfig.screenWidth * 0.05,
-                              vertical: SizeConfig.blockSizeVertical),
-                          child: Text(
-                            "Holding Payment",
+                          Expanded(child: SizedBox()),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight * 0.17,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.screenWidth * 0.05,
+                          vertical: SizeConfig.blockSizeVertical),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: LinearGradient(colors: [
+                            Color(gradientColor1),
+                            Color(gradientColor2)
+                          ])),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Wallet Money",
                             style: TextStyle(
-                                color: Color(black),
-                                fontWeight: FontWeight.w600,
-                                fontSize: SizeConfig.blockSizeVertical * 2),
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
                           ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 20,right: 20),
-                          child: Row(
+                          SizedBox(
+                            height: SizeConfig.blockSizeVertical,
+                          ),
+                          Text(
+                            "$rs ${snapshot.data.date.wallet_amount}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: SizeConfig.blockSizeVertical * 2.5),
+                          ),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Expanded(
-                                child: Container(
-
-                                  height: 100,
-
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      gradient: LinearGradient(
-                                          colors: [Color(gradientColor1), Color(gradientColor2)])),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Received",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500, color: Colors.white),
-                                      ),
-                                      SizedBox(
-                                        height: SizeConfig.blockSizeVertical,
-                                      ),
-                                      Text(
-                                        "$rs ${snapshot.data.date.received_hold_amount}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: SizeConfig.blockSizeVertical * 2.5),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              MaterialButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Wallet(
+                                              amount: snapshot
+                                                  .data.date.wallet_amount)));
+                                },
+                                height: SizeConfig.blockSizeVertical * 4,
+                                minWidth: SizeConfig.screenWidth * 0.4,
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Text("Top Up"),
                               ),
-                              SizedBox(width: 10,),
-                              Expanded(
-                                child: Container(
-                                  height: 100,
-
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      gradient: LinearGradient(
-                                          colors: [Color(gradientColor1), Color(gradientColor2)])),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Paid",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500, color: Colors.white),
-                                      ),
-                                      SizedBox(
-                                        height: SizeConfig.blockSizeVertical,
-                                      ),
-                                      Text(
-                                        "$rs ${snapshot.data.date.paid_hold_amount}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white,
-                                            fontSize: SizeConfig.blockSizeVertical * 2.5),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              MaterialButton(
+                                onPressed: () {
+                                  if (snapshot.data.date.wallet_amount
+                                          .toString() ==
+                                      "0.00") {
+                                    CommonSnackBar.snackBar(
+                                        message:
+                                            "You Don't have enough amount ");
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Withdrawalwallet(
+                                                    amount: snapshot.data.date
+                                                        .wallet_amount)));
+                                  }
+                                },
+                                height: SizeConfig.blockSizeVertical * 4,
+                                minWidth: SizeConfig.screenWidth * 0.4,
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Text("Withdraw"),
+                              )
                             ],
                           ),
-                        ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: SizeConfig.screenWidth,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: SizeConfig.screenWidth * 0.05,
+                          vertical: SizeConfig.blockSizeVertical),
+                      child: Text(
+                        "Holding Payment",
+                        style: TextStyle(
+                            color: Color(black),
+                            fontWeight: FontWeight.w600,
+                            fontSize: SizeConfig.blockSizeVertical * 2),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 100,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  gradient: LinearGradient(colors: [
+                                    Color(gradientColor1),
+                                    Color(gradientColor2)
+                                  ])),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Received",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    height: SizeConfig.blockSizeVertical,
+                                  ),
+                                  Text(
+                                    "$rs ${snapshot.data.date.received_hold_amount}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontSize:
+                                            SizeConfig.blockSizeVertical * 2.5),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: 100,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  gradient: LinearGradient(colors: [
+                                    Color(gradientColor1),
+                                    Color(gradientColor2)
+                                  ])),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Paid",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    height: SizeConfig.blockSizeVertical,
+                                  ),
+                                  Text(
+                                    "$rs ${snapshot.data.date.paid_hold_amount}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontSize:
+                                            SizeConfig.blockSizeVertical * 2.5),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-
-                      /*  Container(
+                    /*  Container(
                           width: SizeConfig.screenWidth,
                           margin: EdgeInsets.symmetric(
                               horizontal: SizeConfig.screenWidth * 0.05,
@@ -332,7 +353,7 @@ class _WalletTransState extends State<WalletTrans> {
                             return Container();
                           }
                         }),*/
-                     /*   Container(
+                    /*   Container(
                           width: SizeConfig.screenWidth,
                           margin: EdgeInsets.symmetric(
                               horizontal: SizeConfig.screenWidth * 0.05,
@@ -581,23 +602,19 @@ class _WalletTransState extends State<WalletTrans> {
                         SizedBox(
                           height: SizeConfig.blockSizeVertical * 4,
                         ),*/
-
-                      ],
-                    ),
-                  );
-                }else{
-                  return Container();
-                }
-              },
-            ),
-          )),
+                  ],
+                ),
+              );
+            } else {
+              return Container();
+            }
+          },
+        ),
+      )),
     );
   }
-  
-
 
   Future<WalletModel> _callWalletAPI() async {
-
     Map<String, dynamic> body = {
       "user_id": "${PreferenceManager.getUserId()}",
       "session_key": PreferenceManager.getSessionKey(),
@@ -609,13 +626,12 @@ class _WalletTransState extends State<WalletTrans> {
 
     return data;
   }
-
-
 }
-String getSign(String type){
-  if(type == "Dr"){
+
+String getSign(String type) {
+  if (type == "Dr") {
     return "-";
-  }else{
-    return  "+";
+  } else {
+    return "+";
   }
 }

@@ -2,6 +2,7 @@ import 'package:book_buy_and_sell/ChatUi/views/chatrooms.dart';
 import 'package:book_buy_and_sell/UI/Activities/Login.dart';
 import 'package:book_buy_and_sell/UI/Activities/MainScreen.dart';
 import 'package:book_buy_and_sell/Utils/FirebaseNoticicationManager.dart';
+import 'package:book_buy_and_sell/Utils/MyStreamsController.dart';
 import 'package:book_buy_and_sell/viewModel/account_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/image_upload_view_model.dart';
 import 'package:book_buy_and_sell/viewModel/login_view_model.dart';
@@ -99,9 +100,11 @@ class _BookBuySellState extends State<BookBuySell> {
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       // notifpermission();
-      print("message recieved" + event.notification.body);
-      Vibration.vibrate(duration: 3000);
+      print("message recieved " + event.notification.body);
+      Vibration.vibrate(duration: 2000);
       HapticFeedback.vibrate();
+
+      MyStreamsController().notificationCountController.add(true);
 
       // showSimpleNotification(
       //

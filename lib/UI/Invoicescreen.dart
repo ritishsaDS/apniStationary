@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
-
-
 
 class CreatePdfWidget extends StatelessWidget {
   @override
@@ -47,13 +47,30 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
     );
   }
 
+  Future<List<int>> _readDocumentData() async {
+    final ByteData data = await rootBundle.load('assets/bg/watermark.jpg');
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
   Future<void> _createPDF() async {
     //Create PDF document.
     PdfDocument document = PdfDocument();
 
+//Load image data into PDF bitmap object
+    PdfBitmap image = PdfBitmap(await _readDocumentData());
+//Draw image in page graphics
+    document.pages
+        .add()
+        .graphics
+        .drawImage(image, const Rect.fromLTWH(0, 0, 500, 200));
+    // page.graphics
+    //     .drawImage(image, Rect.fromLTWH(0, 0, pageSize.width, pageSize.height));
+    // page2.graphics
+    //     .drawImage(image, Rect.fromLTWH(0, 0, pageSize.width, pageSize.height));
+
     //Create a header template and draw image/text.
     final PdfPageTemplateElement headerElement =
-    PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
+        PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
     headerElement.graphics.drawString(
         'This is page header', PdfStandardFont(PdfFontFamily.helvetica, 10),
         bounds: const Rect.fromLTWH(0, 0, 515, 50),
@@ -71,7 +88,7 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
 
     //Create a footer template and draw a text.
     final PdfPageTemplateElement footerElement =
-    PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
+        PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
     footerElement.graphics.drawString(
       'This is page footer',
       PdfStandardFont(PdfFontFamily.helvetica, 10),
@@ -104,7 +121,7 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
     OpenFile.open('$path/Output.pdf');
   }
 
-  //Add invoice 
+  //Add invoice
   PdfDocument _createInvoice(PdfDocument document) {
     //Add page and draw text.
     final PdfPage page = document.pages.add();
@@ -118,11 +135,11 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
     final Size size = page.getClientSize();
     //Create a text element and draw it to the page
     PdfLayoutResult result = PdfTextElement(
-        text: 'Bill To',
-        font: PdfStandardFont(PdfFontFamily.helvetica, 15,
-            style: PdfFontStyle.bold),
-        brush: PdfBrushes.red,
-        format: PdfStringFormat(alignment: PdfTextAlignment.left))
+            text: 'Bill To',
+            font: PdfStandardFont(PdfFontFamily.helvetica, 15,
+                style: PdfFontStyle.bold),
+            brush: PdfBrushes.red,
+            format: PdfStringFormat(alignment: PdfTextAlignment.left))
         .draw(page: page, bounds: Rect.fromLTWH(0, 30, size.width, 30));
 
     result = PdfTextElement(text: 'Abraham Swearegin,', font: h1Font).draw(
@@ -131,31 +148,31 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
             size.height - result.bounds.bottom));
 
     result = PdfTextElement(
-        text:
-        'United States, California, San Mateo,\r\n9920 BridgePointe Parkway,\r\n9365550136',
-        font: contentFont)
+            text:
+                'United States, California, San Mateo,\r\n9920 BridgePointe Parkway,\r\n9365550136',
+            font: contentFont)
         .draw(
-        page: result.page,
-        bounds: Rect.fromLTWH(0, result.bounds.bottom, size.width,
-            size.height - result.bounds.bottom));
+            page: result.page,
+            bounds: Rect.fromLTWH(0, result.bounds.bottom, size.width,
+                size.height - result.bounds.bottom));
 
     result = PdfTextElement(
-        text: 'Invoice Number: 2058557939',
-        font: h1Font,
-        brush: PdfBrushes.red)
+            text: 'Invoice Number: 2058557939',
+            font: h1Font,
+            brush: PdfBrushes.red)
         .draw(
-        page: result.page,
-        bounds: Rect.fromLTWH(0, result.bounds.bottom + 15, size.width,
-            size.height - result.bounds.bottom + 15),
-        format: PdfLayoutFormat(layoutType: PdfLayoutType.paginate));
+            page: result.page,
+            bounds: Rect.fromLTWH(0, result.bounds.bottom + 15, size.width,
+                size.height - result.bounds.bottom + 15),
+            format: PdfLayoutFormat(layoutType: PdfLayoutType.paginate));
 
     result =
         PdfTextElement(text: 'Date: Monday 04, January 2021', font: contentFont)
             .draw(
-            page: result.page,
-            bounds: Rect.fromLTWH(0, result.bounds.bottom, size.width,
-                size.height - result.bounds.bottom),
-            format: PdfLayoutFormat(layoutType: PdfLayoutType.paginate));
+                page: result.page,
+                bounds: Rect.fromLTWH(0, result.bounds.bottom, size.width,
+                    size.height - result.bounds.bottom),
+                format: PdfLayoutFormat(layoutType: PdfLayoutType.paginate));
 
     PdfGrid grid = PdfGrid();
     //Add 3 columns
@@ -262,14 +279,14 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
             size.height - result.bounds.bottom + 15));
 
     final PdfTextElement element =
-    PdfTextElement(text: 'Grand Total: 14740.84', font: h1Font);
+        PdfTextElement(text: 'Grand Total: 14740.84', font: h1Font);
     result = element.draw(
         page: gridResult.page,
         bounds: Rect.fromLTWH(0, gridResult.bounds.bottom + 15, size.width,
             size.height - gridResult.bounds.bottom + 15),
         format: PdfLayoutFormat(
             paginateBounds:
-            Rect.fromLTWH(0, 15, size.width, size.height - 15)));
+                Rect.fromLTWH(0, 15, size.width, size.height - 15)));
     return document;
   }
 }

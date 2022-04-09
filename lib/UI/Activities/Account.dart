@@ -8,12 +8,15 @@ import 'package:book_buy_and_sell/UI/Activities/MyBookList.dart';
 import 'package:book_buy_and_sell/UI/Activities/Orders.dart';
 import 'package:book_buy_and_sell/UI/Activities/Transactions.dart';
 import 'package:book_buy_and_sell/UI/Activities/Wallet.dart';
+import 'package:book_buy_and_sell/UI/Activities/WebViewPage.dart';
 import 'package:book_buy_and_sell/Utils/SizeConfig.dart';
+import 'package:book_buy_and_sell/Utils/constantString.dart';
 import 'package:book_buy_and_sell/Utils/helper/constants.dart';
 import 'package:book_buy_and_sell/Utils/services/auth.dart';
 import 'package:book_buy_and_sell/common/preference_manager.dart';
 import 'package:book_buy_and_sell/model/services/AppNotification.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../main.dart';
@@ -26,6 +29,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_webservice/directions.dart';
 import 'package:google_maps_webservice/places.dart';
+
 class Account extends StatefulWidget {
   const Account({Key key}) : super(key: key);
 
@@ -34,7 +38,7 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
-  final logout=GetStorage();
+  final logout = GetStorage();
   Future<String> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -73,19 +77,20 @@ class _AccountState extends State<Account> {
     final location = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     var addresses =
-    await placemarkFromCoordinates(location.latitude, location.longitude);
+        await placemarkFromCoordinates(location.latitude, location.longitude);
     print("-------------------------------------------------");
     print(addresses);
     return addresses[0].street.toString();
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return WillPopScope(
-
-        onWillPop: (){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainScreen()));
-        },
+      onWillPop: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
+      },
       child: SafeArea(
           child: Scaffold(
         backgroundColor: Color(backgroundColor),
@@ -101,7 +106,6 @@ class _AccountState extends State<Account> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-
                     Flexible(
                       child: Row(
                         children: [
@@ -113,17 +117,17 @@ class _AccountState extends State<Account> {
                                   return GestureDetector(
                                     onTap: () async {
                                       Prediction p =
-                                      await PlacesAutocomplete.show(
-                                          context: context,
-                                          apiKey: kGoogleApiKey,
-                                          mode: Mode.overlay,
-                                          // Mode.fullscreen
-                                          language: "en",
-                                          components: [
+                                          await PlacesAutocomplete.show(
+                                              context: context,
+                                              apiKey: kGoogleApiKey,
+                                              mode: Mode.overlay,
+                                              // Mode.fullscreen
+                                              language: "en",
+                                              components: [
                                             new Component(
                                                 Component.country, "in")
                                           ],
-                                          types: []);
+                                              types: []);
                                     },
                                     child: Text(
                                       snapshot.data,
@@ -131,8 +135,7 @@ class _AccountState extends State<Account> {
                                       style: TextStyle(color: Color(black)),
                                     ),
                                   );
-                                }
-                                else {
+                                } else {
                                   return Container();
                                 }
                               }),
@@ -147,8 +150,7 @@ class _AccountState extends State<Account> {
                         ],
                       ),
                     ),
-Expanded(child: SizedBox()),
-
+                    Expanded(child: SizedBox()),
                   ],
                 ),
               ),
@@ -171,12 +173,17 @@ Expanded(child: SizedBox()),
                   children: [
                     Container(
                       width: SizeConfig.screenWidth * 0.23,
-                      decoration:
-                          BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15)),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: PreferenceManager.getImage()!=null?Image.network(PreferenceManager.getImage()): Icon(Icons.person_outline_rounded, color: Color(colorBlue),
-                          size: 60,),
+                        child: PreferenceManager.getImage() != null
+                            ? Image.network(PreferenceManager.getImage())
+                            : Icon(
+                                Icons.person_outline_rounded,
+                                color: Color(colorBlue),
+                                size: 60,
+                              ),
                       ),
                     ),
                     SizedBox(
@@ -195,7 +202,9 @@ Expanded(child: SizedBox()),
                                 fontWeight: FontWeight.w600,
                                 fontSize: SizeConfig.blockSizeVertical * 2),
                           ),
-SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(
                             PreferenceManager.getPhoneNo(),
                             style: TextStyle(
@@ -203,7 +212,9 @@ SizedBox(height: 10,),
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.blockSizeVertical * 1.75),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Text(
                             PreferenceManager.getEmailId(),
                             style: TextStyle(
@@ -211,7 +222,6 @@ SizedBox(height: 10,),
                                 fontWeight: FontWeight.w400,
                                 fontSize: SizeConfig.blockSizeVertical * 1.75),
                           ),
-
                           InkWell(
                             onTap: () {
                               Navigator.push(context,
@@ -228,7 +238,8 @@ SizedBox(height: 10,),
                                 "Edit Profile",
                                 style: TextStyle(
                                     color: Color(colorBlue),
-                                    fontSize: SizeConfig.blockSizeVertical * 1.5,
+                                    fontSize:
+                                        SizeConfig.blockSizeVertical * 1.5,
                                     fontWeight: FontWeight.w600),
                               ),
                             ),
@@ -247,8 +258,8 @@ SizedBox(height: 10,),
                 ),
                 child: Text(
                   "My Dashboard",
-                  style:
-                      TextStyle(color: Color(black), fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      color: Color(black), fontWeight: FontWeight.w500),
                 ),
               ),
               Container(
@@ -340,8 +351,8 @@ SizedBox(height: 10,),
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                                return MyBookList();
-                              }));
+                            return MyBookList();
+                          }));
                         },
                       ),
                     ),
@@ -481,6 +492,39 @@ SizedBox(height: 10,),
                         },
                       ),
                     ),
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       boxShadow: [
+                    //         BoxShadow(
+                    //             color: Colors.grey[200],
+                    //             blurRadius: 5,
+                    //             spreadRadius: 2),
+                    //       ],
+                    //       borderRadius: BorderRadius.circular(15)),
+                    //   margin: EdgeInsets.only(
+                    //       bottom: SizeConfig.blockSizeVertical * 2),
+                    //   child: ListTile(
+                    //     title: Text(
+                    //       "Offers",
+                    //       style: TextStyle(
+                    //           fontSize: SizeConfig.blockSizeVertical * 2,
+                    //           fontWeight: FontWeight.w500,
+                    //           color: Color(matteBlack)),
+                    //     ),
+                    //     contentPadding: EdgeInsets.symmetric(
+                    //         horizontal: SizeConfig.screenWidth * 0.04),
+                    //     leading: ImageIcon(
+                    //       Image.asset('assets/icons/offer.png').image,
+                    //       color: Color(colorBlue),
+                    //     ),
+                    //     trailing: Icon(
+                    //       Icons.arrow_forward_ios_rounded,
+                    //       color: Color(matteBlack),
+                    //       size: SizeConfig.blockSizeVertical * 2.5,
+                    //     ),
+                    //   ),
+                    // ),
                     Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -494,41 +538,11 @@ SizedBox(height: 10,),
                       margin: EdgeInsets.only(
                           bottom: SizeConfig.blockSizeVertical * 2),
                       child: ListTile(
-                        title: Text(
-                          "Offers",
-                          style: TextStyle(
-                              fontSize: SizeConfig.blockSizeVertical * 2,
-                              fontWeight: FontWeight.w500,
-                              color: Color(matteBlack)),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: SizeConfig.screenWidth * 0.04),
-                        leading: ImageIcon(
-                          Image.asset('assets/icons/offer.png').image,
-                          color: Color(colorBlue),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: Color(matteBlack),
-                          size: SizeConfig.blockSizeVertical * 2.5,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey[200],
-                                blurRadius: 5,
-                                spreadRadius: 2),
-                          ],
-                          borderRadius: BorderRadius.circular(15)),
-                      margin: EdgeInsets.only(
-                          bottom: SizeConfig.blockSizeVertical * 2),
-                      child: ListTile(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Orderrequest()));
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Orderrequest()));
                         },
                         title: Text(
                           "Order Requests",
@@ -563,6 +577,15 @@ SizedBox(height: 10,),
                       margin: EdgeInsets.only(
                           bottom: SizeConfig.blockSizeVertical * 2),
                       child: ListTile(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      WebViewPage(
+                                        title: "Contact us",
+                                        url: contactUsURL)));
+                        },
                         title: Text(
                           "Help & Support",
                           style: TextStyle(
@@ -668,9 +691,11 @@ SizedBox(height: 10,),
                       margin: EdgeInsets.only(
                           bottom: SizeConfig.blockSizeVertical * 2),
                       child: ListTile(
-                        onTap: (){
-
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatRoom()));
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatRoom()));
                         },
                         title: Text(
                           "Chats",
@@ -681,7 +706,10 @@ SizedBox(height: 10,),
                         ),
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: SizeConfig.screenWidth * 0.04),
-                        leading:Icon(Icons.chat_bubble,color: Colors.blue,),
+                        leading: Icon(
+                          Icons.chat_bubble,
+                          color: Colors.blue,
+                        ),
                         trailing: Icon(
                           Icons.arrow_forward_ios_rounded,
                           color: Color(matteBlack),
@@ -702,9 +730,8 @@ SizedBox(height: 10,),
                       margin: EdgeInsets.only(
                           bottom: SizeConfig.blockSizeVertical * 2),
                       child: ListTile(
-                        onTap: (){
+                        onTap: () {
                           return showDialog(
-
                             context: context,
                             builder: (ctx) => AlertDialog(
                               title: Text("Logout"),
@@ -721,13 +748,15 @@ SizedBox(height: 10,),
                                     logout.remove("userfirebasetokens");
                                     logout.remove("userfirebaseid");
 
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginScreen()));
                                   },
                                   child: Text("Yes"),
                                 ),
                                 FlatButton(
-
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
@@ -736,7 +765,7 @@ SizedBox(height: 10,),
                               ],
                             ),
                           );
-                           },
+                        },
                         title: Text(
                           "Logout",
                           style: TextStyle(
